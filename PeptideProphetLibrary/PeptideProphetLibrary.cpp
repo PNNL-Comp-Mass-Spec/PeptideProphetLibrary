@@ -231,7 +231,8 @@ namespace PeptideProphetLibrary
 		{
 			c_synopsis_file = (char*)(void*)Marshal::StringToHGlobalAnsi(synopsis_file);
 			LoadSynopsisFile(c_synopsis_file, vectResults) ; 
-			Marshal::FreeHGlobal(c_synopsis_file);			
+
+			Marshal::FreeHGlobal(c_synopsis_file);	
 		}
 		catch(System::Exception *ex)
 		{
@@ -256,6 +257,8 @@ namespace PeptideProphetLibrary
 		Boolean2 mascot = False;
 		Boolean2 qtof = False;
 
+		
+
 		char *c_enzyme;
 		char* c_output_file;
 		try
@@ -264,12 +267,12 @@ namespace PeptideProphetLibrary
 				throw new AbortException("Aborted");
 
 			// Calculate SequestDiscrimScore
-			c_enzyme = (char*)(void*)Marshal::StringToHGlobalAnsi(p_enzyme); 
+			c_enzyme = (char*)(void*)Marshal::StringToHGlobalAnsi(p_enzyme); 			
 
 			if(strlen(c_enzyme) == 0)
 				calc = new SequestDiscrimScoreCalculator(vectResults, exclude, windows, massd, modify_deltas, maldi);
-			else
-				calc = new SequestDiscrimScoreCalculator(vectResults, exclude, windows, massd, modify_deltas, maldi, c_enzyme);
+			else				
+				calc = new SequestDiscrimScoreCalculator(vectResults, exclude, windows, massd, modify_deltas, maldi, c_enzyme);				
 
 			if(abort)
 				throw new AbortException("Aborted");
@@ -295,16 +298,19 @@ namespace PeptideProphetLibrary
 			this->status = IPeptideProphet::ProcessStatus::PP_COMPLETE;
 			return 1;
 		}
-		catch(System::Exception *ex)
-		{
-			Marshal::FreeHGlobal(c_enzyme);
-			Marshal::FreeHGlobal(c_output_file);
+		//catch(System::Exception *ex)
+		//{
+		//	Marshal::FreeHGlobal(c_enzyme);
+		//	Marshal::FreeHGlobal(c_output_file);			
 
-			this->error_msg = ex->Message;
-			this->results = IPeptideProphet::ProcessResults::PP_FAILURE;
-			this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
-			return 1;
-		}
+		//	this->error_msg = ex->Message;
+		//	this->results = IPeptideProphet::ProcessResults::PP_FAILURE;
+		//	this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
+
+		//	std::cout << results << "\t" << status << std::endl ;
+
+		//	return 1;
+		//}
 
 		return 0 ; 
 	}

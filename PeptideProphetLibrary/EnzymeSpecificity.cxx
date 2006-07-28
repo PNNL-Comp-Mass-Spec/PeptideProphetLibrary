@@ -65,7 +65,8 @@ EnzymeDigestion* EnzymeSpecificity::getEnzymeDigestion(char* enz) {
 		}
 		i++ ;
 	}
-	enz_lowercase[strlen(enz_lowercase)] = '\0' ;
+	//enz_lowercase[strlen(enz_lowercase)] = '\0' ;
+	enz_lowercase[i] = '\0' ;
 
   if(enz_lowercase == NULL) // default
     return new TrypticEnzymeDigestion();

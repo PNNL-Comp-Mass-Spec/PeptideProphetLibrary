@@ -26,7 +26,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -360,6 +360,9 @@
 				RelativePath=".\PeptideProphetLibrary.h">
 			</File>
 			<File
+				RelativePath=".\resource.h">
+			</File>
+			<File
 				RelativePath=".\ScoreCalculator.h">
 			</File>
 			<File
@@ -393,6 +396,9 @@
 				RelativePath=".\VariableOffsetMassDiffDiscrMixtureDistr.h">
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\PeptideProphetLibrary.rc">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

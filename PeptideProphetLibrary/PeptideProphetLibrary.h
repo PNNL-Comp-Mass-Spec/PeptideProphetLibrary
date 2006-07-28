@@ -200,19 +200,15 @@ namespace PeptideProphetLibrary
 
 			IPeptideProphet::ProcessCheckFile FileCheck ()
 			{
-				//try
-				//{
-					if (!System::IO::File::Exists(this->InputFileName) || !System::IO::Directory::Exists(this->OutputFilePath))
-					{
-						throw new AbortException("Input file or output file path do not exist!");
-					}
-					else
-					{
-						this->file_status = IPeptideProphet::ProcessCheckFile::PP_IOFileExist ;
-						return file_status ;
-					}
-				//}
-
+				if (!System::IO::File::Exists(this->InputFileName) || !System::IO::Directory::Exists(this->OutputFilePath))
+				{
+					throw new AbortException("Input file or output file path do not exist!");
+				}
+				else
+				{
+					this->file_status = IPeptideProphet::ProcessCheckFile::PP_IOFileExist ;
+					return file_status ;
+				}
 			}
 
 
@@ -223,7 +219,9 @@ namespace PeptideProphetLibrary
 				{			
 					file_status = FileCheck() ;					
 
-					status = IPeptideProphet::ProcessStatus::PP_RUNNING;
+					status = IPeptideProphet::ProcessStatus::PP_RUNNING ;
+					results = IPeptideProphet::ProcessResults::PP_FAILURE ;
+
 					abort = false;
 
 					String *temp1 ;
@@ -255,9 +253,14 @@ namespace PeptideProphetLibrary
 				}
 				catch(System::Exception *ex)
 				{			
-					status = IPeptideProphet::ProcessStatus::PP_ERROR;
+					//status = IPeptideProphet::ProcessStatus::PP_ERROR;		
+
+					this->error_msg = ex->Message;
+					this->results = IPeptideProphet::ProcessResults::PP_FAILURE;
+					this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
 				}
-				return Status;
+							
+				return Status;				
 			}
 
 			// Aborts peptide prophet file creation
