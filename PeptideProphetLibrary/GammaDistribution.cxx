@@ -155,13 +155,13 @@ float GammaDistribution::getGammaProb(float val, float alpha, float beta, float 
 	//Xiuxia, commented out
     //helper = ((beta - 1) * log(value)) - (beta * log(alpha)) - loggamma;
     //helper = exp(helper) * exp(- value / alpha);
-    prob = pow(value, beta - 1) * exp(- value / alpha);
+    prob = pow((double)value, (double)(beta - 1)) * exp(- (double)value / (double)alpha);
 
     gamm = exp(loggamma);//Xiuxia, how can gamm be zero from this exponential function?
     if(gamm == 0.0) {
       return 1.0;
     }
-    first = pow(alpha, beta) * gamm;
+    first = pow((double)alpha, (double) beta) * gamm;
     if(first == 0) {
       return 0.0;
     }

@@ -378,7 +378,7 @@ void MixtureModel::deriveModel(int maxnumiters) {
 
 Boolean2 MixtureModel::iterate(int counter) {
 	Boolean2 output = False;
-	
+
 	for(int charge = 0; charge < numCharge; charge++) {	
 
 		if(done_[charge] < 0) {
@@ -454,11 +454,13 @@ Boolean2 MixtureModel::updateProbs(int counter, int charge) {
 	{
 		float probValue = computeProb(charge, k) ; 
 
+		//std::cout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << (*(*probs_)[0])[k] << std::endl ;
+
 		newprobs->insertAtEnd(probValue);
 	
 		if(abs((*newprobs)[k] - (*(*probs_)[charge])[k]) >= maxdiff) 
 		{
-			output = True; 
+			output = True;
 		}    
 	}
 	
