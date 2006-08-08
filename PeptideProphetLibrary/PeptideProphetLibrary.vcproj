@@ -276,6 +276,9 @@
 				RelativePath=".\ContinuousMultimixtureDistr.h">
 			</File>
 			<File
+				RelativePath=".\DatasetNumMap.h">
+			</File>
+			<File
 				RelativePath=".\DecayContinuousMultimixtureDistr.h">
 			</File>
 			<File
@@ -355,6 +358,9 @@
 			</File>
 			<File
 				RelativePath=".\OrderedResult.h">
+			</File>
+			<File
+				RelativePath=".\OutputContent.h">
 			</File>
 			<File
 				RelativePath=".\PeptideProphetLibrary.h">

@@ -2,6 +2,7 @@
 //#include "GlobalVariable.h"
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 
 using namespace std ;
@@ -1072,6 +1073,128 @@ void MixtureModel::writeResults(char* filename)
 	} // else
 	fout.close();
 }
+
+
+
+
+
+
+
+// Xiuxia, added this function on 08/02/2006
+void MixtureModel::writeResultsOrdered(char* filename, std::vector<DatasetNumMap> &vecDatasetMap)
+{
+
+	if(use_adj_probs_ && pairedspecs_ == NULL) 
+	{
+		computeAdjDoubleTriplySpectraProbs();
+	}
+
+	OutputContent oneOutputUnit ;
+	std::vector<OutputContent> vecOutputContent ;
+
+	for(int k = 0; k < (*spectra_)[0]->length(); k++) {
+		int temp = 0;		
+
+		if(! negOnly_[0] && priors_[0] == 0.0) { // definite 0
+			oneOutputUnit.HitNum = (*(*dataset_num_All_)[0])[k] ;
+			oneOutputUnit.fscore = 0.0 ;
+			oneOutputUnit.prob = 0.0 ;
+			oneOutputUnit.negonly = 1 ;
+
+			vecOutputContent.push_back(oneOutputUnit) ;
+		}
+		else {
+			oneOutputUnit.HitNum = (*(*dataset_num_All_)[0])[k] ;
+			oneOutputUnit.fscore = (*(*fvalAll_)[0])[k] ;
+			oneOutputUnit.prob = (*(*probs_)[0])[k] ;
+
+			if(negOnly_[0]) {
+				//fout << "\t negonly";
+				oneOutputUnit.negonly = 1 ;
+			}
+			else {
+				oneOutputUnit.negonly = 0;
+			}
+
+			vecOutputContent.push_back (oneOutputUnit) ;
+		}	
+	}
+
+
+	for(int charge = 1; charge < numCharge; charge++) {
+
+		for(int k = 0; k < (*spectra_)[charge]->length(); k++) {
+	
+			if(! negOnly_[charge] && priors_[charge] == 0.0) { // definite 0
+				oneOutputUnit.HitNum = (*(*dataset_num_All_)[charge])[k] ;
+				oneOutputUnit.fscore = 0.0 ;
+				oneOutputUnit.prob = 0.0 ;
+				oneOutputUnit.negonly = 1 ;
+
+				vecOutputContent.push_back(oneOutputUnit) ;
+			}
+			else {
+				oneOutputUnit.HitNum = (*(*dataset_num_All_)[charge])[k] ;
+				oneOutputUnit.fscore = (*(*fvalAll_)[charge])[k] ;
+				oneOutputUnit.prob = (*(*probs_)[charge])[k] ;
+
+				if(negOnly_[0]) {
+					oneOutputUnit.negonly = 1 ;
+				}
+				else {
+					oneOutputUnit.negonly = 0;
+				}
+
+				vecOutputContent.push_back (oneOutputUnit) ;
+			}
+		}	// next spectrum
+
+	} // next charge
+
+	sort(vecOutputContent.begin(), vecOutputContent.end(), MixtureModel::SortOutputResultsByHitnum) ; 	
+
+	std::ofstream fout(filename);
+	if(! fout) {
+		std::cerr << "could not open filename" << std::endl;
+		exit(1);
+	}
+
+	fout << "HitNum" << "\t" << "FScore" << "\t" << "Probability" << "\t" << "negOnly" << std::endl ;
+
+	int indexMap = 0 ;
+	for (int index = 0; index < vecOutputContent.size(); index++ )
+	{		
+		while (vecOutputContent[index].HitNum == vecDatasetMap[indexMap].dataset_num_start)
+		{
+			fout << vecDatasetMap[indexMap].dataset_num_other << "\t" << vecOutputContent[index].fscore << "\t" << vecOutputContent[index].prob << "\t" << vecOutputContent[index].negonly << "\n" ;
+			indexMap++ ;
+		}
+		
+	}
+
+	fout.close();
+}
+
+
+
+
+	
+
+bool MixtureModel::SortOutputResultsByHitnum(OutputContent &a, OutputContent &b)
+{
+	if (a.HitNum < b.HitNum)
+		return true ;
+	if (a.HitNum > b.HitNum)
+		return false ;
+
+	return false ; 
+}
+
+
+
+
+
+
 
 
 Boolean2 MixtureModel::isAdjusted(int index) {

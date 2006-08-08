@@ -103,7 +103,7 @@ namespace PeptideProphetLibrary
 	public __gc class PeptideProphet : public PeptideProphetLibrary::IPeptideProphet
 	{	
 		private:
-			void LoadSynopsisFile(char *synopsis_file, std::vector<SequestResult> &vectResults);
+			void LoadSynopsisFile(char *synopsis_file, std::vector<SequestResult> &vectResults, std::vector<DatasetNumMap> &vecDatasetNumMap);
 			char* strCopy(char* orig);
 			int PValueCalculate(System::String *synopsis_file, System::String *output_file, System::String *enzyme);
 

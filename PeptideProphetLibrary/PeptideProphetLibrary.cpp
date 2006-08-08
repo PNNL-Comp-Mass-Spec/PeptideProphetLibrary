@@ -1,6 +1,7 @@
 // This is the main DLL file.
 
 #include "PeptideProphetLibrary.h"
+#include "DatasetNumMap.h"
 
 namespace PeptideProphetLibrary
 {
@@ -15,6 +16,11 @@ namespace PeptideProphetLibrary
 
 	bool SortSequestResultsByScanChargeXCorrDelcn2Peptide(SequestResult &a, SequestResult &b)
 	{
+		if (a.dataset_num_ < b.dataset_num_)
+			return true ;
+		if (a.dataset_num_ > b.dataset_num_)
+			return false ;
+
 		if(a.ScanNumber < b.ScanNumber)
 			return true ; 
 		if (a.ScanNumber > b.ScanNumber)
@@ -43,7 +49,7 @@ namespace PeptideProphetLibrary
 		return false ; 
 	}
 
-	void PeptideProphet::LoadSynopsisFile(char *synopsis_file, std::vector<SequestResult> &vectResults)
+	void PeptideProphet::LoadSynopsisFile(char *synopsis_file, std::vector<SequestResult> &vectResults, std::vector<DatasetNumMap> &vecDatasetNumMap)
 	{
 		//Xiuxia 05/16/2006
 		int temp;
@@ -51,6 +57,8 @@ namespace PeptideProphetLibrary
 		double MH, XCorr, DeltaCn, Sp, MO, DeltaCn2, DelM, XcRatio, MScore;
 		char Reference[256];
 		char peptide[256] ;
+
+		DatasetNumMap oneMap ;
 
 		dataset_num = 0;
 		Scan = 0;
@@ -180,9 +188,18 @@ namespace PeptideProphetLibrary
 		std::vector<SequestResult> copyVect ; 
 		copyVect.push_back(vectResults[0]) ; 
 
+		int masterDatasetNum ;
+
+		masterDatasetNum = vectResults[0].dataset_num_ ;
+		oneMap.dataset_num_start = vectResults[0].dataset_num_ ;
+		oneMap.dataset_num_other = vectResults[0].dataset_num_ ;
+
+		vecDatasetNumMap.push_back(oneMap) ;
+
 		for (int index = 1 ; index < vectResults.size() ; index++)
 		{ 
 
+			int cDatasetNum = vectResults[index].dataset_num_ ;
 			int cScan = vectResults[index].ScanNumber ; 
 			int clast_Scan = vectResults[index-1].ScanNumber ; 
 			int cCharge = vectResults[index].ScanNumber ; 
@@ -200,9 +217,24 @@ namespace PeptideProphetLibrary
 				(cPeptide != clast_Peptide)) 
 
 			{
-				copyVect.push_back(vectResults[index]) ; 
+				copyVect.push_back(vectResults[index]) ;
+
+				masterDatasetNum = vectResults[index].dataset_num_;
+
+				oneMap.dataset_num_start = masterDatasetNum ;
+				oneMap.dataset_num_other = masterDatasetNum ;
+
+				vecDatasetNumMap.push_back(oneMap) ;
 
 			}
+			else
+			{
+				oneMap.dataset_num_start = masterDatasetNum ;
+				oneMap.dataset_num_other = cDatasetNum ;
+
+				vecDatasetNumMap.push_back (oneMap) ;
+			}
+
 		}
 
 		vectResults.clear() ; 
@@ -224,13 +256,14 @@ namespace PeptideProphetLibrary
 		//	Usage(argc, argv) ; 
 
 		std::vector<SequestResult> vectResults ; 
+		std::vector<DatasetNumMap> vecDatasetNumMap ;
 
 		// load the synopsis file into a vector of results.
 		char* c_synopsis_file;
 		try
 		{
 			c_synopsis_file = (char*)(void*)Marshal::StringToHGlobalAnsi(synopsis_file);
-			LoadSynopsisFile(c_synopsis_file, vectResults) ; 
+			LoadSynopsisFile(c_synopsis_file, vectResults, vecDatasetNumMap) ; 
 
 			Marshal::FreeHGlobal(c_synopsis_file);	
 		}
@@ -285,7 +318,8 @@ namespace PeptideProphetLibrary
 
 			// Write results
 			c_output_file = (char*)(void*)Marshal::StringToHGlobalAnsi(output_file);
-			mixmodel->writeResults(c_output_file) ;
+			//mixmodel->writeResults(c_output_file) ;
+			mixmodel->writeResultsOrdered(c_output_file, vecDatasetNumMap) ;
 			Marshal::FreeHGlobal(c_output_file);	
 		}
 		catch(AbortException *ex)

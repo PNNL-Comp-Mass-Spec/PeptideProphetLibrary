@@ -22,6 +22,8 @@
 #include "MassDifferenceDiscrMixtureDistr.h"
 #include "DecayContinuousMultimixtureDistr.h"
 #include "VariableOffsetMassDiffDiscrMixtureDistr.h"
+#include "OutputContent.h"
+#include "DatasetNumMap.h"
 
 
 /*
@@ -103,6 +105,8 @@ class MixtureModel {
   void writeResultsInOrder(char* filename);	//Xiuxia, removed sequestResults from the argument
   char* getTagValue(char* data, char*tag);
   char* getEnzyme(char* filename);
+  void writeResultsOrdered(char* filename, std::vector<DatasetNumMap> &vecDatasetMap) ;
+  static bool SortOutputResultsByHitnum(OutputContent &a, OutputContent &b) ; //Xiuxia, 08/02/2006
 
 
  protected:
