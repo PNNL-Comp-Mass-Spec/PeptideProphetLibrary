@@ -246,7 +246,7 @@ namespace PeptideProphetLibrary
 
 
 
-	int PeptideProphet::PValueCalculate(System::String *synopsis_file, System::String *output_file, System::String *p_enzyme)
+	int PeptideProphet::PValueCalculate(System::String *synopsis_file, System::String *output_file, System::String *output_file_param, System::String *p_enzyme)
 	{	
 		//std::cerr << "\n PeptideProphet v. 1.0 by A.Keller 11.7.02 ISB \n" ;
 		////std::cerr << " Modified by Xiuxia Du and Deep Jaitly, June 21, 2006" << std::endl << std::endl ;
@@ -294,6 +294,8 @@ namespace PeptideProphetLibrary
 
 		char *c_enzyme;
 		char* c_output_file;
+		char *c_output_file_param ;
+
 		try
 		{
 			if(abort)		
@@ -313,13 +315,20 @@ namespace PeptideProphetLibrary
 			MixtureModel* mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, c_enzyme);
 			Marshal::FreeHGlobal(c_enzyme);
 
+			SequestDiscrimFunction* SequestDiscrimFcn = new SequestDiscrimFunction(0) ;
+
 			if(abort)		
 				throw new AbortException("Aborted");
 
 			// Write results
 			c_output_file = (char*)(void*)Marshal::StringToHGlobalAnsi(output_file);
+			c_output_file_param = (char*)(void*)Marshal::StringToHGlobalAnsi(output_file_param);
+
 			//mixmodel->writeResults(c_output_file) ;
 			mixmodel->writeResultsOrdered(c_output_file, vecDatasetNumMap) ;
+
+			SequestDiscrimFcn->writeCoef(c_output_file_param) ; 
+			
 			Marshal::FreeHGlobal(c_output_file);	
 		}
 		catch(AbortException *ex)

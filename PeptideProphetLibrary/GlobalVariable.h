@@ -1,1 +1,3 @@
-int numCharge = 5 ;
+#pragma once
+
+const int numCharge = 5 ;

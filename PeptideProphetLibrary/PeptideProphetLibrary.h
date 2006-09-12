@@ -105,7 +105,7 @@ namespace PeptideProphetLibrary
 		private:
 			void LoadSynopsisFile(char *synopsis_file, std::vector<SequestResult> &vectResults, std::vector<DatasetNumMap> &vecDatasetNumMap);
 			char* strCopy(char* orig);
-			int PValueCalculate(System::String *synopsis_file, System::String *output_file, System::String *enzyme);
+			int PValueCalculate(System::String *synopsis_file, System::String *output_file, System::String *output_file_param, System::String *enzyme);
 
 			// Members
 			System::String *input_file_name;
@@ -238,9 +238,12 @@ namespace PeptideProphetLibrary
 					System::String *output_file 
 						= System::IO::Path::Combine(this->OutputFilePath, temp3);
 
+					System::String *output_file_param
+						= System::IO::Path::Combine(this->OutputFilePath, "PeptideProphet_Coefficients.txt" ) ; 
+
 					//System::String *output_file 
 						//= System::IO::Path::Combine(this->OutputFilePath, new System::String("peptide_prophet_results.txt"));
-					this->PValueCalculate(this->InputFileName, output_file, this->Enzyme);
+					this->PValueCalculate(this->InputFileName, output_file, output_file_param, this->Enzyme);
 
 					status = IPeptideProphet::ProcessStatus::PP_COMPLETE;
 					results = IPeptideProphet::ProcessResults::PP_SUCCESS;

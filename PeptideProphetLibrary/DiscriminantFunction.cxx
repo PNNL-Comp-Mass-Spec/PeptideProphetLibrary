@@ -1,6 +1,5 @@
 #include "DiscriminantFunction.h"
-
-extern numCharge ;
+#include "GlobalVariable.h"
 
 /*
 

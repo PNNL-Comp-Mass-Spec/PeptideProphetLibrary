@@ -1,12 +1,11 @@
 #include "MixtureModel.h"
-//#include "GlobalVariable.h"
+#include "GlobalVariable.h"
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 
 
 using namespace std ;
-extern numCharge ;
 
 /*
 
@@ -1153,26 +1152,47 @@ void MixtureModel::writeResultsOrdered(char* filename, std::vector<DatasetNumMap
 
 	sort(vecOutputContent.begin(), vecOutputContent.end(), MixtureModel::SortOutputResultsByHitnum) ; 	
 
-	std::ofstream fout(filename);
-	if(! fout) {
+//	std::ofstream fout(filename);
+	FILE *fp = fopen(filename, "w") ; 
+
+	if(fp== NULL) {
 		std::cerr << "could not open filename" << std::endl;
 		exit(1);
 	}
 
-	fout << "HitNum" << "\t" << "FScore" << "\t" << "Probability" << "\t" << "negOnly" << std::endl ;
+//	fout << "HitNum" << "\t" << "FScore" << "\t" << "Probability" << "\t" << "negOnly" << std::endl ;
+	fprintf(fp, "HitNum\tFScore\tProbability\tnegOnly\n") ;
 
 	int indexMap = 0 ;
+	const int MAXSIZE = 16 ; 
+	char tempBuff[MAXSIZE]; 
+
+	int decimal=0, sign=0; 
+
 	for (int index = 0; index < vecOutputContent.size(); index++ )
 	{		
 		while (vecOutputContent[index].HitNum == vecDatasetMap[indexMap].dataset_num_start)
 		{
-			fout << vecDatasetMap[indexMap].dataset_num_other << "\t" << vecOutputContent[index].fscore << "\t" << vecOutputContent[index].prob << "\t" << vecOutputContent[index].negonly << "\n" ;
+//			fout << vecDatasetMap[indexMap].dataset_num_other << "\t" ;
+			int datasetNum = vecDatasetMap[indexMap].dataset_num_other ; 
+			float fScore = vecOutputContent[index].fscore ; 
+			float prob = vecOutputContent[index].prob ; 
+			int negOnly = vecOutputContent[index].negonly ; 
+
+			sprintf(tempBuff, "%.4f", prob);
+			
+			if (strcmp(tempBuff, "0.0000") == 0 || strcmp(tempBuff, "1.0000") == 0)
+				fprintf(fp, "%d\t%.4f\t%.0f\t%d\n", datasetNum, fScore, prob, negOnly) ; 
+			else
+				fprintf(fp, "%d\t%.4f\t%.4f\t%d\n", datasetNum, fScore, prob, negOnly) ; 
+
 			indexMap++ ;
 		}
 		
 	}
 
-	fout.close();
+	fclose(fp) ; 
+//	fout.close();
 }
 
 

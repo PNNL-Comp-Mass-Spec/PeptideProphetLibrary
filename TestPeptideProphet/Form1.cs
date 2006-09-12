@@ -63,12 +63,12 @@ namespace TestPeptideProphet
 			this.button1.Location = new System.Drawing.Point(36, 24);
 			this.button1.Name = "button1";
 			this.button1.TabIndex = 0;
-			this.button1.Text = "button1";
+			this.button1.Text = "Start";
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// button2
 			// 
-			this.button2.Location = new System.Drawing.Point(164, 28);
+			this.button2.Location = new System.Drawing.Point(140, 24);
 			this.button2.Name = "button2";
 			this.button2.TabIndex = 1;
 			this.button2.Text = "Abort";
@@ -105,7 +105,8 @@ namespace TestPeptideProphet
 			{
 				p = new PeptideProphetLibrary.PeptideProphet();
 				PeptideProphetLibrary.InitializationParams parms = new PeptideProphetLibrary.InitializationParams();
-				parms.InputFileName = @"C:\d3p019\DuXiuxia\AID_MPH_002_071906_23_24July06_Griffin_06-03-06_syn.txt";
+//				parms.InputFileName = @"C:\d3p019\DuXiuxia\AID_MPH_002_071906_23_24July06_Griffin_06-03-06_syn.txt";
+				parms.InputFileName = @"C:\d3p019\DuXiuxia\core_SO4449_020_060525_03Jun06_Falcon_05-09-02fst_syn.txt";
 				parms.OutputFilePath = @"C:\d3p019\DuXiuxia";
 				parms.Enzyme = "tryptic";
 				p.Setup(parms);

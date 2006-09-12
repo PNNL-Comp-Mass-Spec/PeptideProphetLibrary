@@ -1,6 +1,5 @@
 #include "SequestDiscrimScoreCalculator.h"
-
-extern numCharge ;
+#include "GlobalVariable.h"
 
 /*
 
