@@ -38,7 +38,7 @@ in PeptideProphet written by Andrew Keller
 ScoreCalculator::ScoreCalculator() { }
 
 ScoreCalculator::ScoreCalculator(char* enz) {
-  // in the future, want to specify the enzyme specificity through the c'tor	
+  // in the future, want to specify the enzyme specificity through the c'tor
 
   // for now
   if(enz == NULL)
@@ -46,7 +46,7 @@ ScoreCalculator::ScoreCalculator(char* enz) {
   else {
     enzyme_ = new char[strlen(enz)+1];
     strcpy(enzyme_, enz);
-    enzyme_[strlen(enz)] = 0;	
+    enzyme_[strlen(enz)] = 0;
   }
   enzyme_digestion_ = (new EnzymeSpecificity())->getEnzymeDigestion(enzyme_);
 

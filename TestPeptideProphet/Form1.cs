@@ -107,7 +107,7 @@ namespace TestPeptideProphet
 				PeptideProphetLibrary.InitializationParams parms = new PeptideProphetLibrary.InitializationParams();
 //				parms.InputFileName = @"C:\d3p019\DuXiuxia\AID_MPH_002_071906_23_24July06_Griffin_06-03-06_syn.txt";
 				parms.InputFileName = @"C:\d3p019\DuXiuxia\core_SO4449_020_060525_03Jun06_Falcon_05-09-02fst_syn.txt";
-				parms.OutputFilePath = @"C:\d3p019\DuXiuxia";
+				parms.OutputFilePath = @"C:\d3p019\DuXiuxia\";
 				parms.Enzyme = "tryptic";
 				p.Setup(parms);
 				t = new Thread(new ThreadStart(Start));				

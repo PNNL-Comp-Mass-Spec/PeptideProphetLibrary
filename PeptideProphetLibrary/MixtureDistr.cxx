@@ -166,7 +166,7 @@ void MixtureDistr::enter(int index, float val) {
 void MixtureDistr::enter(int index, int val) {//Xiuxia, index is not used here
   intvals_->insertAtEnd(val);
 
-  ////std::cerr << intvals_[index] << std::endl;
+  //std::cerr << intvals_[index] << std::endl;
 }
 	
 Boolean2 MixtureDistr::update(Array<float>* probs) {

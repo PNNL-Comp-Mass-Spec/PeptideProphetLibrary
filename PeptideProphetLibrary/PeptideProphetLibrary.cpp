@@ -304,15 +304,25 @@ namespace PeptideProphetLibrary
 			// Calculate SequestDiscrimScore
 			c_enzyme = (char*)(void*)Marshal::StringToHGlobalAnsi(p_enzyme); 			
 
+			// Note: Matt Monroe and Deep Jaitly tried to consolidate the two calls to SequestDiscrimScoreCalculator by
+			// updating c_enzyme to be "tryptic" if p_enzyme = "", but were not successful, most likely due to a memory
+			// allocation error elsewhere in this application
 			if(strlen(c_enzyme) == 0)
-				calc = new SequestDiscrimScoreCalculator(vectResults, exclude, windows, massd, modify_deltas, maldi);
+				calc = new SequestDiscrimScoreCalculator(vectResults, exclude, windows, massd, modify_deltas, maldi, "tryptic");
 			else				
 				calc = new SequestDiscrimScoreCalculator(vectResults, exclude, windows, massd, modify_deltas, maldi, c_enzyme);				
 
 			if(abort)
 				throw new AbortException("Aborted");
 
-			MixtureModel* mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, c_enzyme);
+
+			// See above comment concerning c_enzyme
+			MixtureModel* mixmodel ;
+			if(strlen(c_enzyme) == 0)
+				mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, "tryptic");
+			else
+				mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, c_enzyme);
+
 			Marshal::FreeHGlobal(c_enzyme);
 
 			SequestDiscrimFunction* SequestDiscrimFcn = new SequestDiscrimFunction(0) ;

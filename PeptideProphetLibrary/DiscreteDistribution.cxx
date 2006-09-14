@@ -144,7 +144,7 @@ Boolean2 DiscreteDistribution::update() {
     set_ = True;
   }
   if(! output) {
-    ////std::cout << "*** no change in discrete distribution..." << std::endl;
+    //std::cout << "*** no change in discrete distribution..." << std::endl;
   }
 
   return output;

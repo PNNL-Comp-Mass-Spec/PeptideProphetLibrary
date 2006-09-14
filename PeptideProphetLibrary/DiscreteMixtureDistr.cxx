@@ -36,7 +36,7 @@ in PeptideProphet written by Andrew Keller
 
 DiscreteMixtureDistr::DiscreteMixtureDistr(int charge, int numbins, char* name, char* tag) : MixtureDistr(charge, name, tag) {
   numbins_ = numbins;
-  ////std::cout << "...with " << numbins_ << " bins" << std::endl;
+  //std::cout << "...with " << numbins_ << " bins" << std::endl;
   maxdiff_ = 0.002;
   priors_ = NULL;
   numpos_priors_ = 2.0;

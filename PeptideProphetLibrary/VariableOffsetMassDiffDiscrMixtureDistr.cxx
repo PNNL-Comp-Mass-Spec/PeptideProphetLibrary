@@ -60,7 +60,7 @@ int VariableOffsetMassDiffDiscrMixtureDistr::getIntegralValue(float val) {
 Boolean2 VariableOffsetMassDiffDiscrMixtureDistr::update(Array<float>* probs) {
   Boolean2 output = False;
   if(! offset_set_ && update_ctr_ >= min_ctr_) {
-    ////std::cerr << "here1" << std::endl;
+    //std::cerr << "here1" << std::endl;
     float new_offset = getMode(0.1, probs);
     if(new_offset - offset_ > maxdiff_ || offset_ - new_offset > maxdiff_) { // update
       output = True;
@@ -73,7 +73,7 @@ Boolean2 VariableOffsetMassDiffDiscrMixtureDistr::update(Array<float>* probs) {
       offset_set_ = True; // done
     }
   } // if update offset
-  ////std::cerr << "here2" << std::endl;
+  //std::cerr << "here2" << std::endl;
   if(! offset_set_)
     update_ctr_++;
   if(DiscreteMixtureDistr::update(probs) || output)
@@ -101,7 +101,7 @@ float VariableOffsetMassDiffDiscrMixtureDistr::getMode(float window, Array<float
 
   for(int k = 0; k < probs->length(); k++) {
     int next = (int)(((*vals_)[k] + range_) / window);
-    ////std::cerr << k << " out of " << probs->length() << ": " << next << " vs " << num_windows << std::endl;
+    //std::cerr << k << " out of " << probs->length() << ": " << next << " vs " << num_windows << std::endl;
     if(next < 0)
       next = 0;
     if(next >= num_windows)
@@ -125,7 +125,7 @@ float VariableOffsetMassDiffDiscrMixtureDistr::getMode(float window, Array<float
 
   if(max_ind == -1)
     return offset_init_;
-  ////std::cerr << update_ctr_ << ": " << max_ind << " " << max << std::endl;
+  //std::cerr << update_ctr_ << ": " << max_ind << " " << max << std::endl;
   return ((float)max_ind * window - range_);
 }
 

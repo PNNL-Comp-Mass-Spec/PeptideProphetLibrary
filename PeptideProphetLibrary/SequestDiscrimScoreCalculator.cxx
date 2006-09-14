@@ -38,7 +38,7 @@ in PeptideProphet written by Andrew Keller
 SequestDiscrimScoreCalculator::SequestDiscrimScoreCalculator() : ScoreCalculator() { }
 
 
-SequestDiscrimScoreCalculator::SequestDiscrimScoreCalculator(std::vector<SequestResult> &results, Boolean2 exclude_deltastars, Boolean2 windows, Boolean2 massd, Boolean2 modify_deltas, Boolean2 maldi, char* enz) : ScoreCalculator(enz) {	
+SequestDiscrimScoreCalculator::SequestDiscrimScoreCalculator(std::vector<SequestResult> &results, Boolean2 exclude_deltastars, Boolean2 windows, Boolean2 massd, Boolean2 modify_deltas, Boolean2 maldi, char* enz) : ScoreCalculator(enz) {
   modify_deltas_ = modify_deltas;
   maldi_ = maldi;
   maldi_set_ = True;

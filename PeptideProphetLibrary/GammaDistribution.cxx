@@ -161,7 +161,7 @@ float GammaDistribution::getGammaProb(float val, float alpha, float beta, float 
     if(gamm == 0.0) {
       return 1.0;
     }
-    first = pow((double)alpha, (double) beta) * gamm;
+    first = pow((double)alpha,(double)beta) * gamm;
     if(first == 0) {
       return 0.0;
     }

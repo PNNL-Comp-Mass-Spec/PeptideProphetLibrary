@@ -2,11 +2,6 @@
 #include <string>
 #include <stdlib.h>
 #include <ctype.h>
-#using <mscorlib.dll>
-
-using namespace std ;
-using namespace System ;
-using namespace System::Collections ;
 
 
 /*
@@ -52,6 +47,9 @@ EnzymeDigestion* EnzymeSpecificity::getEnzymeDigestion(char* enz) {
 	char *p ;
 	char enz_lowercase[32] ;
 	int i = 0 ;
+
+	if (enz == NULL)
+		return NULL;
 
 	for (p = enz; p < enz + strlen(enz); p++)
 	{

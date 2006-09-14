@@ -43,7 +43,7 @@ DiscrimValMixtureDistr::DiscrimValMixtureDistr(int charge, char* name, char* tag
   floatvals_ = new Array<float>() ;
  
   if(qtof_ || (maldi_ && charge_ == 0)) {
-    ////std::cerr << "instantiating decaycontmultimix distr" << std::endl;
+    //std::cerr << "instantiating decaycontmultimix distr" << std::endl;
     posdistr_ = new DecayContinuousMultimixtureDistr(maxdiff_ * 2.0, qtof_);
   }
   else
@@ -201,7 +201,7 @@ Boolean2 DiscrimValMixtureDistr::noDistr() {
     first = gamma_ && ((ContinuousDistribution*)(posdistr_))->getMean() + ((ContinuousDistribution*)(posdistr_))->getStdev() < ((ContinuousDistribution*)(negdistr_))->getMean() + ((GammaDistribution*)(negdistr_))->getZero() + num_stdevs * sqrt(((ContinuousDistribution*)(negdistr_))->getStdev());
     second = !gamma_ && ((ContinuousDistribution*)(posdistr_))->getMean() + ((ContinuousDistribution*)(posdistr_))->getStdev() < ((ContinuousDistribution*)(negdistr_))->getMean() + ((ContinuousDistribution*)(negdistr_))->getStdev();
 
-	////std::cerr << "mean = " << ((ContinuousDistribution*)(posdistr_))->getMean() << "\t" << "stdev = " << ((ContinuousDistribution*)(posdistr_))->getStdev() << std::endl ;
+	//std::cerr << "mean = " << ((ContinuousDistribution*)(posdistr_))->getMean() << "\t" << "stdev = " << ((ContinuousDistribution*)(posdistr_))->getStdev() << std::endl ;
   }
 
 
@@ -216,46 +216,46 @@ Boolean2 DiscrimValMixtureDistr::noDistr() {
 }
 //float DiscrimValMixtureDistr::getPosProb(int index) {
 float DiscrimValMixtureDistr::getPosProb(int index) {//Xiuxia
-	////std::cerr << ((GaussianDistribution*)(posdistr_))->mean_ << std::endl ;//Xiuxia
+	//std::cerr << ((GaussianDistribution*)(posdistr_))->mean_ << std::endl ;//Xiuxia
 
 	float temp; //Xiuxia
 
 	//DiscrimValMixtureDistr::printDistr() ;
-	////std::cerr << "fval = " << (*floatvals_)[index] << "\t" << "prob = " ;
+	//std::cerr << "fval = " << (*floatvals_)[index] << "\t" << "prob = " ;
 
 	if(qtof_ || (maldi_ && charge_ == 0)) {
-    ////std::cerr << "pos prob: " << ((DecayContinuousMultimixtureDistr*)(posdistr_))->getMixtureProb(index, (*floatvals_)[index]) << std::endl;
+    //std::cerr << "pos prob: " << ((DecayContinuousMultimixtureDistr*)(posdistr_))->getMixtureProb(index, (*floatvals_)[index]) << std::endl;
     //if(((DecayContinuousMultimixtureDistr*)(posdistr_))->oneProb((*floatvals_)[index])) {
     // return 1.0;
     //}
 
     return ((DecayContinuousMultimixtureDistr*)(posdistr_))->getMixtureProb(index, (*floatvals_)[index]);
    
-    ////std::cerr << "MALDI" << std::endl;
-    ////std::cerr << "number of distrs in DISCRIMVAL: " << ((DecayContinuousMultimixtureDistr*)(posdistr_))->getNumDistributions() << std::endl;
+    //std::cerr << "MALDI" << std::endl;
+    //std::cerr << "number of distrs in DISCRIMVAL: " << ((DecayContinuousMultimixtureDistr*)(posdistr_))->getNumDistributions() << std::endl;
 	}
 
 	if(all_negs_ || (*floatvals_)[index] < negmean_) {//Xiuxia, all_negs_ is initialized to False
 		temp = 0.0;
-		////std::cerr << temp << std::endl ;
+		//std::cerr << temp << std::endl ;
 
 		return temp ;//0.0;
 	}
 	else if(! maldi_ && ((GaussianDistribution*)(posdistr_))->oneProb((*floatvals_)[index])) { //Xiuxia, check if fval > mean_ + stdev_
 		if(charge_ == 0) {
-		;////std::cout << "one probs for " << (*floatvals_)[index] << std::endl;
+		;//std::cout << "one probs for " << (*floatvals_)[index] << std::endl;
 		}
 		temp = 1.0 ;
-		////std::cerr << temp << std::endl ;
+		//std::cerr << temp << std::endl ;
 		return temp; //1.0;
 	}
 	else if(gamma_ && ((GammaDistribution*)(negdistr_))->zeroProb((*floatvals_)[index])) {
 		temp = 0.0;
-		////std::cerr << temp << std::endl ;
+		//std::cerr << temp << std::endl ;
 		return temp;//0.0;
 	}
 	temp = MixtureDistr::getPosProb(index);
-	////std::cerr << temp << std::endl ;
+	//std::cerr << temp << std::endl ;
 	return temp;
 }
 
@@ -274,7 +274,7 @@ float DiscrimValMixtureDistr::getNegProb(int index) {
   else if(gamma_ && ((GammaDistribution*)(negdistr_))->zeroProb((*floatvals_)[index])) {
     return 1.0;
   }
-  ////std::cerr << "neg prob: " << MixtureDistr::getNegProb(index) << std::endl;
+  //std::cerr << "neg prob: " << MixtureDistr::getNegProb(index) << std::endl;
 
   return MixtureDistr::getNegProb(index);
 }
@@ -493,7 +493,7 @@ Boolean2 DiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr* nttd
 		  negmean_ = MAX_SINGLY_NEGMEAN;
 	  }
 
-	  ////std::cerr << "setting negmean to " << negmean_ << " for charge " << (charge_+1) << " with zero " << zero << std::endl;
+	  //std::cerr << "setting negmean to " << negmean_ << " for charge " << (charge_+1) << " with zero " << zero << std::endl;
 
 	  USE_TR_NEG_DISTR_ = True;
 	  return False; // done
@@ -521,7 +521,7 @@ Boolean2 DiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr* nttd
   if(maldi_) 
   {
 	  negmean_ = mean - maldi_negmean_num_stds * stdev;
-	  ////std::cerr << "mean: " << mean << ", negmeanstdevs: " << negmean_num_stds[0] << ", stdev: " << stdev << std::endl;
+	  //std::cerr << "mean: " << mean << ", negmeanstdevs: " << negmean_num_stds[0] << ", stdev: " << stdev << std::endl;
 	  //negmean_ = -1.4;
   }
   else if(qtof_) 

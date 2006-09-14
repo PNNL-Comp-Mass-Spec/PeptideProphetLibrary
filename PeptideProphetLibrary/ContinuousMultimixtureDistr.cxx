@@ -94,7 +94,7 @@ float ContinuousMultimixtureDistr::getProb(float val) {
   float prob = 0.0;
   for(int k = 0; k < distrs_->length(); k++)
     prob += getMixtureDistrProb(k, val) * priors_[k];
-  ////std::cerr << "returning " << prob << " for " << val << std::endl;
+  //std::cerr << "returning " << prob << " for " << val << std::endl;
   return prob;
 }
 
@@ -130,7 +130,7 @@ float ContinuousMultimixtureDistr::getStdev() {
 }
 
 float ContinuousMultimixtureDistr::getMixtureDistrProb(int k, float val) {
-  ////std::cerr << (*defs_)[k] << std::endl;
+  //std::cerr << (*defs_)[k] << std::endl;
   if(strcmp((*distrtypes_)[k], "gaussian") == 0)
       return ((GaussianDistribution*)(*distrs_)[k])->getProb(val);
   else if(strcmp((*distrtypes_)[k], "gamma") == 0)
@@ -163,7 +163,7 @@ void ContinuousMultimixtureDistr::addVal(float wt, float val) {
 
     // now add it
     zvals_->insertAtEnd(nextz);
-    ////std::cerr << "initial wt: " << wt << std::endl;
+    //std::cerr << "initial wt: " << wt << std::endl;
     wts_->insertAtEnd(wt);
     assert(index_ == vals_->length() - 1);
     
@@ -242,7 +242,7 @@ Boolean2 ContinuousMultimixtureDistr::update() {
 //    exit(1);
   }
   //set_ = True;
-  ////std::cerr << " updating...." << std::endl;
+  //std::cerr << " updating...." << std::endl;
   //std::cerr << " start priors: " << priors_[0] << ":" << priors_[1] << std::endl;
 
   assert(vals_->length() == index_);
@@ -286,7 +286,7 @@ Boolean2 ContinuousMultimixtureDistr::update() {
 	//totalprob += ((*zvals_)[i])[k];
       }
 
-    ////std::cerr << "index " << i << ": [" << (*distrs_)[0]->getProb((*vals_)[i]) << " <=> " << (*distrs_)[1]->getProb((*vals_)[i]) << "]  " << (*vals_)[i] << " (" << ((*zvals_)[i])[0] << " " << ((*zvals_)[i])[1] << ")" << " wt: " << (*wts_)[i] << std::endl;
+    //std::cerr << "index " << i << ": [" << (*distrs_)[0]->getProb((*vals_)[i]) << " <=> " << (*distrs_)[1]->getProb((*vals_)[i]) << "]  " << (*vals_)[i] << " (" << ((*zvals_)[i])[0] << " " << ((*zvals_)[i])[1] << ")" << " wt: " << (*wts_)[i] << std::endl;
 
   } // next data
   // now recompute priors
@@ -302,8 +302,8 @@ Boolean2 ContinuousMultimixtureDistr::update() {
     for(int k = 0; k < distrs_->length(); k++) 
       priors_[k] /= totalprob;
 
-  ////std::cerr << " end priors: " << priors_[0] << ":" << priors_[1] << std::endl;
-  ////std::cerr << "total wt: " << totalwts_ << std::endl;
+  //std::cerr << " end priors: " << priors_[0] << ":" << priors_[1] << std::endl;
+  //std::cerr << "total wt: " << totalwts_ << std::endl;
   return output;
 
 }
