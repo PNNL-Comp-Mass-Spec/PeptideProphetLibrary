@@ -1,4 +1,4 @@
-Imports System
+﻿Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -8,16 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("")> 
+<Assembly: AssemblyTitle("PeptideProphetRunner")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("")> 
-<Assembly: AssemblyCopyright("")> 
+<Assembly: AssemblyCompany("PNNL")> 
+<Assembly: AssemblyProduct("PeptideProphetRunner")> 
+<Assembly: AssemblyCopyright("Copyright © PNNL 2011")> 
 <Assembly: AssemblyTrademark("")> 
-<Assembly: CLSCompliant(True)> 
+
+<Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("7F35B0B9-2869-4563-A188-1EBA58C65B30")> 
+<Assembly: Guid("1f740b8f-d0a3-45b5-9893-d1b3ba22b3da")> 
 
 ' Version information for an assembly consists of the following four values:
 '

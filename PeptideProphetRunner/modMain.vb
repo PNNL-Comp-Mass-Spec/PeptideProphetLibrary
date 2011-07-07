@@ -2,29 +2,17 @@ Option Strict On
 
 ' This program calls Peptide Prophet to process the specified synopsis file
 '
-' Example command line /I:SynFileName.txt
+' Example command line SynFileName.txt
 '
 ' -------------------------------------------------------------------------------
 ' Written by Matthew Monroe for the Department of Energy (PNNL, Richland, WA)
 ' Program started April 6, 2009
+' Program renamed from TestPeptideProphetConsole to PeptideProphetRunner on July 7, 2011
 '
 ' E-mail: matthew.monroe@pnl.gov or matt@alchemistmatt.com
 ' Website: http://ncrr.pnl.gov/ or http://www.sysbio.org/resources/staff/
 ' -------------------------------------------------------------------------------
 ' 
-' Licensed under the Apache License, Version 2.0; you may not use this file except
-' in compliance with the License.  You may obtain a copy of the License at 
-' http://www.apache.org/licenses/LICENSE-2.0
-'
-' Notice: This computer software was prepared by Battelle Memorial Institute, 
-' hereinafter the Contractor, under Contract No. DE-AC05-76RL0 1830 with the 
-' Department of Energy (DOE).  All rights in the computer software are reserved 
-' by DOE on behalf of the United States Government and the Contractor as 
-' provided in the Contract.  NEITHER THE GOVERNMENT NOR THE CONTRACTOR MAKES ANY 
-' WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS 
-' SOFTWARE.  This notice including this sentence must appear on any copies of 
-' this computer software.
-
 
 Module modMain
 
@@ -32,41 +20,6 @@ Module modMain
 
     Private mInputFilePath As String
     Private mOutputFolderPath As String
-    Private mColumnNumber As Integer
-    Private mColumnDelimiter As Char
-
-    Private Function CleanupFilePaths() As Boolean
-        ' Returns True if success, False if failure
-
-        Dim intCharLoc As Integer
-        Dim strParentFolderPath As String
-
-        Try
-            ' Make sure mInputFilePath points to a valid file
-            If Not System.IO.File.Exists(mInputFilePath) Then
-                System.Console.WriteLine(ControlChars.NewLine & "Error -- Input file not found: " & ControlChars.NewLine & mInputFilePath)
-                CleanupFilePaths = False
-            Else
-                If mOutputFolderPath Is Nothing OrElse mOutputFolderPath.Length = 0 Then
-                    ' Define mOutputFolderPath based on mInputFilePath
-                    Dim ioFileInfo As System.IO.FileInfo
-                    ioFileInfo = New System.IO.FileInfo(mInputFilePath)
-                    mOutputFolderPath = ioFileInfo.DirectoryName
-                End If
-
-
-                CleanupFilePaths = True
-            End If
-        Catch ex As System.Exception
-            System.Console.WriteLine(ControlChars.NewLine & "Error cleaning up the file paths: " & ControlChars.NewLine & ex.Message)
-        End Try
-
-    End Function
-
-    Private Function GetAppFolderPath() As String
-        ' Could use Application.StartupPath, but .GetExecutingAssembly is better
-        Return System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-    End Function
 
     Public Function Main() As Integer
         ' Returns 0 if no error, 1 if an error
@@ -75,10 +28,7 @@ Module modMain
         Dim objParseCommandLine As New clsParseCommandLine
         Dim blnProceed As Boolean
 
-        mColumnNumber = 1
         mInputFilePath = String.Empty
-        mOutputFolderPath = String.Empty
-        mColumnDelimiter = ControlChars.Tab
 
         Try
             blnProceed = False
@@ -107,6 +57,45 @@ Module modMain
 
         Return intReturnCode
 
+    End Function
+
+
+    Private Function CleanupFilePaths() As Boolean
+        ' Returns True if success, False if failure
+
+        Try
+            ' Make sure mInputFilePath points to a valid file
+            If Not System.IO.File.Exists(mInputFilePath) Then
+                System.Console.WriteLine(ControlChars.NewLine & "Error -- Input file not found: " & ControlChars.NewLine & mInputFilePath)
+                CleanupFilePaths = False
+            Else
+                If mOutputFolderPath Is Nothing OrElse mOutputFolderPath.Length = 0 Then
+                    ' Define mOutputFolderPath based on mInputFilePath
+                    Dim ioFileInfo As System.IO.FileInfo
+                    ioFileInfo = New System.IO.FileInfo(mInputFilePath)
+                    mOutputFolderPath = ioFileInfo.DirectoryName
+                End If
+
+
+                Return True
+            End If
+        Catch ex As System.Exception
+            System.Console.WriteLine(ControlChars.NewLine & "Error cleaning up the file paths: " & ControlChars.NewLine & ex.Message)
+        End Try
+
+        Return False
+
+    End Function
+
+    Private Function GetAppFolderPath() As String
+        ' Could use Application.StartupPath, but .GetExecutingAssembly is better
+        Return System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+    End Function
+
+    Private Function GetAppVersion() As String
+        'Return System.Windows.Forms.Application.ProductVersion & " (" & PROGRAM_DATE & ")"
+
+        Return System.Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString & " (" & PROGRAM_DATE & ")"
     End Function
 
     Private Function RunPeptideProphet() As Boolean
@@ -155,7 +144,7 @@ Module modMain
     Private Function SetOptionsUsingCommandLineParameters(ByVal objParseCommandLine As clsParseCommandLine) As Boolean
         ' Returns True if no problems; otherwise, returns false
 
-        Dim strValue As String
+        Dim strValue As String = String.Empty
         Dim strValidParameters() As String = New String() {"I", "O"}
 
         Try
@@ -168,7 +157,7 @@ Module modMain
                     If .RetrieveValueForParameter("I", strValue) Then
                         mInputFilePath = strValue
                     ElseIf .NonSwitchParameterCount > 0 Then
-                            mInputFilePath = .RetrieveNonSwitchParameter(0)
+                        mInputFilePath = .RetrieveNonSwitchParameter(0)
                     End If
 
                     If .RetrieveValueForParameter("O", strValue) Then
@@ -182,46 +171,36 @@ Module modMain
             End If
 
         Catch ex As System.Exception
-            System.Console.WriteLine(ControlChars.NewLine & "Error parsing the command line parameters: " & ControlChars.NewLine & ex.Message)
+            Console.WriteLine("Error parsing the command line parameters: " & ControlChars.NewLine & ex.Message)
         End Try
+
+        Return False
 
     End Function
 
     Private Sub ShowProgramHelp()
 
-        Dim strSyntax As String
-        Dim ioPath As System.IO.Path
-
         Try
 
-            strSyntax = "This program runs Peptide Prophet on the given Synopsis file" & ControlChars.NewLine & ControlChars.NewLine
+            Console.WriteLine("TThis program runs Peptide Prophet on the given Sequest Synopsis file")
+            Console.WriteLine()
+            Console.WriteLine("Program syntax:" & ControlChars.NewLine & IO.Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+            Console.WriteLine(" InputFilePath.txt [/O:OutputFolderPath]")
+            Console.WriteLine()
 
-            strSyntax &= "Program syntax:" & ControlChars.NewLine & ioPath.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            strSyntax &= " /I:SynFilePath.txt /O:OutputFolderPath" & ControlChars.NewLine & ControlChars.NewLine
+            Console.WriteLine("Program written by Matthew Monroe for the Department of Energy (PNNL, Richland, WA) in 2003")
+            Console.WriteLine("Version: " & GetAppVersion())
+            Console.WriteLine()
 
-            strSyntax &= "Program written by Matthew Monroe for the Department of Energy (PNNL, Richland, WA) in 2003" & ControlChars.NewLine & ControlChars.NewLine
+            Console.WriteLine("E-mail: matthew.monroe@pnl.gov or matt@alchemistmatt.com")
+            Console.WriteLine("Website: http://omics.pnl.gov/ or http://www.sysbio.org/resources/staff/")
+            Console.WriteLine()
 
-            strSyntax &= "This is version " & System.Windows.Forms.Application.ProductVersion & " (" & PROGRAM_DATE & ")" & ControlChars.NewLine & ControlChars.NewLine
-
-            strSyntax &= "E-mail: matthew.monroe@pnl.gov or matt@alchemistmatt.com" & ControlChars.NewLine
-            strSyntax &= "Website: http://ncrr.pnl.gov/ or http://www.sysbio.org/resources/staff/" & ControlChars.NewLine & ControlChars.NewLine
-
-            strSyntax &= "Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License.  "
-            strSyntax &= "You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0" & ControlChars.NewLine & ControlChars.NewLine
-
-            strSyntax &= "Notice: This computer software was prepared by Battelle Memorial Institute, "
-            strSyntax &= "hereinafter the Contractor, under Contract No. DE-AC05-76RL0 1830 with the "
-            strSyntax &= "Department of Energy (DOE).  All rights in the computer software are reserved "
-            strSyntax &= "by DOE on behalf of the United States Government and the Contractor as "
-            strSyntax &= "provided in the Contract.  NEITHER THE GOVERNMENT NOR THE CONTRACTOR MAKES ANY "
-            strSyntax &= "WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS "
-            strSyntax &= "SOFTWARE.  This notice including this sentence must appear on any copies of "
-            strSyntax &= "this computer software." & ControlChars.NewLine
-
-            System.Console.WriteLine(ControlChars.NewLine & strSyntax)
+            ' Delay for 750 msec in case the user double clicked this file from within Windows Explorer (or started the program via a shortcut)
+            System.Threading.Thread.Sleep(750)
 
         Catch ex As System.Exception
-            MsgBox("Error displaying the program syntax: " & ControlChars.NewLine & ex.Message, MsgBoxStyle.Exclamation Or MsgBoxStyle.OKOnly, "Error")
+            Console.WriteLine("Error displaying the program syntax: " & ex.Message)
         End Try
 
     End Sub
