@@ -307,6 +307,8 @@ void MixtureModel::deriveModel(int maxnumiters) {
  //   }
 	//std::cout << counter << " ";
  //   std::cout.flush();
+
+	std::cout << "Iteration " << counter << "\n";
     counter++;
   }
   /*
@@ -348,6 +350,7 @@ void MixtureModel::deriveModel(int maxnumiters) {
       }
   } // if maldi or qtof
   */
+
   //for(int k = 0; k < 12; k++) {
   //  std::cout << '\b';
   //}
@@ -357,7 +360,9 @@ void MixtureModel::deriveModel(int maxnumiters) {
   //if(counter > 100) {
   //  std::cout << '\b';
   //}
-  //std::cout << std::endl << std::endl << " Model complete after " << counter-1 << " iterations" << std::endl << std::endl;
+
+  std::cout << std::endl << std::endl << " Model complete after " << counter-1 << " iterations" << std::endl << std::endl;
+
 	//std::cout << std::endl << " " << counter << " iterations for other charge states not listed above." << std::endl << std::endl;
 
   // if not both satisfactorily modeled
@@ -378,7 +383,7 @@ void MixtureModel::deriveModel(int maxnumiters) {
 
 Boolean2 MixtureModel::iterate(int counter) {
 	Boolean2 output = False;
-	
+
 	for(int charge = 0; charge < numCharge; charge++) {	
 
 		if(done_[charge] < 0) {
@@ -981,7 +986,7 @@ void MixtureModel::writeResults(char* filename)
 			int temp = 1 ;	//charge
 
 			//fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*scanNumberAll_)[0])[k] << "\t" << temp << "\t" << (*(*xcorrAll_)[0])[k] << "\t" << (*(*deltaCn2All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,0)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",0)))->getNMCValue(k) << "\t" << (*(*probs_)[0])[k] ; //Xiuxia<< (*(*probs_)[0])[k] ; //Xiuxia
-			//fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,0)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",0)))->getNMCValue(k) << "\t" << (*(*probs_)[0])[k] ; 
+			//fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << temp << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,0)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",0)))->getNMCValue(k) << "\t" << (*(*probs_)[0])[k] ; 
 			fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << (*(*probs_)[0])[k] ; //Xiuxia<< (*(*probs_)[0])[k] ; //Xiuxia
 		}
 
@@ -1041,7 +1046,7 @@ void MixtureModel::writeResults(char* filename)
 				}
 				else {
 					//fout << (*(*dataset_num_All_)[charge])[k] << "\t" << (*(*scanNumberAll_)[charge])[k] << "\t" << charge+1 << "\t" << (*(*xcorrAll_)[charge])[k] << "\t" << (*(*deltaCn2All_)[charge])[k] << "\t" << (*(*fvalAll_)[charge])[k] << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,charge)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",charge)))->getNMCValue(k) << "\t" << (*(*probs_)[charge])[k] ; //Xiuxia
-					//fout << (*(*dataset_num_All_)[charge])[k] << "\t" << (*(*fvalAll_)[charge])[k] << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,charge)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",charge)))->getNMCValue(k) << "\t" << (*(*probs_)[charge])[k] ; //Xiuxia
+					//fout << (*(*dataset_num_All_)[charge])[k] << "\t" << (*(*fvalAll_)[charge])[k] << "\t" << charge+1 << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,charge)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",charge)))->getNMCValue(k) << "\t" << (*(*probs_)[charge])[k] ; //Xiuxia
 					fout << (*(*dataset_num_All_)[charge])[k] << "\t" << (*(*fvalAll_)[charge])[k] << "\t" << (*(*probs_)[charge])[k] ; //Xiuxia
 
 				}
@@ -1198,7 +1203,7 @@ void MixtureModel::writeResultsOrdered(const char* filename, std::vector<Dataset
 
 	fclose(fp) ; 
 //	fout.close();
-	//std::cerr << "Total number of output HitNum = " << totaloutrow << std::endl ;
+	std::cout << "  ... wrote out " << totaloutrow << " lines" << std::endl ;
 }
 
 
@@ -1507,6 +1512,7 @@ int comp_nums(const void* num1, const void* num2) {
   if(*num1_ < *num2_) return 1;
   if(*num1_ == *num2_) return 0;
   if(*num1_ > *num2_) return -1;
+  return 0;
 }
 
 int comp_specs(const void* num1, const void* num2) {

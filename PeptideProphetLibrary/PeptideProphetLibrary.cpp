@@ -258,6 +258,9 @@ namespace PeptideProphetLibrary
 		std::vector<SequestResult> vectResults ; 
 		std::vector<DatasetNumMap> vecDatasetNumMap ;
 
+		std::cout << "Loading synopsis file\n";
+		std::cout.flush();
+
 		// load the synopsis file into a vector of results.
 		char* c_synopsis_file;
 		try
@@ -274,6 +277,10 @@ namespace PeptideProphetLibrary
 			this->error_msg = ex->Message;
 			this->results = IPeptideProphet::ProcessResults::PP_FAILURE;
 			this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
+
+			std::cout << "Error: " <<  ex->Message << "\n";
+			std::cout.flush();
+
 			return 1;
 		}
 
@@ -290,7 +297,8 @@ namespace PeptideProphetLibrary
 		Boolean2 mascot = False;
 		Boolean2 qtof = False;
 
-		
+		std::cout << "Processing\n";
+		std::cout.flush();
 
 		char *c_enzyme;
 		char* c_output_file;
@@ -315,14 +323,12 @@ namespace PeptideProphetLibrary
 			if(abort)
 				throw new AbortException("Aborted");
 
-
 			// See above comment concerning c_enzyme
 			MixtureModel* mixmodel ;
 			if(strlen(c_enzyme) == 0)
 				mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, "tryptic");
 			else
 				mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, c_enzyme);
-
 			Marshal::FreeHGlobal(c_enzyme);
 
 			SequestDiscrimFunction* SequestDiscrimFcn = new SequestDiscrimFunction(0) ;
@@ -335,6 +341,9 @@ namespace PeptideProphetLibrary
 			c_output_file_param = (char*)(void*)Marshal::StringToHGlobalAnsi(output_file_param);
 
 			//mixmodel->writeResults(c_output_file) ;
+
+			std::cout << "Saving results" << std::endl;
+
 			mixmodel->writeResultsOrdered(c_output_file, vecDatasetNumMap) ;
 
 			SequestDiscrimFcn->writeCoef(c_output_file_param) ; 

@@ -1,5 +1,5 @@
 <VisualStudioProject>
-    <CSHARP LastOpenVersion = "7.10.3077" >
+    <CSHARP LastOpenVersion = "7.10.6030" >
         <Build>
             <Settings ReferencePath = "" >
                 <Config
@@ -11,7 +11,7 @@
                     RemoteDebugEnabled = "false"
                     RemoteDebugMachine = ""
                     StartAction = "Project"
-                    StartArguments = ""
+                    StartArguments = "PTO_LDMM_Pept_iTRAQ_D_28Jun11_Earth_11-04-22_syn.txt"
                     StartPage = ""
                     StartProgram = ""
                     StartURL = ""

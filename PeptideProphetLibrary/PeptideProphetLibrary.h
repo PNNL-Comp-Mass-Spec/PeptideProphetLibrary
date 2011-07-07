@@ -25,7 +25,7 @@ namespace PeptideProphetLibrary
 	public __value struct InitializationParams
 	{
 		System::String* InputFileName;
-		System::String* OutputFilePath;
+		System::String* OutputFolderPath;
 		System::String* Enzyme;
 		int DebugLevel;
 		//ILogger Logger; // Include this if using the prism dll logging
@@ -195,15 +195,21 @@ namespace PeptideProphetLibrary
 				this->DebugLevel = InitParams.DebugLevel;
 				this->Enzyme = InitParams.Enzyme;
 				this->InputFileName = InitParams.InputFileName;
-				this->OutputFilePath = InitParams.OutputFilePath;	
+				this->OutputFilePath = InitParams.OutputFolderPath;	
 			}
 
 			IPeptideProphet::ProcessCheckFile FileCheck ()
 			{
-				if (!System::IO::File::Exists(this->InputFileName) || !System::IO::Directory::Exists(this->OutputFilePath))
+				if (!System::IO::File::Exists(this->InputFileName))
 				{
-					throw new AbortException("Input file or output file path do not exist!");
+					throw new AbortException(String::Concat("Input file not found: ", this->InputFileName));
 				}
+
+				if (!System::IO::Directory::Exists(this->OutputFilePath))
+				{
+					throw new AbortException(String::Concat("Output folder not found: ", this->OutputFilePath));
+				}
+
 				else
 				{
 					this->file_status = IPeptideProphet::ProcessCheckFile::PP_IOFileExist ;
@@ -242,7 +248,7 @@ namespace PeptideProphetLibrary
 						= System::IO::Path::Combine(this->OutputFilePath, "PeptideProphet_Coefficients.txt" ) ; 
 
 					//System::String *output_file 
-						//= System::IO::Path::Combine(this->OutputFilePath, new System::String("peptide_prophet_results.txt"));
+						//= System::IO::Path::Combine(this->OutputFolderPath, new System::String("peptide_prophet_results.txt"));
 					this->PValueCalculate(this->InputFileName, output_file, output_file_param, this->Enzyme);
 
 					status = IPeptideProphet::ProcessStatus::PP_COMPLETE;
@@ -253,6 +259,7 @@ namespace PeptideProphetLibrary
 					this->error_msg = ex->Message;
 					this->file_status = IPeptideProphet::ProcessCheckFile::PP_IOFileNonexistent;
 					this->results = IPeptideProphet::ProcessResults::PP_ABORTED ;
+					this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
 				}
 				catch(System::Exception *ex)
 				{			
