@@ -17,9 +17,18 @@ Option Strict On
 Module modMain
 
     Public Const PROGRAM_DATE As String = "July 7, 2011"
+    Private Const PEP_PROPHET_ENZYME As String = "tryptic"
 
     Private mInputFilePath As String
     Private mOutputFolderPath As String
+    Private mMaxRuntimeMinutes As Integer = 0       ' Set to a positive value to abort processing if this many minutes elapses
+
+    Private m_PeptideProphet As PeptideProphetLibrary.PeptideProphet
+
+    Private m_PepProphetThread As System.Threading.Thread
+    Private m_PepProphetThreadStart As New System.Threading.ThreadStart(AddressOf StartPeptideProphet)
+    Private m_PepProphetRetVal As PeptideProphetLibrary.IPeptideProphet.ProcessStatus
+
 
     Public Function Main() As Integer
         ' Returns 0 if no error, 1 if an error
@@ -100,33 +109,46 @@ Module modMain
 
     Private Function RunPeptideProphet() As Boolean
 
-        Const PEP_PROPHET_ENZYME As String = "tryptic"
+        Dim dtStartTime As System.DateTime
 
         If Not CleanupFilePaths() Then
             Return False
         End If
 
-        'Call peptide prophet
-
-        Dim p As PeptideProphetLibrary.PeptideProphet = New PeptideProphetLibrary.PeptideProphet
-        Dim StartParams As New PeptideProphetLibrary.InitializationParams
-        StartParams.InputFileName = mInputFilePath
-        StartParams.OutputFolderPath = mOutputFolderPath
-        StartParams.Enzyme = PEP_PROPHET_ENZYME
-
-        p.Setup(StartParams)
-        Dim RetVal As PeptideProphetLibrary.IPeptideProphet.ProcessStatus
 
         Try
-            RetVal = p.Start()
+            'Call peptide prophet using a separate thread so that we can abort it if it runs too long
 
-            Do While (p.Status = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_STARTING) OrElse _
-                     (p.Status = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_RUNNING)
-                System.Threading.Thread.Sleep(2000)
+            m_PepProphetThread = New System.Threading.Thread(m_PepProphetThreadStart)
+            m_PepProphetThread.Start()
+            dtStartTime = System.DateTime.Now()
+
+            ' Wait 2 seconds
+            System.Threading.Thread.Sleep(2000)
+
+            Do While m_PeptideProphet Is Nothing AndAlso System.DateTime.Now.Subtract(dtStartTime).TotalSeconds < 20
+                ' Wait some more if the peptide prophet object still isn't instantiated
+                System.Threading.Thread.Sleep(1000)
             Loop
 
-            If RetVal = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_ERROR Then
-                Console.WriteLine("Error while running peptide prophet: " & p.ErrMsg)
+            Do While (m_PeptideProphet.Status = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_STARTING) OrElse _
+                     (m_PeptideProphet.Status = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_RUNNING)
+
+                System.Threading.Thread.Sleep(3000)
+
+                '' RaiseEvent PeptideProphetRunning("Status = " & m_PeptideProphet.Status.ToString, m_PeptideProphet.PercentComplete)
+
+                If mMaxRuntimeMinutes > 0 AndAlso System.DateTime.Now.Subtract(dtStartTime).TotalMinutes >= mMaxRuntimeMinutes Then
+                    Console.WriteLine("Peptide prophet has been running for over " & mMaxRuntimeMinutes.ToString & " minutes; aborting")
+                    Console.WriteLine()
+                    m_PepProphetThread.Abort()
+                    Return False
+                End If
+            Loop
+
+            If m_PepProphetRetVal = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_ERROR Then
+                Console.WriteLine("Peptide prophet returned a non-zero error code: " & m_PepProphetRetVal.ToString)
+                Console.WriteLine(m_PeptideProphet.ErrMsg)
                 Return False
             End If
 
@@ -134,7 +156,7 @@ Module modMain
 
         Catch ex As System.Exception
             Console.WriteLine("Exception while running peptide prophet: " & ex.Message)
-            p = Nothing
+            m_PeptideProphet = Nothing
             Return False
         End Try
 
@@ -145,7 +167,8 @@ Module modMain
         ' Returns True if no problems; otherwise, returns false
 
         Dim strValue As String = String.Empty
-        Dim strValidParameters() As String = New String() {"I", "O"}
+        Dim strValidParameters() As String = New String() {"I", "O", "T"}
+        Dim intValue As Integer
 
         Try
             ' Make sure no invalid parameters are present
@@ -165,6 +188,12 @@ Module modMain
                     ElseIf .NonSwitchParameterCount >= 2 Then
                         mOutputFolderPath = .RetrieveNonSwitchParameter(1)
                     End If
+
+                    If .RetrieveValueForParameter("T", strValue) Then
+                        If Integer.TryParse(strValue, intValue) Then
+                            If intValue > 0 Then mMaxRuntimeMinutes = intValue
+                        End If
+                    End If
                 End With
 
                 Return True
@@ -182,10 +211,10 @@ Module modMain
 
         Try
 
-            Console.WriteLine("TThis program runs Peptide Prophet on the given Sequest Synopsis file")
+            Console.WriteLine("This program runs Peptide Prophet on the given Sequest Synopsis file")
             Console.WriteLine()
             Console.WriteLine("Program syntax:" & ControlChars.NewLine & IO.Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-            Console.WriteLine(" InputFilePath.txt [/O:OutputFolderPath]")
+            Console.WriteLine(" InputFilePath.txt [/O:OutputFolderPath] [/T:MaxRuntimeMinutes]")
             Console.WriteLine()
 
             Console.WriteLine("Program written by Matthew Monroe for the Department of Energy (PNNL, Richland, WA) in 2003")
@@ -205,4 +234,27 @@ Module modMain
 
     End Sub
 
+    Private Sub StartPeptideProphet()
+
+        ' Initialize peptide prophet
+        m_PeptideProphet = New PeptideProphetLibrary.PeptideProphet
+
+        Dim StartParams As PeptideProphetLibrary.InitializationParams
+        StartParams = New PeptideProphetLibrary.InitializationParams
+
+        StartParams.InputFileName = mInputFilePath
+        StartParams.OutputFolderPath = mOutputFolderPath
+        StartParams.Enzyme = PEP_PROPHET_ENZYME
+        m_PeptideProphet.Setup(StartParams)
+
+        Try
+            'Call peptide prophet
+            m_PepProphetRetVal = m_PeptideProphet.Start()
+
+        Catch ex As System.Exception
+            Console.WriteLine("Error running Peptide Prophet: " & ex.Message & " " & ex.StackTrace)
+            m_PepProphetRetVal = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_ERROR
+        End Try
+    End Sub
+  
 End Module
