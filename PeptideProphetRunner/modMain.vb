@@ -121,12 +121,12 @@ Module modMain
 
             m_PepProphetThread = New System.Threading.Thread(m_PepProphetThreadStart)
             m_PepProphetThread.Start()
-            dtStartTime = System.DateTime.Now()
+            dtStartTime = System.DateTime.UtcNow
 
             ' Wait 2 seconds
             System.Threading.Thread.Sleep(2000)
 
-            Do While m_PeptideProphet Is Nothing AndAlso System.DateTime.Now.Subtract(dtStartTime).TotalSeconds < 20
+            Do While m_PeptideProphet Is Nothing AndAlso System.DateTime.UtcNow.Subtract(dtStartTime).TotalSeconds < 20
                 ' Wait some more if the peptide prophet object still isn't instantiated
                 System.Threading.Thread.Sleep(1000)
             Loop
@@ -138,7 +138,7 @@ Module modMain
 
                 '' RaiseEvent PeptideProphetRunning("Status = " & m_PeptideProphet.Status.ToString, m_PeptideProphet.PercentComplete)
 
-                If mMaxRuntimeMinutes > 0 AndAlso System.DateTime.Now.Subtract(dtStartTime).TotalMinutes >= mMaxRuntimeMinutes Then
+                If mMaxRuntimeMinutes > 0 AndAlso System.DateTime.UtcNow.Subtract(dtStartTime).TotalMinutes >= mMaxRuntimeMinutes Then
                     Console.WriteLine("Peptide prophet has been running for over " & mMaxRuntimeMinutes.ToString & " minutes; aborting")
                     Console.WriteLine()
                     m_PepProphetThread.Abort()
