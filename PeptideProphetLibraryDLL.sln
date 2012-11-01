@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PeptideProphetLibrary", "PeptideProphetLibrary\PeptideProphetLibrary.vcproj", "{C33FB992-BC41-4B93-97A7-7D19332CDEF9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{C33FB992-BC41-4B93-97A7-7D19332CDEF9}.Debug.ActiveCfg = Debug|Win32
+		{C33FB992-BC41-4B93-97A7-7D19332CDEF9}.Debug.Build.0 = Debug|Win32
+		{C33FB992-BC41-4B93-97A7-7D19332CDEF9}.Release.ActiveCfg = Release|Win32
+		{C33FB992-BC41-4B93-97A7-7D19332CDEF9}.Release.Build.0 = Release|Win32
+		{46C94DD2-CB15-4059-B59E-02CEB6CB4E21}.Debug.ActiveCfg = Debug|.NET
+		{46C94DD2-CB15-4059-B59E-02CEB6CB4E21}.Debug.Build.0 = Debug|.NET
+		{46C94DD2-CB15-4059-B59E-02CEB6CB4E21}.Release.ActiveCfg = Release|.NET
+		{46C94DD2-CB15-4059-B59E-02CEB6CB4E21}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -16,7 +16,7 @@ Option Strict On
 
 Module modMain
 
-    Public Const PROGRAM_DATE As String = "July 7, 2011"
+	Public Const PROGRAM_DATE As String = "November 1, 2012"
     Private Const PEP_PROPHET_ENZYME As String = "tryptic"
 
     Private mInputFilePath As String

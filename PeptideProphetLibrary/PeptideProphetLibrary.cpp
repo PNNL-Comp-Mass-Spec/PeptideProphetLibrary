@@ -90,7 +90,8 @@ namespace PeptideProphetLibrary
 
 		if(! fhtml) {
 			//std::cerr << " Could not open synopsis file " << synopsis_file << std::endl;
-			System::String *err = new System::String(" Could not open synopsis file ");
+			std::cout << " Could not open synopsis file, file not found" << synopsis_file << "\n";
+			System::String *err = new System::String(" Could not open synopsis file, file not found");
 			throw new System::Exception(err);
 			//exit(1);
 		}
@@ -99,6 +100,7 @@ namespace PeptideProphetLibrary
 		char data[MAX_BUFFER_SIZE];
 
 		int numLoaded = 0 ; 
+		int numSkipped = 0 ;
 		float tolerance = 0.00001 ; 
 		//Xiuxia, if this tolerance is too small, then equal numbers might be considered unequal, 06/06/2006
 
@@ -174,10 +176,15 @@ namespace PeptideProphetLibrary
 					vectResults.push_back(result) ; 
 					numLoaded++ ; 
 				}
+				else
+				{
+					numSkipped++ ;
+				}
 			}
 		}
 
-		//std::cerr << std::endl << " Total number of scans loaded from the synopsis file = " << numLoaded << std::endl ;
+		std::cout << " Loaded  " << numLoaded << " results\n" ;
+		std::cout << " Skipped " << numSkipped << " results where charge is " << (numCharge+1) << "+ or higher\n" ;
 		fhtml.close() ; 
 		
 		sort(vectResults.begin(), vectResults.end(), SortSequestResultsByScanChargeXCorrDelcn2Peptide) ; 
@@ -202,7 +209,7 @@ namespace PeptideProphetLibrary
 			int cDatasetNum = vectResults[index].dataset_num_ ;
 			int cScan = vectResults[index].ScanNumber ; 
 			int clast_Scan = vectResults[index-1].ScanNumber ; 
-			int cCharge = vectResults[index].ScanNumber ; 
+			int cCharge = vectResults[index].charge_ ; 
 			int clast_Charge = vectResults[index-1].ScanNumber ; 
 			double cXCorr = vectResults[index].xcorr_ ; 
 			double clast_XCorr = vectResults[index-1].xcorr_ ; 
@@ -241,16 +248,16 @@ namespace PeptideProphetLibrary
 		vectResults.insert(vectResults.begin(), copyVect.begin(), copyVect.end()) ; 
 		copyVect.clear() ; 
 
-		//std::cerr << " Total number of unique scans to be processed = " << vectResults.size() << std::endl << std::endl ;
+		std::cout << " Total number of unique results to be processed = " << vectResults.size() << "\n\n" ;
 	}
 
 
 
 	int PeptideProphet::PValueCalculate(System::String *synopsis_file, System::String *output_file, System::String *output_file_param, System::String *p_enzyme)
 	{	
-		//std::cerr << "\n PeptideProphet v. 1.0 by A.Keller 11.7.02 ISB \n" ;
-		////std::cerr << " Modified by Xiuxia Du and Deep Jaitly, June 21, 2006" << std::endl << std::endl ;
-		//std::cerr << " Modified by PNNL, June 21, 2006" << std::endl << std::endl ;
+		std::cout << "\nPeptideProphet v. 1.0 by A.Keller 11.7.02 ISB \n" ;
+		std::cout << "Modified by Xiuxia Du and Deep Jaitly, June 21, 2006\n" ;
+		std::cout << "Last updated November 1, 2012\n" ;
 
 		//if (argc != 3 && argc != 4)
 		//	Usage(argc, argv) ; 
@@ -258,14 +265,15 @@ namespace PeptideProphetLibrary
 		std::vector<SequestResult> vectResults ; 
 		std::vector<DatasetNumMap> vecDatasetNumMap ;
 
-		std::cout << "Loading synopsis file\n";
-		std::cout.flush();
-
 		// load the synopsis file into a vector of results.
 		char* c_synopsis_file;
 		try
 		{
 			c_synopsis_file = (char*)(void*)Marshal::StringToHGlobalAnsi(synopsis_file);
+
+			std::cout << "\nLoading synopsis file, " << c_synopsis_file << "\n";
+			std::cout.flush();
+
 			LoadSynopsisFile(c_synopsis_file, vectResults, vecDatasetNumMap) ; 
 
 			Marshal::FreeHGlobal(c_synopsis_file);	
