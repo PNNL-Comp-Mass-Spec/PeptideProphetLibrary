@@ -5,9 +5,9 @@
 #include <iostream>
 #include <vector>
 #include "SequestResult.h"
-#include "SequestDiscrimScoreCalculator.h" 
+#include "SequestDiscrimScoreCalculator.h"
 #include "MixtureModel.h"
-#include <fstream> 
+#include <fstream>
 #include "GlobalVariable.h"
 #include <algorithm>
 #include <string>
@@ -31,7 +31,7 @@ namespace PeptideProphetLibrary
 		//ILogger Logger; // Include this if using the prism dll logging
 	};
 
-	public __gc class AbortException : public System::Exception	
+	public __gc class AbortException : public System::Exception
 	{
 		public:
 			AbortException(System::String __gc *s) : System::Exception(s) {}
@@ -45,21 +45,21 @@ namespace PeptideProphetLibrary
 			PP_IOFileExist,
 			PP_IOFileNonexistent
 		} ;
-		__value enum ProcessResults 
-		{ 
+		__value enum ProcessResults
+		{
 			PP_SUCCESS = 0, // Operation succeeded
 			PP_FAILURE = -1, // Operation failed
 			PP_ABORTED = -2  // PeptideProphet aborted
 		};
-		__value enum ProcessStatus 
-		{ 			
+		__value enum ProcessStatus
+		{
 			PP_STARTING, // PeptideProphet initialization in progress
 			PP_RUNNING,  // PeptideProphet running
-			PP_COMPLETE, // PeptideProphet successfully completed 
+			PP_COMPLETE, // PeptideProphet successfully completed
 			PP_ERROR,    // There was an error somewhere
 			PP_ABORTING  // An ABORT command has been received; plugin shutdown in progress
 		};
-		
+
 		// (in) – filename and path to sequest synopsis results file
 		__property void set_InputFileName(System::String* value);
 		__property System::String* get_InputFileName();
@@ -68,7 +68,7 @@ namespace PeptideProphetLibrary
 		__property System::String* get_OutputFilePath();
 		// (in) - Enzyme name - right now only tryptic is supported
 		__property void set_Enzyme(System::String* value);
-		__property System::String* get_Enzyme();	
+		__property System::String* get_Enzyme();
 
 		__property ProcessCheckFile get_FileStatus() ;
 
@@ -83,7 +83,7 @@ namespace PeptideProphetLibrary
 		// Allows control of debug information verbosity; 0=minimum, 5=maximum verbosity
 		__property int	get_DebugLevel();
 		__property void set_DebugLevel(int level);
-		
+
 		//__property void set_Logger(ILogger logger);
 
 		// Initializes parameters. Must be called before executing Start()
@@ -101,7 +101,7 @@ namespace PeptideProphetLibrary
 	bool SortSequestResultsByScanChargeXCorrDelcn2Peptide(SequestResult &a, SequestResult &b);
 
 	public __gc class PeptideProphet : public PeptideProphetLibrary::IPeptideProphet
-	{	
+	{
 		private:
 			void LoadSynopsisFile(char *synopsis_file, std::vector<SequestResult> &vectResults, std::vector<DatasetNumMap> &vecDatasetNumMap);
 			char* strCopy(char* orig);
@@ -121,7 +121,7 @@ namespace PeptideProphetLibrary
 
 		public:
 			PeptideProphet(void) {}
-			
+
 			// IPeptideProphet Interface definitions:
 
 			// (in) – filename and path to sequest synopsis results file
@@ -186,7 +186,7 @@ namespace PeptideProphetLibrary
 			{
 				debug_level = level;
 			}
-			
+
 			//__property void set_Logger(ILogger logger);
 
 			// Initializes parameters. Must be called before executing Start()
@@ -195,7 +195,7 @@ namespace PeptideProphetLibrary
 				this->DebugLevel = InitParams.DebugLevel;
 				this->Enzyme = InitParams.Enzyme;
 				this->InputFileName = InitParams.InputFileName;
-				this->OutputFilePath = InitParams.OutputFolderPath;	
+				this->OutputFilePath = InitParams.OutputFolderPath;
 			}
 
 			IPeptideProphet::ProcessCheckFile FileCheck ()
@@ -220,10 +220,10 @@ namespace PeptideProphetLibrary
 
 			// Starts the peptide prophet file creation process
 			IPeptideProphet::ProcessStatus Start()
-			{	
+			{
 				try
-				{			
-					file_status = FileCheck() ;					
+				{
+					file_status = FileCheck() ;
 
 					status = IPeptideProphet::ProcessStatus::PP_RUNNING ;
 					results = IPeptideProphet::ProcessResults::PP_FAILURE ;
@@ -231,23 +231,23 @@ namespace PeptideProphetLibrary
 					abort = false;
 
 					String *temp1 ;
-					String *temp2 ;	
-					String *temp3 ;	
+					String *temp2 ;
+					String *temp3 ;
 					int at ;
 
 					temp1 = input_file_name ;
 					at = temp1->LastIndexOf(S"\\") ;
-					temp2 = temp1->Substring(at+1,temp1->Length-4-at-1) ;					 
+					temp2 = temp1->Substring(at+1,temp1->Length-4-at-1) ;
 					temp3 = String::Concat(temp2, "_PepProphet") ;
-					temp3 = String::Concat(temp3, ".txt") ;						
+					temp3 = String::Concat(temp3, ".txt") ;
 
-					System::String *output_file 
+					System::String *output_file
 						= System::IO::Path::Combine(this->OutputFilePath, temp3);
 
 					System::String *output_file_param
-						= System::IO::Path::Combine(this->OutputFilePath, "PeptideProphet_Coefficients.txt" ) ; 
+						= System::IO::Path::Combine(this->OutputFilePath, "PeptideProphet_Coefficients.txt" ) ;
 
-					//System::String *output_file 
+					//System::String *output_file
 						//= System::IO::Path::Combine(this->OutputFolderPath, new System::String("peptide_prophet_results.txt"));
 					this->PValueCalculate(this->InputFileName, output_file, output_file_param, this->Enzyme);
 
@@ -262,15 +262,15 @@ namespace PeptideProphetLibrary
 					this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
 				}
 				catch(System::Exception *ex)
-				{			
-					//status = IPeptideProphet::ProcessStatus::PP_ERROR;		
+				{
+					//status = IPeptideProphet::ProcessStatus::PP_ERROR;
 
 					this->error_msg = ex->Message;
 					this->results = IPeptideProphet::ProcessResults::PP_FAILURE;
 					this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
 				}
-							
-				return Status;				
+
+				return Status;
 			}
 
 			// Aborts peptide prophet file creation
