@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C33FB992-BC41-4B93-97A7-7D19332CDEF9}</ProjectGuid>
+    <RootNamespace>PeptideProphetLibrary</RootNamespace>
+    <Keyword>ManagedCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>OldSyntax</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>OldSyntax</CLRSupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.31727.243</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/Zl %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/noentry %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>mscoree.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/Zl %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/noentry %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>mscoree.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System.Data">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AbbrevSequestDiscrimFunction.cxx" />
+    <ClCompile Include="AspNEnzymeDigestion.cxx" />
+    <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="ChymotrypticEnzymeDigestion.cxx" />
+    <ClCompile Include="ContinuousDistribution.cxx" />
+    <ClCompile Include="ContinuousMultimixtureDistr.cxx" />
+    <ClCompile Include="DecayContinuousMultimixtureDistr.cxx" />
+    <ClCompile Include="DiscreteDistribution.cxx" />
+    <ClCompile Include="DiscreteMixtureDistr.cxx" />
+    <ClCompile Include="DiscriminantFunction.cxx" />
+    <ClCompile Include="DiscrimValMixtureDistr.cxx" />
+    <ClCompile Include="Distribution.cxx" />
+    <ClCompile Include="Elastase.cxx" />
+    <ClCompile Include="EnzymeDigestion.cxx" />
+    <ClCompile Include="EnzymeSpecificity.cxx" />
+    <ClCompile Include="ExtremeValueDistribution.cxx" />
+    <ClCompile Include="GammaDistribution.cxx" />
+    <ClCompile Include="GaussianDistribution.cxx" />
+    <ClCompile Include="GluCEnzymeDigestion.cxx" />
+    <ClCompile Include="GluC_bicarbEnzymeDigestion.cxx" />
+    <ClCompile Include="GlycMixtureDistr.cxx" />
+    <ClCompile Include="ICATMixtureDistr.cxx" />
+    <ClCompile Include="MascotDiscrimValMixtureDistr.cxx" />
+    <ClCompile Include="MassDifferenceDiscrMixtureDistr.cxx" />
+    <ClCompile Include="MixtureDistr.cxx" />
+    <ClCompile Include="MixtureModel.cxx" />
+    <ClCompile Include="MultipleEnzymeDigestion.cxx" />
+    <ClCompile Include="NMCMixtureDistr.cxx" />
+    <ClCompile Include="NonspecificEnzymeDigestion.cxx" />
+    <ClCompile Include="NTTMixtureDistr.cxx" />
+    <ClCompile Include="OrderedResult.cxx" />
+    <ClCompile Include="PeptideProphetLibrary.cpp" />
+    <ClCompile Include="ScoreCalculator.cxx" />
+    <ClCompile Include="SearchResult.cxx" />
+    <ClCompile Include="SequestDiscrimFunction.cxx" />
+    <ClCompile Include="SequestDiscrimScoreCalculator.cxx" />
+    <ClCompile Include="SequestResult.cxx" />
+    <ClCompile Include="Spectrum.cxx" />
+    <ClCompile Include="ToftofAbbrevSequestDiscrimFunction.cxx" />
+    <ClCompile Include="TrypChymAspnEnzymeDigestion.cxx" />
+    <ClCompile Include="TrypticEnzymeDigestion.cxx" />
+    <ClCompile Include="VariableOffsetMassDiffDiscrMixtureDistr.cxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AbbrevSequestDiscrimFunction.h" />
+    <ClInclude Include="Array.h" />
+    <ClInclude Include="AspNEnzymeDigestion.h" />
+    <ClInclude Include="ChymotrypticEnzymeDigestion.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="ContinuousDistribution.h" />
+    <ClInclude Include="ContinuousMultimixtureDistr.h" />
+    <ClInclude Include="DatasetNumMap.h" />
+    <ClInclude Include="DecayContinuousMultimixtureDistr.h" />
+    <ClInclude Include="DiscreteDistribution.h" />
+    <ClInclude Include="DiscreteMixtureDistr.h" />
+    <ClInclude Include="DiscriminantFunction.h" />
+    <ClInclude Include="DiscrimValMixtureDistr.h" />
+    <ClInclude Include="Distribution.h" />
+    <ClInclude Include="Elastase.h" />
+    <ClInclude Include="EnzymeDigestion.h" />
+    <ClInclude Include="EnzymeSpecificity.h" />
+    <ClInclude Include="ExtremeValueDistribution.h" />
+    <ClInclude Include="GammaDistribution.h" />
+    <ClInclude Include="GaussianDistribution.h" />
+    <ClInclude Include="GlobalVariable.h" />
+    <ClInclude Include="GluCEnzymeDigestion.h" />
+    <ClInclude Include="GluC_bicarbEnzymeDigestion.h" />
+    <ClInclude Include="GlycMixtureDistr.h" />
+    <ClInclude Include="ICATMixtureDistr.h" />
+    <ClInclude Include="MascotDiscrimValMixtureDistr.h" />
+    <ClInclude Include="MassDifferenceDiscrMixtureDistr.h" />
+    <ClInclude Include="MixtureDistr.h" />
+    <ClInclude Include="MixtureModel.h" />
+    <ClInclude Include="MultipleEnzymeDigestion.h" />
+    <ClInclude Include="MutlipleEnzymeDigestion.h" />
+    <ClInclude Include="NMCMixtureDistr.h" />
+    <ClInclude Include="NonspecificEnzymeDigestion.h" />
+    <ClInclude Include="NTTMixtureDistr.h" />
+    <ClInclude Include="OrderedResult.h" />
+    <ClInclude Include="OutputContent.h" />
+    <ClInclude Include="PeptideProphetLibrary.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ScoreCalculator.h" />
+    <ClInclude Include="SearchResult.h" />
+    <ClInclude Include="SequestDiscrimFunction.h" />
+    <ClInclude Include="SequestDiscrimScoreCalculator.h" />
+    <ClInclude Include="SequestResult.h" />
+    <ClInclude Include="Spectrum.h" />
+    <ClInclude Include="sysdepend.h" />
+    <ClInclude Include="ToftofAbbrevSequestDiscrimFunction.h" />
+    <ClInclude Include="TrypChymAspnEnzymeDigestion.h" />
+    <ClInclude Include="TrypticEnzymeDigestion.h" />
+    <ClInclude Include="VariableOffsetMassDiffDiscrMixtureDistr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PeptideProphetLibrary.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
