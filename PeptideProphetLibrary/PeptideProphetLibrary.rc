@@ -25,18 +25,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE
 BEGIN
     "#include ""winres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE
 BEGIN
     "\r\n"
     "\0"
@@ -69,12 +69,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Battelle PNNL"
             VALUE "FileDescription", "PeptideP Dynamic Link Library"
-            VALUE "FileVersion", "1.0.0.5"
+            VALUE "FileVersion", "1.0.0.6"
             VALUE "InternalName", "PeptideP"
             VALUE "LegalCopyright", "Copyright (C) 2006"
             VALUE "OriginalFilename", "PeptideP.dll"
             VALUE "ProductName", " PeptideP Dynamic Link Library"
-            VALUE "ProductVersion", "1.0.0.5"
+            VALUE "ProductVersion", "1.0.0.6"
         END
     END
     BLOCK "VarFileInfo"

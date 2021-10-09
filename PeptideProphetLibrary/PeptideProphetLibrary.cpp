@@ -255,7 +255,7 @@ namespace PeptideProphetLibrary
     {
         std::cout << "\nPeptideProphet v. 1.0 by A.Keller 11.7.02 ISB \n" ;
         std::cout << "Modified by Xiuxia Du and Deep Jaitly, June 21, 2006\n" ;
-        std::cout << "Last updated November 1, 2012\n" ;
+        std::cout << "Last updated October 8, 2021\n" ;
 
         //if (argc != 3 && argc != 4)
         //    Usage(argc, argv) ;
