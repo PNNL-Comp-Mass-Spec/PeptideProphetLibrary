@@ -1,5 +1,6 @@
 Option Strict On
 
+Imports PRISM
 ' This program calls Peptide Prophet to process the specified synopsis file
 '
 ' Example command line SynFileName.txt
@@ -12,11 +13,11 @@ Option Strict On
 ' E-mail: matthew.monroe@pnl.gov or matt@alchemistmatt.com
 ' Website: http://ncrr.pnl.gov/ or http://www.sysbio.org/resources/staff/
 ' -------------------------------------------------------------------------------
-' 
+'
 
 Module modMain
 
-	Public Const PROGRAM_DATE As String = "November 1, 2012"
+    Public Const PROGRAM_DATE As String = "October 8, 2021"
     Private Const PEP_PROPHET_ENZYME As String = "tryptic"
 
     Private mInputFilePath As String
@@ -45,9 +46,9 @@ Module modMain
                 If SetOptionsUsingCommandLineParameters(objParseCommandLine) Then blnProceed = True
             End If
 
-            If Not blnProceed OrElse _
-               objParseCommandLine.NeedToShowHelp OrElse _
-               objParseCommandLine.ParameterCount + objParseCommandLine.NonSwitchParameterCount = 0 OrElse _
+            If Not blnProceed OrElse
+               objParseCommandLine.NeedToShowHelp OrElse
+               objParseCommandLine.ParameterCount + objParseCommandLine.NonSwitchParameterCount = 0 OrElse
                mInputFilePath.Length = 0 Then
                 ShowProgramHelp()
                 intReturnCode = 1
