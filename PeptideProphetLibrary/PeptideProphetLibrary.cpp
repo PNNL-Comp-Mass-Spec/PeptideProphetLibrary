@@ -269,7 +269,7 @@ namespace PeptideProphetLibrary
         {
             c_synopsis_file = (char*)Marshal::StringToHGlobalAnsi(synopsis_file).ToPointer();
 
-            std::cout << "\nLoading synopsis file, " << c_synopsis_file << "\n";
+            std::cout << "\nLoading SEQUEST synopsis file, " << c_synopsis_file << "\n";
             std::cout.flush();
 
             LoadSynopsisFile(c_synopsis_file, vectResults, vecDatasetNumMap) ;
