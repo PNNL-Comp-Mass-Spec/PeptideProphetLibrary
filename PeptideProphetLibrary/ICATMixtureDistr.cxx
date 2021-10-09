@@ -56,10 +56,10 @@ Boolean2 ICATMixtureDistr::icatCompatible(const char* pep) {
   for(int k = 0; k < strlen(pep)-1; k++) {
     if(pep[k] == 'C') {
       if(pep[k+1] == '*' || pep[k+1] == '#' || pep[k+1] == '@') {
-	heavy = True;
+        heavy = True;
       }
       else {
-	light = True;
+        light = True;
       }
     }
   }

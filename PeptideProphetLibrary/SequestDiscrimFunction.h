@@ -58,20 +58,20 @@ class SequestDiscrimFunction : public DiscriminantFunction {
 
  protected:
 
-	 float consts[numCharge] ;
-	 float xcorrs[numCharge] ;
-	 float deltas[numCharge] ;
-	 float ranks[numCharge] ;
-	 float massdiffs[numCharge] ;
-	 float max_pep_lens[numCharge] ;
-	 float num_frags[numCharge] ;
+     float consts[numCharge] ;
+     float xcorrs[numCharge] ;
+     float deltas[numCharge] ;
+     float ranks[numCharge] ;
+     float massdiffs[numCharge] ;
+     float max_pep_lens[numCharge] ;
+     float num_frags[numCharge] ;
 
-	float xcorr_p_wt_;
-	float delta_wt_;
-	float log_rank_wt_;
-	float abs_massd_wt_;
-	int max_pep_len_;
-	int num_frags_;
+    float xcorr_p_wt_;
+    float delta_wt_;
+    float log_rank_wt_;
+    float abs_massd_wt_;
+    int max_pep_len_;
+    int num_frags_;
 
 }; // class
 

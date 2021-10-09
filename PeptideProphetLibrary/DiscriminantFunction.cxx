@@ -45,9 +45,9 @@ DiscriminantFunction::DiscriminantFunction(int charge) {
 
 void DiscriminantFunction::error(int charge) {
   //if(charge < 0 || charge > 2) {
-	if(charge < 0 || charge > numCharge-1) {	//Xiuxia
+    if(charge < 0 || charge > numCharge-1) {    //Xiuxia
     //std::cerr << "illegal charge: " << charge << std::endl;
-		throw gcnew System::Exception(gcnew System::String("illegal charge: " + charge));
+        throw gcnew System::Exception(gcnew System::String("illegal charge: " + charge));
     exit(1);
   }
 }

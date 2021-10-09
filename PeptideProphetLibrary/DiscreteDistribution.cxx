@@ -66,12 +66,12 @@ float DiscreteDistribution::getProb(float val) {
 
 void DiscreteDistribution::setPriors(float* priors, float numpriors) 
 {
-	if (priors_ != NULL)
-	{
-		delete [] priors_ ; 
-	}
-	priors_ = priors;
-	num_priors_ = numpriors;
+    if (priors_ != NULL)
+    {
+        delete [] priors_ ; 
+    }
+    priors_ = priors;
+    num_priors_ = numpriors;
 }
 
 float DiscreteDistribution::getProb(int val) {
@@ -81,7 +81,7 @@ void DiscreteDistribution::initUpdate(float* prior) {
 
   if(newtot_ != NULL) 
   {
-	  delete [] newtot_ ; 
+      delete [] newtot_ ; 
   }
   newtot_ = new float[num_bins_];
   
@@ -103,8 +103,8 @@ void DiscreteDistribution::initUpdate(float* prior) {
 
 void DiscreteDistribution::init(float* priors) {
     if(newtot_ != NULL) 
-	{
-		delete [] newtot_ ; 
+    {
+        delete [] newtot_ ; 
     }
     newtot_ = new float[num_bins_];
     newtot_[0] = 0.0;
@@ -131,7 +131,7 @@ Boolean2 DiscreteDistribution::update() {
     if(! set_ || (totwt_ == 0 && newtotwt_ > 0) || (totwt_ > 0 && newtotwt_ > 0)) {
       delta = (tot_[k]/totwt_) - (newtot_[k]/newtotwt_);
       if(abs(delta) > maxdiff_) {
-	output = True;
+    output = True;
       }
     }
 

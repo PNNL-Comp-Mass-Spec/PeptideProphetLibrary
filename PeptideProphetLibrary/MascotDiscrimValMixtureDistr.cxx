@@ -156,9 +156,9 @@ Boolean2 MascotDiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr
     totsq = 0.0;
     for(int k = 0; k < getNumVals(); k++) {
       if((*floatvals_)[k] < posmean[charge_] - posstdev[charge_]) {
-	mean += (*floatvals_)[k];
-	totsq += ((*floatvals_)[k]) * ((*floatvals_)[k]);
-	tot++;
+        mean += (*floatvals_)[k];
+    totsq += ((*floatvals_)[k]) * ((*floatvals_)[k]);
+    tot++;
       }
     } // next
 

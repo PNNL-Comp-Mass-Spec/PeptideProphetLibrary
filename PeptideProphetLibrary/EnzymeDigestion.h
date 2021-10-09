@@ -46,7 +46,7 @@ class EnzymeDigestion {
  public:
 
   EnzymeDigestion(char* sites, char* term_not_following, char* term_not_preceding, 
-		  int min_edge_dist, int min_dist);
+          int min_edge_dist, int min_dist);
   ~EnzymeDigestion();
   virtual int numMissedCleavages(std::string pep);
   virtual int numCompatibleTermini(std::string peptide);

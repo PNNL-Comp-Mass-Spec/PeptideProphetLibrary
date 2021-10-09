@@ -43,15 +43,15 @@ ContinuousDistribution::~ContinuousDistribution() { }
 
 void ContinuousDistribution::init(float* prior) {
     if(prior == NULL)
-	{
-		if (newtot_ != NULL)
-		{
-			delete [] newtot_ ; 
-		}
-		newtot_ = new float[1];
-		newtot_[0] = 0.0;
-		newtotwt_ = 0.0;
-		newtotsq_ = 0.0;
+    {
+        if (newtot_ != NULL)
+        {
+            delete [] newtot_ ; 
+        }
+        newtot_ = new float[1];
+        newtot_[0] = 0.0;
+        newtotwt_ = 0.0;
+        newtotsq_ = 0.0;
     }
     set_ = False;
 }

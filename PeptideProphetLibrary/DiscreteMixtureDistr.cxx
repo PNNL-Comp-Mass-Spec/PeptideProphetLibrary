@@ -49,17 +49,17 @@ Boolean2 DiscreteMixtureDistr::update(Array<float>* probs) {
   {
     priors_ = new float[numbins_];
     for(int k = 0; k < numbins_; k++) 
-	{
+    {
       priors_[k] = 0.0;
     }
-	int numVals = intvals_->length() ; 
+    int numVals = intvals_->length() ; 
     for(int k = 0; k < numVals ; k++) 
-	{
-		int currentBinNum = (*intvals_)[k] ; 
-		priors_[currentBinNum] += 1.0;
+    {
+        int currentBinNum = (*intvals_)[k] ; 
+        priors_[currentBinNum] += 1.0;
     }
     for(int k = 0; k < numbins_; k++) 
-	{
+    {
       priors_[k] /= numVals ;
     }
     ((DiscreteDistribution*)(posdistr_))->setPriors(priors_, numpos_priors_);
@@ -71,13 +71,13 @@ Boolean2 DiscreteMixtureDistr::update(Array<float>* probs) {
 
 void DiscreteMixtureDistr::initializeBinDefs(char** bindefs) 
 {
-	if (bindefs_ != NULL)
-		delete bindefs_ ; 
-	bindefs_ = new Array<char*>;
-	for(int k = 0; k < numbins_; k++) 
-	{
-		bindefs_->insertAtEnd(bindefs[k]);
-	}
+    if (bindefs_ != NULL)
+        delete bindefs_ ; 
+    bindefs_ = new Array<char*>;
+    for(int k = 0; k < numbins_; k++) 
+    {
+        bindefs_->insertAtEnd(bindefs[k]);
+    }
 }
 
 void DiscreteMixtureDistr::init(char** bindefs) {
@@ -85,17 +85,17 @@ void DiscreteMixtureDistr::init(char** bindefs) {
     initializeBinDefs(bindefs);
   if(intvals_ != NULL)
   {
-	  delete intvals_ ;
+      delete intvals_ ;
   }
   intvals_ = new Array<int>;
 
   if (posdistr_ != NULL)
   {
-	  delete posdistr_ ; 
+      delete posdistr_ ; 
   }
   if (negdistr_ != NULL)
   {
-	  delete negdistr_ ; 
+      delete negdistr_ ; 
   }
 
   posdistr_ = new DiscreteDistribution(numbins_, maxdiff_);

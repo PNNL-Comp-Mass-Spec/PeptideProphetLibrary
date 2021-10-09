@@ -38,49 +38,49 @@ AspNEnzymeDigestion::AspNEnzymeDigestion() : EnzymeDigestion("D", "", "", 1, 0) 
 
 int AspNEnzymeDigestion::numCompatibleTermini(std::string peptide)
 {
-	const char *pep = peptide.c_str() ;
+    const char *pep = peptide.c_str() ;
 
-	if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.')
-	{
-		//std::cerr << "cannot parse peptide " << pep << std::endl;
-		std::stringstream str;
-		str << "cannot parse peptide " << pep << std::endl;
-		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
-		//exit(1);
-	}
+    if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.')
+    {
+        //std::cerr << "cannot parse peptide " << pep << std::endl;
+        std::stringstream str;
+        str << "cannot parse peptide " << pep << std::endl;
+        throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+        //exit(1);
+    }
 
-	int nct = 0;
-	if(pep[0] == '-' || pep[0] == '1')
-	{
-		nct++;
-	}
-	else if(strlen(pep) > 2)
-	{
-		for(int s = 0; s < strlen(recognition_sites_); s++)
-		{
-			if(pep[2] == recognition_sites_[s])
-			{
-				nct++;
-				s = strlen(recognition_sites_); // done
-			}
-			if(pep[strlen(pep)-3] == '1' || pep[strlen(pep)-1] == '-')
-			{
-				nct++;
-			}
-			else
-			{
-				for(int s = 0; s < strlen(recognition_sites_); s++)
-				{
-					if(pep[strlen(pep)-1] == recognition_sites_[s])
-					{
-						nct++;
-						s = strlen(recognition_sites_); // done
-					}
-				}
-			}
-		}
-	}
-	return nct;
+    int nct = 0;
+    if(pep[0] == '-' || pep[0] == '1')
+    {
+        nct++;
+    }
+    else if(strlen(pep) > 2)
+    {
+        for(int s = 0; s < strlen(recognition_sites_); s++)
+        {
+            if(pep[2] == recognition_sites_[s])
+            {
+                nct++;
+                s = strlen(recognition_sites_); // done
+            }
+            if(pep[strlen(pep)-3] == '1' || pep[strlen(pep)-1] == '-')
+            {
+                nct++;
+            }
+            else
+            {
+                for(int s = 0; s < strlen(recognition_sites_); s++)
+                {
+                    if(pep[strlen(pep)-1] == recognition_sites_[s])
+                    {
+                        nct++;
+                        s = strlen(recognition_sites_); // done
+                    }
+                }
+            }
+        }
+    }
+    return nct;
 }
 
 

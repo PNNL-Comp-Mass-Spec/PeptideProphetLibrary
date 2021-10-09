@@ -66,26 +66,26 @@ void GaussianDistribution::addVal(float wt, float val) {
 void GaussianDistribution::addVal(float wt, int val) { }
 
 Boolean2 GaussianDistribution::update() {
-	float newmean = newtot_[0]/newtotwt_;
-	float newstdev = (newtotsq_ / newtotwt_) - newmean * newmean;
-	newstdev = sqrt(newstdev);
+    float newmean = newtot_[0]/newtotwt_;
+    float newstdev = (newtotsq_ / newtotwt_) - newmean * newmean;
+    newstdev = sqrt(newstdev);
 
-	Boolean2 output = False;
+    Boolean2 output = False;
 
-	float delta = newmean - mean_;
-	if(abs(delta) >= maxdiff_) {
-	    output = True;
-	}
-	if(use_stdev_)
-		delta = newstdev - stdev_;
-	if(abs(delta) >= maxdiff_) {
-		output = True;
-	}	
-	if(output) {
-		mean_ = newmean;
-		stdev_ = newstdev;
-	}
-	return output;
+    float delta = newmean - mean_;
+    if(abs(delta) >= maxdiff_) {
+        output = True;
+    }
+    if(use_stdev_)
+        delta = newstdev - stdev_;
+    if(abs(delta) >= maxdiff_) {
+        output = True;
+    }    
+    if(output) {
+        mean_ = newmean;
+        stdev_ = newstdev;
+    }
+    return output;
 }
 
 

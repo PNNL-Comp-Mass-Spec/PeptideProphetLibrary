@@ -99,18 +99,18 @@ DiscrimValMixtureDistr::DiscrimValMixtureDistr(int charge, char* name, char* tag
     }
     if(gamma) {
       if(maldi_) {
-		neginit_ = copy(singlyneggammmaldiprior, 3);
+        neginit_ = copy(singlyneggammmaldiprior, 3);
       }
       else {
-		neginit_ = copy(singlyneggammprior, 3);
+        neginit_ = copy(singlyneggammprior, 3);
       }
     }
     else { // not gamma
       if(maldi_) {
-		neginit_ = copy(singlynegmaldiprior, 2);
+        neginit_ = copy(singlynegmaldiprior, 2);
       }
       else {
-		neginit_ = copy(singlynegprior, 2);
+        neginit_ = copy(singlynegprior, 2);
       }
     }
   }
@@ -201,29 +201,29 @@ Boolean2 DiscrimValMixtureDistr::noDistr() {
     first = gamma_ && ((ContinuousDistribution*)(posdistr_))->getMean() + ((ContinuousDistribution*)(posdistr_))->getStdev() < ((ContinuousDistribution*)(negdistr_))->getMean() + ((GammaDistribution*)(negdistr_))->getZero() + num_stdevs * sqrt(((ContinuousDistribution*)(negdistr_))->getStdev());
     second = !gamma_ && ((ContinuousDistribution*)(posdistr_))->getMean() + ((ContinuousDistribution*)(posdistr_))->getStdev() < ((ContinuousDistribution*)(negdistr_))->getMean() + ((ContinuousDistribution*)(negdistr_))->getStdev();
 
-	//std::cerr << "mean = " << ((ContinuousDistribution*)(posdistr_))->getMean() << "\t" << "stdev = " << ((ContinuousDistribution*)(posdistr_))->getStdev() << std::endl ;
+    //std::cerr << "mean = " << ((ContinuousDistribution*)(posdistr_))->getMean() << "\t" << "stdev = " << ((ContinuousDistribution*)(posdistr_))->getStdev() << std::endl ;
   }
 
 
   return (first || second);
 
 
-			       /*
+                   /*
   Boolean2 first = gamma_ && ((ContinuousDistribution*)(posdistr_))->getMean() + ((ContinuousDistribution*)(posdistr_))->getStdev() < ((ContinuousDistribution*)(negdistr_))->getMean() + ((GammaDistribution*)(negdistr_))->getZero() + num_stdevs * sqrt(((ContinuousDistribution*)(negdistr_))->getStdev());
   Boolean2 second = !gamma_ && ((ContinuousDistribution*)(posdistr_))->getMean() + ((ContinuousDistribution*)(posdistr_))->getStdev() < ((ContinuousDistribution*)(negdistr_))->getMean() + ((ContinuousDistribution*)(negdistr_))->getStdev();
   return (first || second);
-			       */
+                   */
 }
 //float DiscrimValMixtureDistr::getPosProb(int index) {
 float DiscrimValMixtureDistr::getPosProb(int index) {//Xiuxia
-	//std::cerr << ((GaussianDistribution*)(posdistr_))->mean_ << std::endl ;//Xiuxia
+    //std::cerr << ((GaussianDistribution*)(posdistr_))->mean_ << std::endl ;//Xiuxia
 
-	float temp; //Xiuxia
+    float temp; //Xiuxia
 
-	//DiscrimValMixtureDistr::printDistr() ;
-	//std::cerr << "fval = " << (*floatvals_)[index] << "\t" << "prob = " ;
+    //DiscrimValMixtureDistr::printDistr() ;
+    //std::cerr << "fval = " << (*floatvals_)[index] << "\t" << "prob = " ;
 
-	if(qtof_ || (maldi_ && charge_ == 0)) {
+    if(qtof_ || (maldi_ && charge_ == 0)) {
     //std::cerr << "pos prob: " << ((DecayContinuousMultimixtureDistr*)(posdistr_))->getMixtureProb(index, (*floatvals_)[index]) << std::endl;
     //if(((DecayContinuousMultimixtureDistr*)(posdistr_))->oneProb((*floatvals_)[index])) {
     // return 1.0;
@@ -233,30 +233,30 @@ float DiscrimValMixtureDistr::getPosProb(int index) {//Xiuxia
    
     //std::cerr << "MALDI" << std::endl;
     //std::cerr << "number of distrs in DISCRIMVAL: " << ((DecayContinuousMultimixtureDistr*)(posdistr_))->getNumDistributions() << std::endl;
-	}
+    }
 
-	if(all_negs_ || (*floatvals_)[index] < negmean_) {//Xiuxia, all_negs_ is initialized to False
-		temp = 0.0;
-		//std::cerr << temp << std::endl ;
+    if(all_negs_ || (*floatvals_)[index] < negmean_) {//Xiuxia, all_negs_ is initialized to False
+        temp = 0.0;
+        //std::cerr << temp << std::endl ;
 
-		return temp ;//0.0;
-	}
-	else if(! maldi_ && ((GaussianDistribution*)(posdistr_))->oneProb((*floatvals_)[index])) { //Xiuxia, check if fval > mean_ + stdev_
-		if(charge_ == 0) {
-		;//std::cout << "one probs for " << (*floatvals_)[index] << std::endl;
-		}
-		temp = 1.0 ;
-		//std::cerr << temp << std::endl ;
-		return temp; //1.0;
-	}
-	else if(gamma_ && ((GammaDistribution*)(negdistr_))->zeroProb((*floatvals_)[index])) {
-		temp = 0.0;
-		//std::cerr << temp << std::endl ;
-		return temp;//0.0;
-	}
-	temp = MixtureDistr::getPosProb(index);
-	//std::cerr << temp << std::endl ;
-	return temp;
+        return temp ;//0.0;
+    }
+    else if(! maldi_ && ((GaussianDistribution*)(posdistr_))->oneProb((*floatvals_)[index])) { //Xiuxia, check if fval > mean_ + stdev_
+        if(charge_ == 0) {
+        ;//std::cout << "one probs for " << (*floatvals_)[index] << std::endl;
+        }
+        temp = 1.0 ;
+        //std::cerr << temp << std::endl ;
+        return temp; //1.0;
+    }
+    else if(gamma_ && ((GammaDistribution*)(negdistr_))->zeroProb((*floatvals_)[index])) {
+        temp = 0.0;
+        //std::cerr << temp << std::endl ;
+        return temp;//0.0;
+    }
+    temp = MixtureDistr::getPosProb(index);
+    //std::cerr << temp << std::endl ;
+    return temp;
 }
 
 
@@ -312,7 +312,7 @@ Boolean2 DiscrimValMixtureDistr::decayMultimixture() { return qtof_ || (charge_ 
 float DiscrimValMixtureDistr::posSliceWithNTT(float left_val, float right_val, int ntt) {
   if(! decayMultimixture()) {
     //std::cerr << "error in posSliceWithNTT" << std::endl;
-	  throw gcnew System::Exception("error in posSliceWithNTT");
+      throw gcnew System::Exception("error in posSliceWithNTT");
     //exit(1);
   }
   return ((DecayContinuousMultimixtureDistr*)(posdistr_))->sliceWithNTT(left_val, right_val, ntt);
@@ -390,8 +390,8 @@ Boolean2 DiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr* nttd
   GammaDistribution* negGammaDistr = NULL ; 
   if (gamma_)
   {
-	  negGammaDistr = (GammaDistribution*) negdistr_ ; 
-	  //Xiuxia, negdist_ is already a GammaDistribution by initialization, why do type cast here?
+      negGammaDistr = (GammaDistribution*) negdistr_ ; 
+      //Xiuxia, negdist_ is already a GammaDistribution by initialization, why do type cast here?
   }
 
   if(gamma_ && charge_ == 0) 
@@ -402,101 +402,101 @@ Boolean2 DiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr* nttd
   int numVals = getNumVals() ; 
   for(int k = 0; k < numVals ; k++) 
   {
-	  float value = (*floatvals_)[k] ; 
-	  if(nttdistr->isValue(k, 0) && (! gamma_ || negGammaDistr->aboveMin(value))) //Xiuxia, only consider the ntt=0 peptides. These are taken as incorrectly identified peptides.
-	  {
-		mean += value ;
-		totsq += value * value ;
-		tot++;
-	  }
+      float value = (*floatvals_)[k] ; 
+      if(nttdistr->isValue(k, 0) && (! gamma_ || negGammaDistr->aboveMin(value))) //Xiuxia, only consider the ntt=0 peptides. These are taken as incorrectly identified peptides.
+      {
+        mean += value ;
+        totsq += value * value ;
+        tot++;
+      }
   }
 
   // what to do if not enough values above the min value of the negative distribution. 
   if(tot < MIN_NUM_PSEUDOS_) 
   { 
-	  if(! gamma_) 
-	  {
-		  zero = 0.0; // don't need this
-	  }
-	  else 
-	  {
-		  if(charge_ == 0) 
-		  {
-			  zero = min_dataval_ - 3.0;
-			  if(zero < min_singly_fval) 
-			  {
-				  zero = min_singly_fval;
-			  }
-		  }
-		  else 
-		  {
-			  zero = min_dataval_ - 0.1;
-		  }
-		  if(zero < minval_) 
-		  {    
-			  zero = minval_;
-		  }
-	  } // gamma
+      if(! gamma_) 
+      {
+          zero = 0.0; // don't need this
+      }
+      else 
+      {
+          if(charge_ == 0) 
+          {
+              zero = min_dataval_ - 3.0;
+              if(zero < min_singly_fval) 
+              {
+                  zero = min_singly_fval;
+              }
+          }
+          else 
+          {
+              zero = min_dataval_ - 0.1;
+          }
+          if(zero < minval_) 
+          {    
+              zero = minval_;
+          }
+      } // gamma
 
-	  tot = 0; // restart
-	  mean = 0.0;
-	  totsq = 0.0;
+      tot = 0; // restart
+      mean = 0.0;
+      totsq = 0.0;
 
-	  for(int k = 0; k < numVals; k++) 
-	  {
-		  float value = (*floatvals_)[k] ; 
-		  if(value > zero && value < posmean[charge_] - posstdev[charge_]) 
-		  {
-			  mean += value - zero ;
-			  totsq += (value - zero) * (value - zero);
-			  tot++;
-		  }
-	  } // next
+      for(int k = 0; k < numVals; k++) 
+      {
+          float value = (*floatvals_)[k] ; 
+          if(value > zero && value < posmean[charge_] - posstdev[charge_]) 
+          {
+              mean += value - zero ;
+              totsq += (value - zero) * (value - zero);
+              tot++;
+          }
+      } // next
 
-	  if(tot > 0) 
-	  {
-		  mean /= tot ; 
-		  // calculate standar deviation
-		  if(gamma_) 
-		  {
-			  stdev = totsq / tot;
-		  }
-		  else
-		  {
-			  stdev = totsq / tot - mean * mean;
-		  }
-	  }
+      if(tot > 0) 
+      {
+          mean /= tot ; 
+          // calculate standar deviation
+          if(gamma_) 
+          {
+              stdev = totsq / tot;
+          }
+          else
+          {
+              stdev = totsq / tot - mean * mean;
+          }
+      }
 
-	  float* newsettings = new float[3];
-	  newsettings[0] = mean;
-	  newsettings[1] = stdev;
+      float* newsettings = new float[3];
+      newsettings[0] = mean;
+      newsettings[1] = stdev;
 
-	  if(!gamma_) 
-	  {
-		  newsettings[1] = sqrt(newsettings[1]);
-	  }
+      if(!gamma_) 
+      {
+          newsettings[1] = sqrt(newsettings[1]);
+      }
 
-	  newsettings[2] = zero;
-	  negdistr_->init(newsettings);
-	  delete [] newsettings;
+      newsettings[2] = zero;
+      negdistr_->init(newsettings);
+      delete [] newsettings;
 
-	  if(! gamma_) 
-	  {
-		  negmean_ = mean - negmean_num_stds[charge_] * stdev;
-	  }
-	  else 
-	  {
-		  negmean_ = zero + mean - negmean_num_stds[charge_] * sqrt(stdev);
-	  }
-	  if(negmean_ > MAX_SINGLY_NEGMEAN) 
-	  {
-		  negmean_ = MAX_SINGLY_NEGMEAN;
-	  }
+      if(! gamma_) 
+      {
+          negmean_ = mean - negmean_num_stds[charge_] * stdev;
+      }
+      else 
+      {
+          negmean_ = zero + mean - negmean_num_stds[charge_] * sqrt(stdev);
+      }
+      if(negmean_ > MAX_SINGLY_NEGMEAN) 
+      {
+          negmean_ = MAX_SINGLY_NEGMEAN;
+      }
 
-	  //std::cerr << "setting negmean to " << negmean_ << " for charge " << (charge_+1) << " with zero " << zero << std::endl;
+      //std::cerr << "setting negmean to " << negmean_ << " for charge " << (charge_+1) << " with zero " << zero << std::endl;
 
-	  USE_TR_NEG_DISTR_ = True;
-	  return False; // done
+      USE_TR_NEG_DISTR_ = True;
+      return False; // done
   } // if not enough pseudos
     
   mean /= tot;
@@ -505,11 +505,11 @@ Boolean2 DiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr* nttd
 
   if(gamma_) 
   {
-	  zero = mean - NUM_DEVS_ * stdev;
-	  if(min_dataval_ - ZERO_SET_ * stdev > zero) 
-	  {
-		  zero = min_dataval_ - ZERO_SET_ * stdev;
-	  }
+      zero = mean - NUM_DEVS_ * stdev;
+      if(min_dataval_ - ZERO_SET_ * stdev > zero) 
+      {
+          zero = min_dataval_ - ZERO_SET_ * stdev;
+      }
   }
   else 
   {
@@ -520,17 +520,17 @@ Boolean2 DiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr* nttd
   
   if(maldi_) 
   {
-	  negmean_ = mean - maldi_negmean_num_stds * stdev;
-	  //std::cerr << "mean: " << mean << ", negmeanstdevs: " << negmean_num_stds[0] << ", stdev: " << stdev << std::endl;
-	  //negmean_ = -1.4;
+      negmean_ = mean - maldi_negmean_num_stds * stdev;
+      //std::cerr << "mean: " << mean << ", negmeanstdevs: " << negmean_num_stds[0] << ", stdev: " << stdev << std::endl;
+      //negmean_ = -1.4;
   }
   else if(qtof_) 
   {
-	  negmean_ = mean - qtof_negmean_num_stds * stdev;
+      negmean_ = mean - qtof_negmean_num_stds * stdev;
   }
   else
   {
-	  negmean_ = mean - negmean_num_stds[charge_] * stdev;
+      negmean_ = mean - negmean_num_stds[charge_] * stdev;
   }
 
 
@@ -541,27 +541,27 @@ Boolean2 DiscrimValMixtureDistr::initializeNegDistribution(NTTMixtureDistr* nttd
     
   for(int k = 0; k < numVals; k++) 
   {
-	  float value = (*floatvals_)[k] ; 
-	  if(nttdistr->isValue(k, 0) && value > zero && (! gamma_ || negGammaDistr->aboveMin(value))) 
-	  {
-		  mean += value - zero;
-		  totsq += (value - zero) * (value - zero);
-		  tot++;
-	  }
+      float value = (*floatvals_)[k] ; 
+      if(nttdistr->isValue(k, 0) && value > zero && (! gamma_ || negGammaDistr->aboveMin(value))) 
+      {
+          mean += value - zero;
+          totsq += (value - zero) * (value - zero);
+          tot++;
+      }
   } // next
   
   if(tot > 0)
   {
-	  mean /= tot;
-	  if(gamma_) 
-	  {
-		  stdev = totsq / tot;
-	  }
-	  else 
-	  {
-		  stdev = (totsq / tot) - mean * mean;
-		  stdev = sqrt(stdev);
-	  }
+      mean /= tot;
+      if(gamma_) 
+      {
+          stdev = totsq / tot;
+      }
+      else 
+      {
+          stdev = (totsq / tot) - mean * mean;
+          stdev = sqrt(stdev);
+      }
   }
 
   Boolean2 reset = False;

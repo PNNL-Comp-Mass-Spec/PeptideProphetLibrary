@@ -55,14 +55,14 @@ Boolean2 GlycMixtureDistr::hasGlycMotif(char* pep) {
     if(pep[k] == 'N') {
 
       if(pep[k+1] != 'P' && (pep[k+2] == 'T' || pep[k+2] == 'S')) 
-	return True;
+        return True;
       else if(k < strlen(pep) - 3 && isModification(pep[k+1]) && pep[k+2] != 'P' && (pep[k+3] == 'T' || pep[k+3] == 'S'))
-	return True;
+        return True;
       else if(k < strlen(pep) - 3 && pep[k+1] != 'P' && isModification(pep[k+2]) && (pep[k+3] == 'T' || pep[k+3] == 'S')) 
-	return True;
+        return True;
       else if(k < strlen(pep) - 4 && isModification(pep[k+1]) && pep[k+2] != 'P' && isModification(pep[k+3]) &&
-	    (pep[k+4] == 'T' || pep[k+4] == 'S')) 
-	return True;
+        (pep[k+4] == 'T' || pep[k+4] == 'S')) 
+      return True;
     }
   } // next position in pep
   return False; // still here

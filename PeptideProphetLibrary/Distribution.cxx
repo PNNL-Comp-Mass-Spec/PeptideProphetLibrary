@@ -43,7 +43,7 @@ in PeptideProphet written by Andrew Keller
 
 Distribution::Distribution() 
 {
-	newtot_ = NULL ; 
+    newtot_ = NULL ; 
 }
 
 Distribution::Distribution(float maxdiff) {

@@ -67,7 +67,7 @@ Boolean2 VariableOffsetMassDiffDiscrMixtureDistr::update(Array<float>* probs) {
       offset_ = new_offset;
       assert(vals_->length() == intvals_->length());
       for(int k = 0; k < vals_->length(); k++)
-	intvals_->replace(k, getIntegralValue((*vals_)[k]));
+        intvals_->replace(k, getIntegralValue((*vals_)[k]));
     }
     else {
       offset_set_ = True; // done
@@ -142,10 +142,10 @@ void VariableOffsetMassDiffDiscrMixtureDistr::writeDistr(FILE* fout) {
       counter++;
       fprintf(fout, "%0.2f %s", posdistr_->getProb(k), (*bindefs_)[k]);
       if(k < numbins_ - 1 && haveDataWithValue(k+1)) {
-	fprintf(fout, ", ");
+    fprintf(fout, ", ");
       }
       if(counter%column_width == 0)
-	fprintf(fout, "\n\t\t");
+    fprintf(fout, "\n\t\t");
     } // if have value
   }
   fprintf(fout, ")\n");
@@ -158,10 +158,10 @@ void VariableOffsetMassDiffDiscrMixtureDistr::writeDistr(FILE* fout) {
       counter++;
       fprintf(fout, "%0.2f %s", negdistr_->getProb(k), (*bindefs_)[k]);
       if(k < numbins_ - 1 && haveDataWithValue(k+1)) {
-	fprintf(fout, ", ");
+    fprintf(fout, ", ");
       }
       if(counter%column_width == 0)
-	fprintf(fout, "\n\t\t");
+    fprintf(fout, "\n\t\t");
     } // if have value
   }
 

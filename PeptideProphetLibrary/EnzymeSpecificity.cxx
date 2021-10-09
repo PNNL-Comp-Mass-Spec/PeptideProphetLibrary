@@ -43,28 +43,28 @@ EnzymeSpecificity::EnzymeSpecificity() { }
 // factory for producing enzyme digestions
 // register all new enzyme digestions here
 EnzymeDigestion* EnzymeSpecificity::getEnzymeDigestion(char* enz) {
-	//Xiuxia, 07/20/2006, convert enz to lowercase so that the original enz can be any case or a mixture of lower and upper case
-	char *p ;
-	char enz_lowercase[32] ;
-	int i = 0 ;
+    //Xiuxia, 07/20/2006, convert enz to lowercase so that the original enz can be any case or a mixture of lower and upper case
+    char *p ;
+    char enz_lowercase[32] ;
+    int i = 0 ;
 
-	if (enz == NULL)
-		return NULL;
+    if (enz == NULL)
+        return NULL;
 
-	for (p = enz; p < enz + strlen(enz); p++)
-	{
-		if (isupper(*p))
-		{
-			enz_lowercase[i] = _tolower(*p) ;
-		}
-		else
-		{
-			enz_lowercase[i] = enz[i] ;
-		}
-		i++ ;
-	}
-	//enz_lowercase[strlen(enz_lowercase)] = '\0' ;
-	enz_lowercase[i] = '\0' ;
+    for (p = enz; p < enz + strlen(enz); p++)
+    {
+        if (isupper(*p))
+        {
+            enz_lowercase[i] = _tolower(*p) ;
+        }
+        else
+        {
+            enz_lowercase[i] = enz[i] ;
+        }
+        i++ ;
+    }
+    //enz_lowercase[strlen(enz_lowercase)] = '\0' ;
+    enz_lowercase[i] = '\0' ;
 
   if(enz_lowercase == NULL) // default
     return new TrypticEnzymeDigestion();

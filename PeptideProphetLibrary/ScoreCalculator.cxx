@@ -54,10 +54,10 @@ ScoreCalculator::ScoreCalculator(char* enz) {
     //std::cerr << "could not get enzyme digestion for " << enzyme_ << std::endl;
     //exit(1);
 
-	  std::stringstream str;
-	  str << "could not get enzyme digestion for " << enzyme_ << std::endl;
+      std::stringstream str;
+      str << "could not get enzyme digestion for " << enzyme_ << std::endl;
 
-	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+      throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
   }
 
 }
@@ -80,17 +80,17 @@ std::string ScoreCalculator::strip(std::string peptide, Boolean2 remove_mods)
   const char *pep = peptide.c_str() ;
   char* output = NULL;
   if(stop > 4 && pep[1] == '.')
-	  start = 2;
+      start = 2;
   if(strlen(pep) > 4 && pep[stop-2] == '.')
-	  stop = stop-3;
+      stop = stop-3;
 
   if(! remove_mods)
   {
     output = new char[stop - start + 2];
     strncpy(output, pep+start, stop - start + 1);
     output[stop - start + 1] = 0;
-	std::string outStr = output ;
-	delete [] output ;
+    std::string outStr = output ;
+    delete [] output ;
     return outStr;
   }
 
@@ -114,9 +114,9 @@ char* ScoreCalculator::parseSpectrum(char* spec) {
   if(spec == NULL) {
     //std::cerr << "null spectrum" << std::endl;
     //exit(1);
-	  std::stringstream str;
-	  str << "null spectrum" << std::endl;
-	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+      std::stringstream str;
+      str << "null spectrum" << std::endl;
+      throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
   }
   char* output = NULL;
   if(strlen(spec) > 2 && spec[strlen(spec)-2] == '.') {
@@ -126,9 +126,9 @@ char* ScoreCalculator::parseSpectrum(char* spec) {
   }
   else {
     //std::cerr << "cannot parse spec " << spec << std::endl;
-	  std::stringstream str;
-	  str << "cannot parse spec " << spec << std::endl;
-	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+      std::stringstream str;
+      str << "cannot parse spec " << spec << std::endl;
+      throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
   }
   return output;
 }

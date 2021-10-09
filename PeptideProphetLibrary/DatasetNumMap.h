@@ -4,16 +4,16 @@
 class DatasetNumMap
 {
 public:
-	DatasetNumMap() 
-	{
-		dataset_num_start = 0 ;
-		dataset_num_other = 0 ;
-	} ;
+    DatasetNumMap() 
+    {
+        dataset_num_start = 0 ;
+        dataset_num_other = 0 ;
+    } ;
 
-	~DatasetNumMap() {};
+    ~DatasetNumMap() {};
 
-	int dataset_num_start ;
-	int dataset_num_other ;
+    int dataset_num_start ;
+    int dataset_num_other ;
 } ;
 
 #endif

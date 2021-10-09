@@ -65,7 +65,7 @@ void SequestDiscrimScoreCalculator::init(std::vector<SequestResult> &results, Bo
 
   discr_funcs_ = new SequestDiscrimFunction* [numCharge];
 
-  for(int ch = 0; ch < numCharge; ch++)		//Xiuxia, to consider charge = 4, 5
+  for(int ch = 0; ch < numCharge; ch++)    //Xiuxia, to consider charge = 4, 5
     if(massd)
       discr_funcs_[ch] = new AbbrevSequestDiscrimFunction(ch);
     else if(maldi_ && ch == 0)
@@ -103,31 +103,31 @@ void SequestDiscrimScoreCalculator::processData(std::vector<SequestResult> &resu
   int numResults = results.size() ;
   for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
   {
-	  if(abort)
-	  {
-		  throw gcnew System::Exception("Process aborted in SequestDiscrimScoreCalculator::processData");
-	  }
+      if(abort)
+      {
+          throw gcnew System::Exception("Process aborted in SequestDiscrimScoreCalculator::processData");
+      }
 
-	  if(results[resultNum].xcorr_ > 0.0)
-	  {
-		  std::string currentPeptide = results[resultNum].peptide_ ;
-		  int charge = results[resultNum].charge_ - 1;
-		  // Xiuxia, 05/16/2006
+      if(results[resultNum].xcorr_ > 0.0)
+      {
+          std::string currentPeptide = results[resultNum].peptide_ ;
+          int charge = results[resultNum].charge_ - 1;
+          // Xiuxia, 05/16/2006
 
-		  //if (charge <= 2)
-		  if (charge < numCharge) //Xiuxia
-		  {
-		    stripped = strip(currentPeptide, 1); // remove all modifications also
-			nmc = numMissedCleavages(stripped);
-			// numMissedCleavages() is a function in the base class ScoreCalculator
+          //if (charge <= 2)
+          if (charge < numCharge) //Xiuxia
+          {
+            stripped = strip(currentPeptide, 1); // remove all modifications also
+            nmc = numMissedCleavages(stripped);
+            // numMissedCleavages() is a function in the base class ScoreCalculator
 
-			ntt = numCompatibleTermini(currentPeptide);
+            ntt = numCompatibleTermini(currentPeptide);
 
-			results[resultNum].mint_numMissedCleavages = nmc;
-			results[resultNum].mint_numTT = ntt;
+            results[resultNum].mint_numMissedCleavages = nmc;
+            results[resultNum].mint_numTT = ntt;
 
-			results[resultNum].mdbl_discriminantScore = discr_funcs_[charge]->getDiscriminantScore(results[resultNum]);
-		  }
+            results[resultNum].mdbl_discriminantScore = discr_funcs_[charge]->getDiscriminantScore(results[resultNum]);
+          }
       } // if process
     } // if real data line
 }

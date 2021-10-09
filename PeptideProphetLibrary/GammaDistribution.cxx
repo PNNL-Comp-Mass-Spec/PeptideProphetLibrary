@@ -111,30 +111,30 @@ void GammaDistribution::addVal(float wt, float val) {
 void GammaDistribution::addVal(float wt, int val) { }
 
 Boolean2 GammaDistribution::update() {
-	//Xiuxia, update the mean_, stdev_, alpha, beta
+    //Xiuxia, update the mean_, stdev_, alpha, beta
 
-	if(newtotwt_ == 0.0)
-		return False;
-	float newmean = newtot_[0]/newtotwt_;
-	float newstdev = newtotsq_/newtotwt_;
+    if(newtotwt_ == 0.0)
+        return False;
+    float newmean = newtot_[0]/newtotwt_;
+    float newstdev = newtotsq_/newtotwt_;
 
-	Boolean2 output = False;
+    Boolean2 output = False;
 
-	float delta = newmean - mean_;
-	if(abs(delta) >= maxdiff_) {
-		output = True;
-	}
-	delta = newstdev - stdev_;
-	if(abs(delta) >= maxdiff_) {
-		output = True;
-	}
+    float delta = newmean - mean_;
+    if(abs(delta) >= maxdiff_) {
+        output = True;
+    }
+    delta = newstdev - stdev_;
+    if(abs(delta) >= maxdiff_) {
+        output = True;
+    }
 
-	if(output) {
-		mean_ = newmean;
-		stdev_ = newstdev;
-		computeAlphaBeta();
-	}
-	return output;
+    if(output) {
+        mean_ = newmean;
+        stdev_ = newstdev;
+        computeAlphaBeta();
+    }
+    return output;
 }
 
 float GammaDistribution::getProb(int val) { return 0.0; }
@@ -151,8 +151,8 @@ float GammaDistribution::getGammaProb(float val, float alpha, float beta, float 
   }
   if(value > 0 && alpha > 0 && aboveMin(val)) {
     loggamma = gammln(beta);
-	
-	//Xiuxia, commented out
+    
+    //Xiuxia, commented out
     //helper = ((beta - 1) * log(value)) - (beta * log(alpha)) - loggamma;
     //helper = exp(helper) * exp(- value / alpha);
     prob = pow((double)value, (double)(beta - 1)) * exp(- (double)value / (double)alpha);
@@ -181,8 +181,8 @@ float GammaDistribution::getProb(float val) {
 float GammaDistribution::gammln(float xx) {
   double x,y,tmp,ser;
   static double cof[6]={76.18009172947146,-86.50532032941677,
-			24.01409824083091,-1.231739572450155,
-			0.1208650973866179e-2,-0.5395239384953e-5};
+            24.01409824083091,-1.231739572450155,
+            0.1208650973866179e-2,-0.5395239384953e-5};
         int j;
 
         y=x=xx;
@@ -194,9 +194,9 @@ float GammaDistribution::gammln(float xx) {
 }
 
 void GammaDistribution::setDistrMinval(float val) {
-	if (minval_ == NULL)
-	  minval_ = new float[1];
-  minval_[0] = val;	//Xiuxia, probability will be zero below the minval_
+    if (minval_ == NULL)
+      minval_ = new float[1];
+  minval_[0] = val;    //Xiuxia, probability will be zero below the minval_
 }
 
 Boolean2 GammaDistribution::aboveMin(float val) {

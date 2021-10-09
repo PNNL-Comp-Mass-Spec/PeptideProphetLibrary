@@ -46,7 +46,7 @@ void ExtremeValueDistribution::init(float* prior) {
 
 void ExtremeValueDistribution::initUpdate(float* prior) {
   if(newtot_ != NULL) {
-	  delete  [] newtot_ ; 
+      delete  [] newtot_ ; 
   }
   newtot_ = new float[1];
   newtot_[0] = 0.0;

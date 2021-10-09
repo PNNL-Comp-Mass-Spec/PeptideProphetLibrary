@@ -55,17 +55,17 @@ int MultipleEnzymeDigestion::numMissedCleavages(std::string pep) {
 
 int MultipleEnzymeDigestion::numCompatibleTermini(std::string peptide)
 {
-	const char *pep = peptide.c_str() ;
-	// max for all enzs
-	int max = 0;
-	int next;
-	for(int k = 0; k < enzs_->length(); k++)
-	{
-		next = (*enzs_)[k]->numCompatibleTermini(pep);
-		if(next > max)
-			max = next;
-	}
-	return max;
+    const char *pep = peptide.c_str() ;
+    // max for all enzs
+    int max = 0;
+    int next;
+    for(int k = 0; k < enzs_->length(); k++)
+    {
+        next = (*enzs_)[k]->numCompatibleTermini(pep);
+        if(next > max)
+            max = next;
+    }
+    return max;
 }
 
 

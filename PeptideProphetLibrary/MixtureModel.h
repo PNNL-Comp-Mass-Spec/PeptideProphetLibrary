@@ -81,7 +81,7 @@ class MixtureModel {
  
   virtual Boolean2 enterDistribution(int charge, int index, const char* tag, char* value);  
 //  void writeResults(std::vector<SequestResult> &sequestResults, char* filename);
-  void writeResults(char* filename);	//Xiuxia, removed sequestResults from the argument
+  void writeResults(char* filename);    //Xiuxia, removed sequestResults from the argument
   float getAdjDoublyTriplyProb(float prob_2_adj, float prob_of_partner);
   void printDistr();
   void readData(std::vector<SequestResult> &results);
@@ -102,7 +102,7 @@ class MixtureModel {
   void setMixtureDistributionNames(char* discrim, char* ntt);
   void validateModel();
 //  void writeResultsInOrder(std::vector<SequestResult> &sequestResults, char* filename);
-  void writeResultsInOrder(char* filename);	//Xiuxia, removed sequestResults from the argument
+  void writeResultsInOrder(char* filename);    //Xiuxia, removed sequestResults from the argument
   char* getTagValue(char* data, char*tag);
   char* getEnzyme(char* filename);
   void writeResultsOrdered(const char* filename, std::vector<DatasetNumMap> &vecDatasetMap) ;
@@ -111,7 +111,7 @@ class MixtureModel {
 
  protected:
 
-	bool abort;
+    bool abort;
 
  MixtureDistr* getMixtureDistr(char* name, int charge);
 
@@ -121,8 +121,8 @@ class MixtureModel {
  Array<Array<int>*>* inds_;
 
  Array<Array<int>*>* dataset_num_All_ ; //Xiuxia
- Array<Array<int>*>* scanNumberAll_ ;	//Xiuxia
- Array<Array<float>*>* xcorrAll_ ;	//Xiuxia
+ Array<Array<int>*>* scanNumberAll_ ;    //Xiuxia
+ Array<Array<float>*>* xcorrAll_ ;    //Xiuxia
  Array<Array<float>*>* fvalAll_ ; //Xiuxia
  Array<Array<float>*>* deltaCn2All_ ; //Xiuxia
 

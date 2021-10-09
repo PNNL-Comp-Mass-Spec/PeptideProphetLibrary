@@ -147,7 +147,7 @@ void DecayContinuousMultimixtureDistr::addVal(float wt, float val) {
     }
     if(totprob > 0)
       for(int k = 0; k < distrs_->length(); k++) 
-	nextz[k] /= totprob;
+        nextz[k] /= totprob;
 
     // now add it
     zvals_->insertAtEnd(nextz);
@@ -204,7 +204,7 @@ void DecayContinuousMultimixtureDistr::commence() {
     // now normalize
     if(nextprob > 0) 
       for(int k = 0; k < distrs_->length(); k++) 
-	  ((*zvals_)[i])[k] /= nextprob;
+        ((*zvals_)[i])[k] /= nextprob;
 
   } // next data
 
@@ -241,7 +241,7 @@ void DecayContinuousMultimixtureDistr::commence() {
   for(int j = 0; j < 3; j++)
     if(newtotnttpriors_[j] > 0)
       for(int k = 0; k < distrs_->length(); k++)
-	((*nttpriors_)[k])[j] /= newtotnttpriors_[j];
+        ((*nttpriors_)[k])[j] /= newtotnttpriors_[j];
   nttdistrtots_ = new float[distrs_->length()];
 
   set_ = True;
@@ -252,7 +252,7 @@ void DecayContinuousMultimixtureDistr::removeViolatingDistrs() {
     if((*distrs_)[k] != (*distrs_)[k-1] && priors_[k] > 0.0 && (violation(k, k-1) || unmixed(k, k-1))) {
       // set all nttpriors to 0.0
       for(int n = 0; n < 3; n++)
-	((*nttpriors_)[k])[n] = 0.0;
+        ((*nttpriors_)[k])[n] = 0.0;
     } // if violation
   } // next pair of adjacent distributions
 }
@@ -284,16 +284,16 @@ Boolean2 DecayContinuousMultimixtureDistr::update() {
     //  //std::cerr << "null zvals_" << std::endl;
     //else
       //std::cerr << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
-		std::stringstream str;
-		str << "error in ContinuousMultimixtureDistr update...." << std::endl;
-		if(vals_ == NULL)
-			str << "null vals_" << std::endl;
-		else if(zvals_ == NULL)
-			str << "null zvals_" << std::endl;
-		else
-			str << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
+        std::stringstream str;
+        str << "error in ContinuousMultimixtureDistr update...." << std::endl;
+        if(vals_ == NULL)
+            str << "null vals_" << std::endl;
+        else if(zvals_ == NULL)
+            str << "null zvals_" << std::endl;
+        else
+            str << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
 
-		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+        throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     //exit(1);
   }
 
@@ -329,14 +329,14 @@ Boolean2 DecayContinuousMultimixtureDistr::update() {
   if(totalwts_ < min_total_wts_) {
     for(int k = 0; k < distrs_->length(); k++) {
       if(k == 0)
-	priors_[k] = 1.0;
+    priors_[k] = 1.0;
       else
-	priors_[k] = 0.0;
+    priors_[k] = 0.0;
       for(int j = 0; j < 3; j++)
-	if(k == 0)
-	  ((*nttpriors_)[k])[j] = 1.0;
-	else
-	  ((*nttpriors_)[k])[j] = 0.0;
+    if(k == 0)
+      ((*nttpriors_)[k])[j] = 1.0;
+    else
+      ((*nttpriors_)[k])[j] = 0.0;
     } // next distr
   } // only use first distribution of mixture
 
@@ -359,27 +359,27 @@ Boolean2 DecayContinuousMultimixtureDistr::update() {
     for(int k = 0; k < distrs_->length(); k++) {
       /*
       if(ntt < 2 && (*vals_)[i] > (*distrs_)[0]->getMean() + NUM_STDS * (*distrs_)[0]->getStdev()) {
-	if(k == 0)
-	  ((*zvals_)[i])[k] = 1.0;
-	else
-	  ((*zvals_)[i])[k] = 0.0;
+    if(k == 0)
+      ((*zvals_)[i])[k] = 1.0;
+    else
+      ((*zvals_)[i])[k] = 0.0;
       }
       else if(ntt < 2 && (*vals_)[i] < (*distrs_)[distrs_->length()-1]->getMean() - NUM_STDS * (*distrs_)[distrs_->length()-1]->getStdev()) {
-	if(k == distrs_->length()-1)
-	  ((*zvals_)[i])[k] = 1.0;
-	else
-	  ((*zvals_)[i])[k] = 0.0;
+    if(k == distrs_->length()-1)
+      ((*zvals_)[i])[k] = 1.0;
+    else
+      ((*zvals_)[i])[k] = 0.0;
       }
       else 
       */
-	((*zvals_)[i])[k] = (*distrs_)[k]->getProb((*vals_)[i]) * ((*nttpriors_)[k])[ntt];
+    ((*zvals_)[i])[k] = (*distrs_)[k]->getProb((*vals_)[i]) * ((*nttpriors_)[k])[ntt];
       nextprob += ((*zvals_)[i])[k];
     }
   
     // now normalize
     if(nextprob > 0) 
       for(int k = 0; k < distrs_->length(); k++) 
-	  ((*zvals_)[i])[k] /= nextprob;
+      ((*zvals_)[i])[k] /= nextprob;
 
   } // next data
 
@@ -416,7 +416,7 @@ Boolean2 DecayContinuousMultimixtureDistr::update() {
   for(int j = 0; j < 3; j++)
     if(newtotnttpriors_[j] > 0)
       for(int k = 0; k < distrs_->length(); k++)
-	((*nttpriors_)[k])[j] /= newtotnttpriors_[j];
+    ((*nttpriors_)[k])[j] /= newtotnttpriors_[j];
 
   //std::cerr << " end priors: " << priors_[0] << ":" << priors_[1] << std::endl;
   //std::cerr << "total wt: " << totalwts_ << std::endl;
@@ -431,7 +431,7 @@ Boolean2 DecayContinuousMultimixtureDistr::update() {
     for(int k = 0; k < distrs_->length(); k++) {
       nttdistrtots_[k] = 0.0;
       for(int n = 0; n < 3; n++) {
-	nttdistrtots_[k] += ((*nttpriors_)[k])[n] * ntt_->getPosDistr()->getProb(n);
+    nttdistrtots_[k] += ((*nttpriors_)[k])[n] * ntt_->getPosDistr()->getProb(n);
       }
     }
   }
@@ -443,30 +443,30 @@ Boolean2 DecayContinuousMultimixtureDistr::update() {
       //std::cerr << "desired: " << desired << std::endl;
       // only move distributions to the right...
       if(((*nttpriors_)[1])[1] * ntt_->getPosDistr()->getProb(1) < desired) {
-	((*nttpriors_)[1])[1] = desired * nttdistrtots_[1] / ntt_->getPosDistr()->getProb(1);
-	if(((*nttpriors_)[1])[1] > 1.0)
-	  ((*nttpriors_)[1])[1] = 1.0;
-	if(((*nttpriors_)[1])[1] < 0.0)
-	  ((*nttpriors_)[1])[1] = 0.0;
-	((*nttpriors_)[0])[1] = 1.0 - ((*nttpriors_)[1])[1];
-	((*nttpriors_)[1])[0] = (1 - desired) * nttdistrtots_[1] / ntt_->getPosDistr()->getProb(0);
-	if(((*nttpriors_)[1])[0] > 1.0)
-	  ((*nttpriors_)[1])[0] = 1.0;
-	if(((*nttpriors_)[1])[0] < 0.0)
-	  ((*nttpriors_)[1])[0] = 0.0;
-	((*nttpriors_)[0])[0] = 1.0 - ((*nttpriors_)[1])[0];
+    ((*nttpriors_)[1])[1] = desired * nttdistrtots_[1] / ntt_->getPosDistr()->getProb(1);
+    if(((*nttpriors_)[1])[1] > 1.0)
+      ((*nttpriors_)[1])[1] = 1.0;
+    if(((*nttpriors_)[1])[1] < 0.0)
+      ((*nttpriors_)[1])[1] = 0.0;
+    ((*nttpriors_)[0])[1] = 1.0 - ((*nttpriors_)[1])[1];
+    ((*nttpriors_)[1])[0] = (1 - desired) * nttdistrtots_[1] / ntt_->getPosDistr()->getProb(0);
+    if(((*nttpriors_)[1])[0] > 1.0)
+      ((*nttpriors_)[1])[0] = 1.0;
+    if(((*nttpriors_)[1])[0] < 0.0)
+      ((*nttpriors_)[1])[0] = 0.0;
+    ((*nttpriors_)[0])[0] = 1.0 - ((*nttpriors_)[1])[0];
       //std::cerr << "(" << ((*nttpriors_)[1])[1] << "," << ((*nttpriors_)[0])[1] << "," << ((*nttpriors_)[1])[0] << ")" << std::endl;
       } // if must move to the right
     }
   } // if ntt not NULL
-  	  
+        
   // here can remove all distributions with prior below minimum
   float MIN_DISTR_PRIOR = 0.025;
   for(int k = 1; k < distrs_->length(); k++) 
     if(priors_[k] < MIN_DISTR_PRIOR) {
       //std::cerr << "removing " << k << " distr" << std::endl;
       for(int n = 0; n < 3; n++)
-	((*nttpriors_)[k])[n] = 0.0; // get rid of distribution!
+    ((*nttpriors_)[k])[n] = 0.0; // get rid of distribution!
     }
   //std::cerr << "returning from update! " << std::endl;
   
@@ -501,11 +501,11 @@ void DecayContinuousMultimixtureDistr::writeDistr(FILE* fout) {
     fprintf(fout, " ntt%d [", ntt);
     for(int k = 0; k < distrs_->length(); k++) {
       if(nttpriors_ != NULL)
-	fprintf(fout, "%0.2f", ((*nttpriors_)[k])[ntt]);
+    fprintf(fout, "%0.2f", ((*nttpriors_)[k])[ntt]);
       else 
-	fprintf(fout, "0");
+    fprintf(fout, "0");
       if(k < distrs_->length() - 1)
-	fprintf(fout, ",");
+    fprintf(fout, ",");
     } // next distr
     fprintf(fout, "]");
   } // next ntt

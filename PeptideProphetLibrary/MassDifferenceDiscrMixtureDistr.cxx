@@ -2,9 +2,9 @@
 
 /*
 
-Program       : MassDifferenceDiscrMixtureDistr for PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : MassDifferenceDiscrMixtureDistr for PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 Copyright (C) 2003 Andrew Keller
 
@@ -24,11 +24,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
@@ -74,7 +74,7 @@ Boolean2 MassDifferenceDiscrMixtureDistr::haveDataWithValue(int bin) {
 }
 
 void MassDifferenceDiscrMixtureDistr::writeDistr(FILE* fout) {
-  
+
   fprintf(fout, "%s\n", name_);
   fprintf(fout, "\tpos: ");
   fprintf(fout, "(");
@@ -86,14 +86,14 @@ void MassDifferenceDiscrMixtureDistr::writeDistr(FILE* fout) {
       counter++;
       fprintf(fout, "%0.2f %s", posdistr_->getProb(k), (*bindefs_)[k]);
       if(k < numbins_ - 1 && haveDataWithValue(k+1)) {
-	fprintf(fout, ", ");
+        fprintf(fout, ", ");
       }
       if(counter%column_width == 0)
-	fprintf(fout, "\n\t\t");
+        fprintf(fout, "\n\t\t");
     } // if have value
   }
   fprintf(fout, ")\n");
-  
+
   fprintf(fout, "\tneg: ");
   fprintf(fout, "(");
   counter = 0;
@@ -102,12 +102,12 @@ void MassDifferenceDiscrMixtureDistr::writeDistr(FILE* fout) {
       counter++;
       fprintf(fout, "%0.2f %s", negdistr_->getProb(k), (*bindefs_)[k]);
       if(k < numbins_ - 1 && haveDataWithValue(k+1)) {
-	fprintf(fout, ", ");
+        fprintf(fout, ", ");
       }
       if(counter%column_width == 0)
-	fprintf(fout, "\n\t\t");
+        fprintf(fout, "\n\t\t");
     } // if have value
   }
-  
+
   fprintf(fout, ")\n");
 }

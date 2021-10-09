@@ -66,7 +66,7 @@ ContinuousMultimixtureDistr::~ContinuousMultimixtureDistr() {
   if(distrs_ != NULL) {
     for(int k = 0; k < distrs_->length(); k++)
       if((*distrs_)[k] != NULL)
-	delete (*distrs_)[k];
+        delete (*distrs_)[k];
     delete distrs_;
   }
   if(priors_ != NULL)
@@ -74,7 +74,7 @@ ContinuousMultimixtureDistr::~ContinuousMultimixtureDistr() {
   if(zvals_ != NULL) {
     for(int k = 0; k < zvals_->length(); k++)
       if((*zvals_)[k] != NULL)
-	delete[] (*zvals_)[k];
+    delete[] (*zvals_)[k];
     delete zvals_;
   }
   if(vals_ != NULL)
@@ -82,7 +82,7 @@ ContinuousMultimixtureDistr::~ContinuousMultimixtureDistr() {
   if(defs_ != NULL) {
     for(int k = 0; k < defs_->length(); k++)
       if((*defs_)[k] != NULL)
-	delete (*defs_)[k];
+    delete (*defs_)[k];
     delete defs_;
   }
     
@@ -106,7 +106,7 @@ void ContinuousMultimixtureDistr::removeViolatingDistrs() {
   for(int k = 1; k < distrs_->length(); k++) {
     if((*distrs_)[k] != (*distrs_)[k-1] && violation(k, k-1)) {
       if((*distrs_)[k] != NULL) 
-	delete (*distrs_)[k];
+    delete (*distrs_)[k];
       distrs_->replace(k, (*distrs_)[k-1]);
     } // if violation
   } // next pair of adjacent distributions
@@ -150,16 +150,16 @@ void ContinuousMultimixtureDistr::addVal(float wt, float val) {
     int preset_mixture = presetZvalue(index_);
     for(int k = 0; k < distrs_->length(); k++) {
       if(preset_mixture < 0)
-	nextz[k] = getMixtureDistrProb(k, val) * priors_[k];
+    nextz[k] = getMixtureDistrProb(k, val) * priors_[k];
       else if(k == preset_mixture)
-	nextz[k] = 1.0;
+    nextz[k] = 1.0;
       else
-	nextz[k] = 0.0;
+    nextz[k] = 0.0;
       totprob += nextz[k];
     }
     if(preset_mixture < 0 && totprob > 0) 
       for(int k = 0; k < distrs_->length(); k++) 
-	nextz[k] /= totprob;
+    nextz[k] /= totprob;
 
     // now add it
     zvals_->insertAtEnd(nextz);
@@ -191,9 +191,9 @@ void ContinuousMultimixtureDistr::addComponent(float* settings, char* distr, cha
   else {
     //std::cerr << "cannot accommodate " << distr << " distribution" << std::endl;
     //exit(1);
-	  std::stringstream str;
-	  str << "cannot accommodate " << distr << " distribution" << std::endl;
-	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+      std::stringstream str;
+      str << "cannot accommodate " << distr << " distribution" << std::endl;
+      throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
   }
   char* newdistr = new char[strlen(distr)+1];
   strcpy(newdistr, distr);
@@ -224,20 +224,20 @@ void ContinuousMultimixtureDistr::initUpdate(float* prior) {
 
 Boolean2 ContinuousMultimixtureDistr::update() {
   if(vals_ == NULL || zvals_ == NULL || vals_->length() != zvals_->length()) {
-	  std::stringstream str; 
-	  str << "error in ContinuousMultimixtureDistr update...." << std::endl;
+      std::stringstream str; 
+      str << "error in ContinuousMultimixtureDistr update...." << std::endl;
     //std::cerr << "error in ContinuousMultimixtureDistr update...." << std::endl;
     if(vals_ == NULL)
-		str << "null vals_" << std::endl;
+        str << "null vals_" << std::endl;
       //std::cerr << "null vals_" << std::endl;
     else if(zvals_ == NULL)
-		str << "null zvals_" << std::endl;
+        str << "null zvals_" << std::endl;
       //std::cerr << "null zvals_" << std::endl;
     else
-		str << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
+        str << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
       //std::cerr << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
 
-	throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+    throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
 
 //    exit(1);
   }
@@ -267,23 +267,23 @@ Boolean2 ContinuousMultimixtureDistr::update() {
     nextprob = 0.0;
     if(preset_mixture < 0) {
       for(int k = 0; k < distrs_->length(); k++) {
-	((*zvals_)[i])[k] = getMixtureDistrProb(k, (*vals_)[i]);
-	nextprob += ((*zvals_)[i])[k];
+    ((*zvals_)[i])[k] = getMixtureDistrProb(k, (*vals_)[i]);
+    nextprob += ((*zvals_)[i])[k];
       }
 
     }
     // now normalize
     if(preset_mixture >= 0 || nextprob > 0) 
       for(int k = 0; k < distrs_->length(); k++) {
-	if(preset_mixture < 0)
-	  ((*zvals_)[i])[k] /= nextprob;
-	else if(k == preset_mixture)
-	  ((*zvals_)[i])[k] = 1.0;
-	else 
-	  ((*zvals_)[i])[k] = 0.0;
-	//priors_[k] += ((*zvals_)[i])[k];
-	//(*priors_)[k] += ((*zvals_)[i])[k];
-	//totalprob += ((*zvals_)[i])[k];
+    if(preset_mixture < 0)
+      ((*zvals_)[i])[k] /= nextprob;
+    else if(k == preset_mixture)
+      ((*zvals_)[i])[k] = 1.0;
+    else 
+      ((*zvals_)[i])[k] = 0.0;
+    //priors_[k] += ((*zvals_)[i])[k];
+    //(*priors_)[k] += ((*zvals_)[i])[k];
+    //totalprob += ((*zvals_)[i])[k];
       }
 
     //std::cerr << "index " << i << ": [" << (*distrs_)[0]->getProb((*vals_)[i]) << " <=> " << (*distrs_)[1]->getProb((*vals_)[i]) << "]  " << (*vals_)[i] << " (" << ((*zvals_)[i])[0] << " " << ((*zvals_)[i])[1] << ")" << " wt: " << (*wts_)[i] << std::endl;

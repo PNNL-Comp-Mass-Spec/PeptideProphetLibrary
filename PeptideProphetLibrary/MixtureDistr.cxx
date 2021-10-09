@@ -37,15 +37,15 @@ in PeptideProphet written by Andrew Keller
 
 MixtureDistr::MixtureDistr() 
 { 
-	posdistr_ = NULL ; 
-	negdistr_ = NULL ; 
+    posdistr_ = NULL ; 
+    negdistr_ = NULL ; 
 }
 
 MixtureDistr::MixtureDistr(int charge, char* name, char* tag) 
 {
-	posdistr_ = NULL ; 
-	negdistr_ = NULL ; 
-	initializeDistr(charge, name, tag);
+    posdistr_ = NULL ; 
+    negdistr_ = NULL ; 
+    initializeDistr(charge, name, tag);
 }
 
 MixtureDistr::~MixtureDistr() { }
@@ -56,12 +56,12 @@ void MixtureDistr::initializeDistr(int charge, char* name, char* tag) {
   floatvals_ = NULL;
   if(name == NULL) {
     //std::cerr << "null name for MixtureDistr" << std::endl;
-	  throw gcnew System::Exception("null name for MixtureDistr");
+      throw gcnew System::Exception("null name for MixtureDistr");
     //exit(1);
   }
   if(tag == NULL) {
     //std::cerr << "null tag for MixtureDistr" << std::endl;
-	  throw gcnew System::Exception("null tag for MixtureDistr");
+      throw gcnew System::Exception("null tag for MixtureDistr");
     //exit(1);
   }
 
@@ -119,9 +119,9 @@ float MixtureDistr::getPosProb(int index) {
     if(index < 0 || index >= intvals_->length()) {
       //std::cerr << "violation of index " << index << " for " << intvals_->length() << std::endl;
       //exit(1);
-		std::stringstream str;
-		str << "violation of index " << index << " for " << intvals_->length() << std::endl;
-		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+        std::stringstream str;
+        str << "violation of index " << index << " for " << intvals_->length() << std::endl;
+        throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     }
     return posdistr_->getProb((*intvals_)[index]);
   }
@@ -157,7 +157,7 @@ void MixtureDistr::setPosDistr(MixtureDistr* distr) {
 
 }
 
-	
+    
 void MixtureDistr::enter(int index, float val) {
   floatvals_->insertAtEnd(val);
 }
@@ -168,26 +168,26 @@ void MixtureDistr::enter(int index, int val) {//Xiuxia, index is not used here
 
   //std::cerr << intvals_[index] << std::endl;
 }
-	
+    
 Boolean2 MixtureDistr::update(Array<float>* probs) {
-	//Xiuxia, get new mean and new stdev for both the Gaussian and the Gamma distribution
+    //Xiuxia, get new mean and new stdev for both the Gaussian and the Gamma distribution
   
-	//Xiuxia, initialize newtot_[0] = 0, newtotsq_ = 0, newtotwt_ = 0
-	posdistr_->initUpdate(NULL);	  
-	negdistr_->initUpdate(NULL);
+    //Xiuxia, initialize newtot_[0] = 0, newtotsq_ = 0, newtotwt_ = 0
+    posdistr_->initUpdate(NULL);      
+    negdistr_->initUpdate(NULL);
 
-	for(int k = 0; k < probs->length(); k++) {
+    for(int k = 0; k < probs->length(); k++) {
 
-		if(intvals_ != NULL) {
-			posdistr_->addVal((*probs)[k], (*intvals_)[k]);
-			negdistr_->addVal(1.0 - (*probs)[k], (*intvals_)[k]);
-		}
-		else {
-			posdistr_->addVal((*probs)[k], (*floatvals_)[k]);
-			negdistr_->addVal(1.0 - (*probs)[k],(*floatvals_)[k]);
-		}
+        if(intvals_ != NULL) {
+            posdistr_->addVal((*probs)[k], (*intvals_)[k]);
+            negdistr_->addVal(1.0 - (*probs)[k], (*intvals_)[k]);
+        }
+        else {
+            posdistr_->addVal((*probs)[k], (*floatvals_)[k]);
+            negdistr_->addVal(1.0 - (*probs)[k],(*floatvals_)[k]);
+        }
 
-	}
+    }
   
   Boolean2 output = False;
   
@@ -197,7 +197,7 @@ Boolean2 MixtureDistr::update(Array<float>* probs) {
   if(negdistr_->update()) {
     output = True;
   }
-  return output;	//Xiuxia, negdistr_ takes precedence over posdistr_
+  return output;    //Xiuxia, negdistr_ takes precedence over posdistr_
 }
 
 char* MixtureDistr::getName() { return name_; }

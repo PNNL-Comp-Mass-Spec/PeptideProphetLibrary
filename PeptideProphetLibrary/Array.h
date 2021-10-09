@@ -6,7 +6,7 @@
 
 
 #ifdef SCCS_ID
-static const char* arraySccsId = "@(#)array.h	1.4 09/15/95 11:43:21";
+static const char* arraySccsId = "@(#)array.h    1.4 09/15/95 11:43:21";
 #endif
 
 

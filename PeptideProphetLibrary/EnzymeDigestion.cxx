@@ -38,7 +38,7 @@ in PeptideProphet written by Andrew Keller
 */
 
 EnzymeDigestion::EnzymeDigestion(char* sites, char* term_not_following, char* term_not_preceding,
-				 int min_edge_dist, int min_dist) {
+                 int min_edge_dist, int min_dist) {
   recognition_sites_ = strCopy(sites);
   term_not_following_ = strCopy(term_not_following);
   term_not_preceding_ = strCopy(term_not_preceding);
@@ -64,9 +64,9 @@ int EnzymeDigestion::numMissedCleavages(std::string peptide)
   if(strlen(pep) > 4 && pep[1] == '.' && pep[strlen(pep)-2] != '.')
   {
     //std::cerr << "cannot parse peptide " << pep << std::endl;
-	  std::stringstream str;
-	  str << "cannot parse peptide " << pep << std::endl;
-	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+      std::stringstream str;
+      str << "cannot parse peptide " << pep << std::endl;
+      throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     //exit(1);
   }
   int counter = 0;
@@ -76,9 +76,9 @@ int EnzymeDigestion::numMissedCleavages(std::string peptide)
   for(int k = 0; k < strlen(pep); k++) {
     if(counter >= min_dist_ && k >= min_edge_dist_ && k < strlen(pep) - min_edge_dist_) { // position ok
       if((k > 0 || termCanFollow(pep[k-1])) && (k < strlen(pep) - 1 || termCanPrecede(pep[k+1])) &&
-	 isCompatibleTerminus(pep[k])) {
-	nmc++;
-	counter = 0;
+     isCompatibleTerminus(pep[k])) {
+    nmc++;
+    counter = 0;
       }
     } // ok posn
 
@@ -90,63 +90,63 @@ int EnzymeDigestion::numMissedCleavages(std::string peptide)
 // pep of form: P.XXXXX.F
 int EnzymeDigestion::numCompatibleTermini(std::string peptide)
 {
-	const char *pep1 = peptide.c_str() ;
+    const char *pep1 = peptide.c_str() ;
 
-	//Xiuxia, July 06, 2006
-	if(pep1[0] == '.')
-	{
-		peptide = '-' + peptide ;
-	}
-	if(pep1[strlen(pep1)-1] == '.')
-	{
-		peptide = peptide + '-' ;
-	}
+    //Xiuxia, July 06, 2006
+    if(pep1[0] == '.')
+    {
+        peptide = '-' + peptide ;
+    }
+    if(pep1[strlen(pep1)-1] == '.')
+    {
+        peptide = peptide + '-' ;
+    }
 
-	const char *pep = peptide.c_str() ;
+    const char *pep = peptide.c_str() ;
 
-	if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.')
-	{
-		//std::cerr << strlen(pep) << "\t" << pep[1] << "\t" << pep[strlen(pep)-2] << std::endl << std::endl ;
-		//std::cerr << "cannot parse peptide " << pep << std::endl;
-		std::stringstream str;
-		str << strlen(pep) << "\t" << pep[1] << "\t" << pep[strlen(pep)-2] << std::endl << std::endl ;
-		str << "cannot parse peptide " << pep << std::endl;
-		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
-		//exit(1);
-	}
-	int nct = 0;
+    if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.')
+    {
+        //std::cerr << strlen(pep) << "\t" << pep[1] << "\t" << pep[strlen(pep)-2] << std::endl << std::endl ;
+        //std::cerr << "cannot parse peptide " << pep << std::endl;
+        std::stringstream str;
+        str << strlen(pep) << "\t" << pep[1] << "\t" << pep[strlen(pep)-2] << std::endl << std::endl ;
+        str << "cannot parse peptide " << pep << std::endl;
+        throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
+        //exit(1);
+    }
+    int nct = 0;
 
-	if(pep[0] == '-' || pep[0] == '1')
-	{
-		nct++;
-	}
-	else if(strlen(pep) > 2 && termCanPrecede(pep[2]))
-	{
-		for(int s = 0; s < strlen(recognition_sites_); s++)
-		{
-			if(pep[0] == recognition_sites_[s])
-			{
-				nct++;
-				s = strlen(recognition_sites_); // done
-			}
-		}
-	}
-	if(pep[strlen(pep)-3] == '1' || pep[strlen(pep)-1] == '-')
-	{
-		nct++;
-	}
-	else if(strlen(pep) > 3 && termCanFollow(pep[strlen(pep)-4]))
-	{
-		for(int s = 0; s < strlen(recognition_sites_); s++)
-		{
-			if(pep[strlen(pep)-3] == recognition_sites_[s])
-			{
-				nct++;
-				s = strlen(recognition_sites_); // done
-			}
-		}
-	}
-	return nct;
+    if(pep[0] == '-' || pep[0] == '1')
+    {
+        nct++;
+    }
+    else if(strlen(pep) > 2 && termCanPrecede(pep[2]))
+    {
+        for(int s = 0; s < strlen(recognition_sites_); s++)
+        {
+            if(pep[0] == recognition_sites_[s])
+            {
+                nct++;
+                s = strlen(recognition_sites_); // done
+            }
+        }
+    }
+    if(pep[strlen(pep)-3] == '1' || pep[strlen(pep)-1] == '-')
+    {
+        nct++;
+    }
+    else if(strlen(pep) > 3 && termCanFollow(pep[strlen(pep)-4]))
+    {
+        for(int s = 0; s < strlen(recognition_sites_); s++)
+        {
+            if(pep[strlen(pep)-3] == recognition_sites_[s])
+            {
+                nct++;
+                s = strlen(recognition_sites_); // done
+            }
+        }
+    }
+    return nct;
 }
 
 Boolean2 EnzymeDigestion::isCompatibleTerminus(char c) {
