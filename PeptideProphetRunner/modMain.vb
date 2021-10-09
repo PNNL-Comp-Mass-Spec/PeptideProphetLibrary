@@ -27,7 +27,7 @@ Module modMain
     Private m_PeptideProphet As PeptideProphetLibrary.PeptideProphet
 
     Private m_PepProphetThread As System.Threading.Thread
-    Private m_PepProphetThreadStart As New System.Threading.ThreadStart(AddressOf StartPeptideProphet)
+    Private ReadOnly m_PepProphetThreadStart As New System.Threading.ThreadStart(AddressOf StartPeptideProphet)
     Private m_PepProphetRetVal As PeptideProphetLibrary.IPeptideProphet.ProcessStatus
 
 
