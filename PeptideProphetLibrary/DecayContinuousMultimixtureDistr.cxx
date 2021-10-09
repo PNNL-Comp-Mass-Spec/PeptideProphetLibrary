@@ -293,7 +293,7 @@ Boolean2 DecayContinuousMultimixtureDistr::update() {
 		else
 			str << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
 
-		throw new System::Exception(str.str().c_str());
+		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     //exit(1);
   }
 

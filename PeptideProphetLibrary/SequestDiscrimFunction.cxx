@@ -8,9 +8,9 @@ using namespace System;
 
 /*
 
-Program       : DiscriminantFunction for discr_calc of PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : DiscriminantFunction for discr_calc of PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 
 Copyright (C) 2003 Andrew Keller
@@ -31,11 +31,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
@@ -108,12 +108,12 @@ Boolean2 SequestDiscrimFunction::isComputable(SequestResult &result) {
   return result.xcorr_ > 0.0 ;
 }
 
-float SequestDiscrimFunction::getDiscriminantScore(SequestResult &seqresult) 
+float SequestDiscrimFunction::getDiscriminantScore(SequestResult &seqresult)
 {
   float tot = const_;
   tot += xcorr_p_wt_ * getXcorrP(seqresult.xcorr_, getPepLen(seqresult.peptide_));
   tot += delta_wt_ * seqresult.delta_;
-  float lg_val = log((float)(1.0*seqresult.rank_)) ; 
+  float lg_val = log((float)(1.0*seqresult.rank_)) ;
   tot += log_rank_wt_ * lg_val;
   tot += abs_massd_wt_ * abs(seqresult.massdiff_);
   Boolean2 writeMultivariate = False;
@@ -125,7 +125,7 @@ float SequestDiscrimFunction::getDiscriminantScore(SequestResult &seqresult)
       //exit(1);
 	  std::stringstream str;
 	  str << "cannot append multivariate info for " << seqresult.spectrum_.c_str() << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     }
 	double lg_val = log(1.0*seqresult.rank_) ;
     fMulti << seqresult.spectrum_.c_str() << "\t" << getXcorrP(seqresult.xcorr_, getPepLen(seqresult.peptide_)) << "\t" << seqresult.delta_ << "\t" << lg_val<< "\t" << abs(seqresult.massdiff_) << "\t" << tot << std::endl;
@@ -136,22 +136,22 @@ float SequestDiscrimFunction::getDiscriminantScore(SequestResult &seqresult)
 }
 
 
-int SequestDiscrimFunction::getPepLen(std::string peptide) 
+int SequestDiscrimFunction::getPepLen(std::string peptide)
 {
-	const char *pep = peptide.c_str() ; 
+	const char *pep = peptide.c_str() ;
 
 	if (peptide.length() == 0)
-		return 0 ; 
+		return 0 ;
 	int start = 0;
 	int end = peptide.length() ;
 
-	if(end > 4 && pep[1] == '.' && pep[end-2] == '.') 
+	if(end > 4 && pep[1] == '.' && pep[end-2] == '.')
 	{
 		start = 2;
 		end = strlen(pep) - 2;
 	}
 	int tot = 0;
-	for(int k = start; k < end; k++) 
+	for(int k = start; k < end; k++)
 		if(pep[k] >= 'A' && pep[k] <= 'Z')
 			tot++;
 	return tot;
@@ -161,8 +161,8 @@ float SequestDiscrimFunction::getXcorrP(float xcorr, int peplen) {
   int eff_pep_len = peplen;
   if(eff_pep_len > max_pep_len_)
     eff_pep_len = max_pep_len_;
-  float lg_xcorr = log(xcorr) ; 
-  float lg_eff_len = log((float)(1.0*eff_pep_len * num_frags_)) ; 
+  float lg_xcorr = log(xcorr) ;
+  float lg_eff_len = log((float)(1.0*eff_pep_len * num_frags_)) ;
   return lg_xcorr / lg_eff_len;
 }
 
@@ -173,7 +173,7 @@ void SequestDiscrimFunction::writeCoef(char *d_output_file_param) {
     //std::cerr << "could not open filename" << std::endl;
 	  std::stringstream str;
 	  str << "could not open filename" << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     //exit(1);
   }
 
@@ -182,6 +182,6 @@ void SequestDiscrimFunction::writeCoef(char *d_output_file_param) {
   for (int charge =0; charge < numCharge; charge++) {
 	  fout << charge+1 << "\t" << xcorrs[charge] << "\t" << deltas[charge] << "\t" << ranks[charge] << "\t" << massdiffs[charge] << "\t" << consts[charge] << "\n" ;
   }
-  
+
   fout.close() ;
 }

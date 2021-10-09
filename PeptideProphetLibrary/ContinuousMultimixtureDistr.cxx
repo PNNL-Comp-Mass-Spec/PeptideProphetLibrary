@@ -193,7 +193,7 @@ void ContinuousMultimixtureDistr::addComponent(float* settings, char* distr, cha
     //exit(1);
 	  std::stringstream str;
 	  str << "cannot accommodate " << distr << " distribution" << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
   }
   char* newdistr = new char[strlen(distr)+1];
   strcpy(newdistr, distr);
@@ -237,7 +237,7 @@ Boolean2 ContinuousMultimixtureDistr::update() {
 		str << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
       //std::cerr << vals_->length() << " vals_ <> " << zvals_->length() << " zvals_" << std::endl;
 
-	throw new System::Exception(str.str().c_str());
+	throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
 
 //    exit(1);
   }

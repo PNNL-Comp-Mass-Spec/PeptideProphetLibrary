@@ -6,9 +6,9 @@ using namespace std;
 
 /*
 
-Program       : EnzymeDigestion for PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : EnzymeDigestion for PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 Copyright (C) 2003 Andrew Keller
 
@@ -28,16 +28,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
 
-EnzymeDigestion::EnzymeDigestion(char* sites, char* term_not_following, char* term_not_preceding, 
+EnzymeDigestion::EnzymeDigestion(char* sites, char* term_not_following, char* term_not_preceding,
 				 int min_edge_dist, int min_dist) {
   recognition_sites_ = strCopy(sites);
   term_not_following_ = strCopy(term_not_following);
@@ -58,15 +58,15 @@ EnzymeDigestion::~EnzymeDigestion() {
 
 
 // pep seq must be stripped
-int EnzymeDigestion::numMissedCleavages(std::string peptide) 
+int EnzymeDigestion::numMissedCleavages(std::string peptide)
 {
-  const char *pep = peptide.c_str() ; 
-  if(strlen(pep) > 4 && pep[1] == '.' && pep[strlen(pep)-2] != '.') 
+  const char *pep = peptide.c_str() ;
+  if(strlen(pep) > 4 && pep[1] == '.' && pep[strlen(pep)-2] != '.')
   {
     //std::cerr << "cannot parse peptide " << pep << std::endl;
 	  std::stringstream str;
-	  str << "cannot parse peptide " << pep << std::endl; 
-	  throw new System::Exception(str.str().c_str());
+	  str << "cannot parse peptide " << pep << std::endl;
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     //exit(1);
   }
   int counter = 0;
@@ -88,9 +88,9 @@ int EnzymeDigestion::numMissedCleavages(std::string peptide)
 }
 
 // pep of form: P.XXXXX.F
-int EnzymeDigestion::numCompatibleTermini(std::string peptide) 
+int EnzymeDigestion::numCompatibleTermini(std::string peptide)
 {
-	const char *pep1 = peptide.c_str() ; 
+	const char *pep1 = peptide.c_str() ;
 
 	//Xiuxia, July 06, 2006
 	if(pep1[0] == '.')
@@ -102,16 +102,16 @@ int EnzymeDigestion::numCompatibleTermini(std::string peptide)
 		peptide = peptide + '-' ;
 	}
 
-	const char *pep = peptide.c_str() ; 
+	const char *pep = peptide.c_str() ;
 
-	if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.') 
+	if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.')
 	{
 		//std::cerr << strlen(pep) << "\t" << pep[1] << "\t" << pep[strlen(pep)-2] << std::endl << std::endl ;
 		//std::cerr << "cannot parse peptide " << pep << std::endl;
 		std::stringstream str;
 		str << strlen(pep) << "\t" << pep[1] << "\t" << pep[strlen(pep)-2] << std::endl << std::endl ;
 		str << "cannot parse peptide " << pep << std::endl;
-		throw new System::Exception(str.str().c_str());
+		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
 		//exit(1);
 	}
 	int nct = 0;
@@ -124,7 +124,7 @@ int EnzymeDigestion::numCompatibleTermini(std::string peptide)
 	{
 		for(int s = 0; s < strlen(recognition_sites_); s++)
 		{
-			if(pep[0] == recognition_sites_[s]) 
+			if(pep[0] == recognition_sites_[s])
 			{
 				nct++;
 				s = strlen(recognition_sites_); // done
@@ -139,7 +139,7 @@ int EnzymeDigestion::numCompatibleTermini(std::string peptide)
 	{
 		for(int s = 0; s < strlen(recognition_sites_); s++)
 		{
-			if(pep[strlen(pep)-3] == recognition_sites_[s]) 
+			if(pep[strlen(pep)-3] == recognition_sites_[s])
 			{
 				nct++;
 				s = strlen(recognition_sites_); // done

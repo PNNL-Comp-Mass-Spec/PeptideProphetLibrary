@@ -3,9 +3,9 @@
 
 /*
 
-Program       : DiscriminantCalculator for discr_calc of PeptideProphet 
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : DiscriminantCalculator for discr_calc of PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 
 Copyright (C) 2003 Andrew Keller
@@ -26,11 +26,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
@@ -52,7 +52,7 @@ SequestDiscrimScoreCalculator::SequestDiscrimScoreCalculator(std::vector<Sequest
   init(results, exclude_deltastars, windows, massd);
 }
 
-void SequestDiscrimScoreCalculator::init(std::vector<SequestResult> &results, Boolean2 exclude_deltastars, Boolean2 windows, Boolean2 massd) 
+void SequestDiscrimScoreCalculator::init(std::vector<SequestResult> &results, Boolean2 exclude_deltastars, Boolean2 windows, Boolean2 massd)
 {
   abort = false;
   set_deltastars_zero_ = True;
@@ -69,8 +69,8 @@ void SequestDiscrimScoreCalculator::init(std::vector<SequestResult> &results, Bo
     if(massd)
       discr_funcs_[ch] = new AbbrevSequestDiscrimFunction(ch);
     else if(maldi_ && ch == 0)
-      discr_funcs_[ch] = new ToftofAbbrevSequestDiscrimFunction(); 
-    else 
+      discr_funcs_[ch] = new ToftofAbbrevSequestDiscrimFunction();
+    else
       discr_funcs_[ch] = new SequestDiscrimFunction(ch);
 
 
@@ -90,7 +90,7 @@ void SequestDiscrimScoreCalculator::processData(std::vector<SequestResult> &resu
   //if(enzyme_ != NULL)
     //std::cerr << " (" << enzyme_ << ")" << std::endl;
   //std::cerr << std::endl;
-	
+
 
   float discr_score;
   int ntt;
@@ -100,18 +100,18 @@ void SequestDiscrimScoreCalculator::processData(std::vector<SequestResult> &resu
 
   int format = -1;
 
-  int numResults = results.size() ; 
+  int numResults = results.size() ;
   for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
   {
 	  if(abort)
 	  {
-		  throw new System::Exception("Process aborted in SequestDiscrimScoreCalculator::processData");
+		  throw gcnew System::Exception("Process aborted in SequestDiscrimScoreCalculator::processData");
 	  }
 
-	  if(results[resultNum].xcorr_ > 0.0) 
+	  if(results[resultNum].xcorr_ > 0.0)
 	  {
-		  std::string currentPeptide = results[resultNum].peptide_ ; 
-		  int charge = results[resultNum].charge_ - 1; 
+		  std::string currentPeptide = results[resultNum].peptide_ ;
+		  int charge = results[resultNum].charge_ - 1;
 		  // Xiuxia, 05/16/2006
 
 		  //if (charge <= 2)
@@ -125,8 +125,8 @@ void SequestDiscrimScoreCalculator::processData(std::vector<SequestResult> &resu
 
 			results[resultNum].mint_numMissedCleavages = nmc;
 			results[resultNum].mint_numTT = ntt;
-			
-			results[resultNum].mdbl_discriminantScore = discr_funcs_[charge]->getDiscriminantScore(results[resultNum]);	
+
+			results[resultNum].mdbl_discriminantScore = discr_funcs_[charge]->getDiscriminantScore(results[resultNum]);
 		  }
       } // if process
     } // if real data line

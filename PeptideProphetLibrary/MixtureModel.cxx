@@ -9,9 +9,9 @@ using namespace std ;
 
 /*
 
-Program       : MixtureModel for PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : MixtureModel for PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 Primary data object holding all mixture distributions for each precursor ion charge
 
@@ -33,20 +33,20 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
 /*
-	DJ: Deep Jaitly. Tried to keep annotating what I was changing, but at some points, I ran out of patience 
+	DJ: Deep Jaitly. Tried to keep annotating what I was changing, but at some points, I ran out of patience
 	because of the amount I was changing.
 */
 
-MixtureModel::MixtureModel(std::vector<SequestResult> &results, int max_num_iters, Boolean2 icat, Boolean2 glyc, Boolean2 massd, Boolean2 mascot, Boolean2 qtof, char *enzyme) 
+MixtureModel::MixtureModel(std::vector<SequestResult> &results, int max_num_iters, Boolean2 icat, Boolean2 glyc, Boolean2 massd, Boolean2 mascot, Boolean2 qtof, char *enzyme)
 {
 
   max_num_iters_ = max_num_iters;
@@ -90,18 +90,18 @@ MixtureModel::MixtureModel(std::vector<SequestResult> &results, int max_num_iter
   enzyme_ = NULL ;	//Xiuxia, redundant assignment
   if (enzyme != NULL)
   {
-	  enzyme_ = new char [strlen(enzyme)+1] ; 
-	  strcpy(enzyme_, enzyme) ; 
+	  enzyme_ = new char [strlen(enzyme)+1] ;
+	  strcpy(enzyme_, enzyme) ;
 	  enzyme_[strlen(enzyme)] = '\0' ;	//Xiuxia, terminating character
   }
-  
+
   char enz_dig_distr_name[100];
   strcpy(enz_dig_distr_name, "no. ");
   if(enzyme_ == NULL)
     strcat(enz_dig_distr_name, "tryptic");
   else strcat(enz_dig_distr_name, enzyme_);
   strcat(enz_dig_distr_name, " term.");
-  
+
 
   setMixtureDistributionNames("discrim score", enz_dig_distr_name); // fval and ntt mixture model names
 
@@ -109,7 +109,7 @@ MixtureModel::MixtureModel(std::vector<SequestResult> &results, int max_num_iter
 
     numspectra_[charge] = 0;
     done_[charge] = -1;
-    priors_[charge] = -1.0;	
+    priors_[charge] = -1.0;
     negOnly_[charge] = False;
     pseudonegs_[charge] = False;
     Array<char*>* nextspec = new Array<char*>;
@@ -123,9 +123,9 @@ MixtureModel::MixtureModel(std::vector<SequestResult> &results, int max_num_iter
 	Array<int>* nextDatasetNum = new Array<int>() ;
 	dataset_num_All_ -> insertAtEnd(nextDatasetNum) ;
 	Array<int>* nextScanNumber = new Array<int>();
-	scanNumberAll_ ->insertAtEnd(nextScanNumber) ; 
+	scanNumberAll_ ->insertAtEnd(nextScanNumber) ;
 	Array<float>* nextXCorr = new Array<float>();
-	xcorrAll_ ->insertAtEnd(nextXCorr) ; 	
+	xcorrAll_ ->insertAtEnd(nextXCorr) ;
 	Array<float>* nextFval = new Array<float>() ;
 	fvalAll_->insertAtEnd(nextFval) ;
 	Array<float>* nextDeltaCn2 = new Array<float>() ;
@@ -135,7 +135,7 @@ MixtureModel::MixtureModel(std::vector<SequestResult> &results, int max_num_iter
 	//                    add new distributions to model here
 
     /////////////////////////////////////////////////////////////////////////////////////////////
-    if(mascot) 
+    if(mascot)
       next->insertAtEnd(new MascotDiscrimValMixtureDistr(charge, discrim_name_, "fval", maldi_, qtof_));
     else
       next->insertAtEnd(new DiscrimValMixtureDistr(charge, discrim_name_, "fval", gamma_, maldi_, qtof_));
@@ -155,8 +155,8 @@ MixtureModel::MixtureModel(std::vector<SequestResult> &results, int max_num_iter
     /////////////////////////////////////////////////////////////////////////////////////////////
     mixtureDistrs_->insertAtEnd(next);
   }
-  
-  
+
+
   readData(results);
 
   validateModel();
@@ -186,7 +186,7 @@ void MixtureModel::validateModel() {
 			//std::cerr << "have " << (*spectra_)[charge]->length() << " spectra and " << (*(*mixtureDistrs_)[charge])[k]->getNumVals() << " values for " << (*(*mixtureDistrs_)[charge])[k]->getName() << " charge " << (charge+1) << std::endl;
 		  std::stringstream str;
 		  str <<  "have " << (*spectra_)[charge]->length() << " spectra and " << (*(*mixtureDistrs_)[charge])[k]->getNumVals() << " values for " << (*(*mixtureDistrs_)[charge])[k]->getName() << " charge " << (charge+1) << std::endl;
-		  throw new System::Exception(str.str().c_str());
+		  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
 			//	exit(1);
       }
     } // next distr
@@ -196,24 +196,24 @@ void MixtureModel::validateModel() {
     //exit(1);
 	  std::stringstream str("");
 	  str << " read in no data" << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
 
   }
 }
 
 
 // initialize fval negative distributions with 0 tryptic termini data, if available
-void MixtureModel::setNegativeDiscrimValDistrs() 
-{ 
+void MixtureModel::setNegativeDiscrimValDistrs()
+{
   for(int charge = 0; charge < numCharge; charge++) //Xiuxia, there is an outer loop wrt charge, why loop again wrt charge here?
   {
-	  MixtureDistr* discrimDistr = getMixtureDistr(discrim_name_, charge) ; 
-	  MixtureDistr* nttDistr = getMixtureDistr(ntt_name_, charge) ; 
-	  
-	  if(discrimDistr != NULL && nttDistr != NULL) 
+	  MixtureDistr* discrimDistr = getMixtureDistr(discrim_name_, charge) ;
+	  MixtureDistr* nttDistr = getMixtureDistr(ntt_name_, charge) ;
+
+	  if(discrimDistr != NULL && nttDistr != NULL)
 	  {
   		  DiscrimValMixtureDistr *discrimMixDistr = (DiscrimValMixtureDistr*) discrimDistr ; //Xiuxia, upgrade to daughter class directly from the mother class
-		  NTTMixtureDistr *nttMixDistr = (NTTMixtureDistr*) nttDistr ; 
+		  NTTMixtureDistr *nttMixDistr = (NTTMixtureDistr*) nttDistr ;
 		  pseudonegs_[charge] = discrimMixDistr->initializeNegDistribution(nttMixDistr); //Xiuxia, initialized to False
 	  }
   }
@@ -221,14 +221,14 @@ void MixtureModel::setNegativeDiscrimValDistrs()
 }
 
 
-MixtureDistr* MixtureModel::getMixtureDistr(char* name, int charge) 
+MixtureDistr* MixtureModel::getMixtureDistr(char* name, int charge)
 {
   int numDistr = (*mixtureDistrs_)[charge]->length() ;
 
-  for(int k = 0; k < numDistr ; k++) 
+  for(int k = 0; k < numDistr ; k++)
   {
-    MixtureDistr* distr = (*(*mixtureDistrs_)[charge])[k] ; 
-	char *distrName = distr->getName() ; 
+    MixtureDistr* distr = (*(*mixtureDistrs_)[charge])[k] ;
+	char *distrName = distr->getName() ;
     if(strcmp(distrName, name) == 0) {
       return distr;	//Xiuxia, get the pointer to the mixture distribution. This is initialized earlier.
     }
@@ -267,20 +267,20 @@ void MixtureModel::deriveModel(int maxnumiters) {
      getMixtureDistr(discrim_name_, 0)->getPosDistr() != NULL) {
     ((DecayContinuousMultimixtureDistr*)(getMixtureDistr(discrim_name_, 0)->getPosDistr()))->initWithNTTs((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, 0)));
     //std::cerr << "number of distrs: " << ((DecayContinuousMultimixtureDistr*)(getMixtureDistr(discrim_name_, 0)->getPosDistr()))->getNumDistributions() << std::endl;
-    
+
 
   } // maldi
   if(qtof_)
     for(int ch = 0; ch < numCharge; ch++)
 	{
-		MixtureDistr* discrimDistr = getMixtureDistr(discrim_name_, ch) ; 
-		MixtureDistr* nttDistr = getMixtureDistr(ntt_name_, ch) ; 
+		MixtureDistr* discrimDistr = getMixtureDistr(discrim_name_, ch) ;
+		MixtureDistr* nttDistr = getMixtureDistr(ntt_name_, ch) ;
 		if(discrimDistr != NULL &&  nttDistr != NULL)
 		{
-			Distribution *discrimPosDistr = discrimDistr->getPosDistr() ; 
-			if (discrimPosDistr != NULL) 
+			Distribution *discrimPosDistr = discrimDistr->getPosDistr() ;
+			if (discrimPosDistr != NULL)
 			{
-				DecayContinuousMultimixtureDistr* decayDistr = (DecayContinuousMultimixtureDistr*) discrimPosDistr ; 
+				DecayContinuousMultimixtureDistr* decayDistr = (DecayContinuousMultimixtureDistr*) discrimPosDistr ;
 				decayDistr->initWithNTTs((NTTMixtureDistr*)nttDistr);
 			}
 		}
@@ -290,7 +290,7 @@ void MixtureModel::deriveModel(int maxnumiters) {
   setNegativeDiscrimValDistrs();
 
   int counter = 1;
-  
+
   while(counter <= maxnumiters && iterate(counter)) {
  //   if(counter == 1) {
  //     //std::cout << " iteration ";
@@ -322,12 +322,12 @@ void MixtureModel::deriveModel(int maxnumiters) {
       if(qtof_)
 	for(int ch = 0; ch < 3; ch++)
 	  if(getMixtureDistr(discrim_name_, ch) != NULL && getMixtureDistr(ntt_name_, ch) != NULL &&
-	     getMixtureDistr(discrim_name_, ch)->getPosDistr() != NULL) 
+	     getMixtureDistr(discrim_name_, ch)->getPosDistr() != NULL)
 	    ((DecayContinuousMultimixtureDistr*)(getMixtureDistr(discrim_name_, ch)->getPosDistr()))->commence();
- 
+
       for(int ch = 0; ch < 3; ch++)
 	done_[ch] = -1; // set back
- 
+
 
 
       while(counter < maxnumiters && iterate(counter)) {
@@ -368,9 +368,9 @@ void MixtureModel::deriveModel(int maxnumiters) {
   // if not both satisfactorily modeled
   for(int charge = 0; charge < numCharge; charge++) {
 
-    if((*spectra_)[charge]->length() > 0 && 
-       ((*spectra_)[charge]->length() < min_num_specs_ || 
-       (priors_[charge] == 0.0 && (*spectra_)[charge]->length() > 0))) 
+    if((*spectra_)[charge]->length() > 0 &&
+       ((*spectra_)[charge]->length() < min_num_specs_ ||
+       (priors_[charge] == 0.0 && (*spectra_)[charge]->length() > 0)))
 	{
 		//std::cerr<<"\t Setting negative only values"<<std::endl << std::endl;
 
@@ -384,18 +384,18 @@ void MixtureModel::deriveModel(int maxnumiters) {
 Boolean2 MixtureModel::iterate(int counter) {
 	Boolean2 output = False;
 
-	for(int charge = 0; charge < numCharge; charge++) {	
+	for(int charge = 0; charge < numCharge; charge++) {
 
 		if(done_[charge] < 0) {
 			if(! iterate(counter, charge)) {
 				done_[charge] = counter;
 
-				//std::cerr << std::endl << " " << counter << " iterations for " << charge+1 << "+" ;  
+				//std::cerr << std::endl << " " << counter << " iterations for " << charge+1 << "+" ;
 			}
 		}
 		if(done_[charge] < 0) {
-			output = True;		  
-		}		
+			output = True;
+		}
 	}
 
 	return output;
@@ -419,7 +419,7 @@ Boolean2 MixtureModel::iterate(int counter, int charge) {//Xiuxia, counter is no
 	}
 
 	int maxcount = 100;
-  
+
 	//std::cout << "counter = " << counter << ", charge = " << charge << std::endl ;
 	//std::cout << "priors_[" << charge << "]" << priors_[charge] << std::endl ;
 
@@ -440,7 +440,7 @@ Boolean2 MixtureModel::iterate(int counter, int charge) {//Xiuxia, counter is no
 	if(updatePriors(charge)) {
 		output = True;
 	}
-  
+
   // do the rest here
 	for(int k = 2; k < (*mixtureDistrs_)[charge]->length(); k++) {//Xiuxia, NMC
 		if((*(*mixtureDistrs_)[charge])[k]->update((*probs_)[charge])) {
@@ -460,21 +460,21 @@ Boolean2 MixtureModel::updateProbs(int counter, int charge) {
 
 	Array<float>* newprobs = new Array<float>() ;
 
-	for(int k = 0; k < (*probs_)[charge]->length(); k++) 
+	for(int k = 0; k < (*probs_)[charge]->length(); k++)
 	{
-		float probValue = computeProb(charge, k) ; 
+		float probValue = computeProb(charge, k) ;
 
 		//std::cout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << (*(*probs_)[0])[k] << std::endl ;
 
 		newprobs->insertAtEnd(probValue);
-	
-		if(abs((*newprobs)[k] - (*(*probs_)[charge])[k]) >= maxdiff) 
+
+		if(abs((*newprobs)[k] - (*(*probs_)[charge])[k]) >= maxdiff)
 		{
 			output = True;
-		}    
+		}
 	}
-	
-	if(output) 
+
+	if(output)
 	{
 		assert(newprobs->length() == (*probs_)[charge]->length());
 		delete (*probs_)[charge] ;
@@ -482,11 +482,11 @@ Boolean2 MixtureModel::updateProbs(int counter, int charge) {
 		probs_->insert(charge, newprobs);
 
 		char fpath[80], fname[80], string_temp[10] ;
-		strcpy(fpath, "out_Intermediate") ;				
+		strcpy(fpath, "out_Intermediate") ;
 
 		/*
-		if (counter > 200 && counter <= 210 && charge == 1) {	
-			
+		if (counter > 200 && counter <= 210 && charge == 1) {
+
 			(*(*mixtureDistrs_)[charge])[0]->printDistr() ;
 
 			strcpy(fname, fpath) ;
@@ -502,7 +502,7 @@ Boolean2 MixtureModel::updateProbs(int counter, int charge) {
 			for (int k = 0 ; k < newprobs->length() ; k++) {
 				fout << (*(*fvalAll_)[charge])[k] << "\t" << (*newprobs)[k] << "\n";
 			}
-			fout.close() ;			
+			fout.close() ;
 		}
 
 		if (counter > 400 && counter <= 410 && charge == 1) {
@@ -521,11 +521,11 @@ Boolean2 MixtureModel::updateProbs(int counter, int charge) {
 			for (int k = 0 ; k < newprobs->length() ; k++) {
 				fout << (*(*fvalAll_)[charge])[k] << "\t" << (*newprobs)[k] << "\n";
 			}
-			fout.close() ;			
+			fout.close() ;
 		}
 		*/
 	}
-	else 
+	else
 	{
 		delete newprobs;
 	}
@@ -647,7 +647,7 @@ Boolean2 MixtureModel::negOnly(int charge) {
 
 	priors_[charge] = 0.0; // set this to 0
 
-	((DiscrimValMixtureDistr*)(getMixtureDistr(discrim_name_, charge)))->resetTot(); // set prior to 0  
+	((DiscrimValMixtureDistr*)(getMixtureDistr(discrim_name_, charge)))->resetTot(); // set prior to 0
 
 	if(charge == 1 || charge == 2) {
 		use_adj_probs_ = False;
@@ -674,7 +674,7 @@ float MixtureModel::computeProb(int charge, int index) {	// Xiuxia, index is the
 		}
 		posprob *= (*(*mixtureDistrs_)[charge])[k]->getPosProb(index);
 		negprob *= (*(*mixtureDistrs_)[charge])[k]->getNegProb(index);
-	}	
+	}
 
 	if(posprob + negprob == 0.0) {
 		return 0.0;
@@ -692,8 +692,8 @@ float MixtureModel::computeProbWithNTT(int charge, int orig_ntt, float orig_prob
     return orig_prob;
   }
 
-  float posntt1 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTPosFraction(orig_ntt);  
-  float negntt1 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTNegFraction(orig_ntt); 
+  float posntt1 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTPosFraction(orig_ntt);
+  float negntt1 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTNegFraction(orig_ntt);
   if(maldi_) {
     posntt1 *= ((DecayContinuousMultimixtureDistr*)(((DiscrimValMixtureDistr*)(getMixtureDistr(discrim_name_, charge)))->getPosDistr()))->getMixtureProbWithNTT(orig_ntt, index);
     negntt1 *= ((DiscrimValMixtureDistr*)(getMixtureDistr(discrim_name_, charge)))->getNegProb(index);
@@ -705,8 +705,8 @@ float MixtureModel::computeProbWithNTT(int charge, int orig_ntt, float orig_prob
   else {
     ratio1 = negntt1 / posntt1;
   }
-  float posntt2 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTPosFraction(ntt);  
-  float negntt2 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTNegFraction(ntt);  
+  float posntt2 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTPosFraction(ntt);
+  float negntt2 = ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_, charge)))->getNTTNegFraction(ntt);
   if(maldi_) {
     posntt2 *= ((DecayContinuousMultimixtureDistr*)(((DiscrimValMixtureDistr*)(getMixtureDistr(discrim_name_, charge)))->getPosDistr()))->getMixtureProbWithNTT(ntt, index);
     negntt2 *= ((DiscrimValMixtureDistr*)(getMixtureDistr(discrim_name_, charge)))->getNegProb(index);
@@ -741,11 +741,11 @@ float MixtureModel::getProb(int charge, int index) {
 Boolean2 MixtureModel::enterDistribution(int charge, int index, const char* tag, char* value) {
   Boolean2 output = False;
   int numDistributions = (*mixtureDistrs_)[charge]->length() ;
-  for(int k = 0; k < numDistributions ; k++) 
+  for(int k = 0; k < numDistributions ; k++)
   {
-	MixtureDistr *mixDistr = (*(*mixtureDistrs_)[charge])[k] ; 
-	char *distrTag = mixDistr->getTag() ; 
-    if(strcmp(distrTag, tag) == 0) 
+	MixtureDistr *mixDistr = (*(*mixtureDistrs_)[charge])[k] ;
+	char *distrTag = mixDistr->getTag() ;
+    if(strcmp(distrTag, tag) == 0)
 	{
       mixDistr->enter(index, value); //index is not used in the function
       output = True;
@@ -771,7 +771,7 @@ char* MixtureModel::getTagValue(char* data, char*tag) {
 }
 
 
-void MixtureModel::readData(std::vector<SequestResult> &results) 
+void MixtureModel::readData(std::vector<SequestResult> &results)
 {
   char tag[75];
   char value[100];
@@ -780,16 +780,16 @@ void MixtureModel::readData(std::vector<SequestResult> &results)
   int index = 0; //-1;
   int nextpair;
   char next_line[200];
-      
 
-  int numResults = results.size() ; 
-  char *decoySpecName = "spec" ; 
-  char *nextSpec ; 
+
+  int numResults = results.size() ;
+  char *decoySpecName = "spec" ;
+  char *nextSpec ;
 
   const char *nmcTag = "nmc" ;
-  const char *discrTag = "fval" ; 
-  const char *nttTag = "ntt" ; 
-  char tagValue[128] ; 
+  const char *discrTag = "fval" ;
+  const char *nttTag = "ntt" ;
+  char tagValue[128] ;
 
   for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
   {
@@ -800,18 +800,18 @@ void MixtureModel::readData(std::vector<SequestResult> &results)
 	  strcpy(nextSpec, decoySpecName);
 	  nextSpec[strlen(decoySpecName)] = 0;
 
-	  int currentCharge = sequestResult.charge_ - 1; 
+	  int currentCharge = sequestResult.charge_ - 1;
 	  (*spectra_)[currentCharge]->insertAtEnd(nextSpec);
 	  (*probs_)[currentCharge]->insertAtEnd(0.5);
 	  (*inds_)[currentCharge]->insertAtEnd(index++);
 
-	
+
 
 	  // add values for fval, ntt, nmc (F, # tryptic termini and # missed cleavages)
 	  // while I am passing the wrong index (i.e. the index of the next value), I am doing so
 	  // because that is how the original idiots that wrote PeptideProphet wrote it.
-	  int currentNtt = sequestResult.mint_numTT ; 
-	  int currentNmc = sequestResult.mint_numMissedCleavages ; 
+	  int currentNtt = sequestResult.mint_numTT ;
+	  int currentNmc = sequestResult.mint_numMissedCleavages ;
 
 	  int currentDatasetNum = sequestResult.dataset_num_ ; //Xiuxia
 	  float currentFval = (float) sequestResult.mdbl_discriminantScore ; //Xiuxia
@@ -825,19 +825,19 @@ void MixtureModel::readData(std::vector<SequestResult> &results)
 	  (*fvalAll_)[currentCharge]->insertAtEnd(currentFval) ;	//Xiuxia
 	  (*deltaCn2All_)[currentCharge]->insertAtEnd(currentDeltaCn2) ; //Xiuxia
 
-	  _itoa(currentNtt, tagValue,10) ; 
+	  _itoa(currentNtt, tagValue,10) ;
 	  enterDistribution(currentCharge, index, nttTag, tagValue);
 
-	  _itoa(currentNmc, tagValue,10) ; 
+	  _itoa(currentNmc, tagValue,10) ;
 	  enterDistribution(currentCharge, index, nmcTag, tagValue);
 
-	  sprintf(tagValue, "%f", currentFval) ; 
+	  sprintf(tagValue, "%f", currentFval) ;
 	  enterDistribution(currentCharge, index, discrTag, tagValue);
 
   }
 
   //std::cerr << " Processed: " << std::endl ;
-	for (int charge = 0; charge < numCharge; charge++){		
+	for (int charge = 0; charge < numCharge; charge++){
 		//std::cerr << " " << (*spectra_)[charge]->length() << "\t" << charge+1 <<  "+ " << std::endl ;
   }
 }
@@ -856,13 +856,13 @@ void MixtureModel::writeResultsInOrder(char* filename) {
   // first the 1+
 	for(int k = 0; k < (*spectra_)[0]->length(); k++) {
 		nextresult = new OrderedResult(0, k, (*(*inds_)[0])[k]);
-		ordered[ordered_ind++] = *nextresult; 
+		ordered[ordered_ind++] = *nextresult;
 	}
 	if(use_adj_probs_) {
 		for(int k = 0; k < num_pairs_; k++) {
 			charge = atoi(pairedspecs_[k].name_ + strlen(pairedspecs_[k].name_)-1);
 			nextresult = new OrderedResult(charge-1, k, pairedspecs_[k].ind_);
-			ordered[ordered_ind++] = *nextresult; 
+			ordered[ordered_ind++] = *nextresult;
 		}
 	}
 	else {
@@ -882,77 +882,77 @@ void MixtureModel::writeResultsInOrder(char* filename) {
 		//std::cerr << "could not open filename" << std::endl;
 		std::stringstream str;
 		str << "could not open filename" << std::endl;
-		throw new System::Exception(str.str().c_str());
+		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
 		//exit(1);
 	}
 
-	for(int k = 0; k < total; k++) 
+	for(int k = 0; k < total; k++)
 	{
-		int originalIndex = ordered[k].index_ ; 
-		int currentCharge = ordered[k].charge_ ; 
-	 		
+		int originalIndex = ordered[k].index_ ;
+		int currentCharge = ordered[k].charge_ ;
+
 		int temp = (*(*inds_)[currentCharge])[30000] ;
-		int originalVectorIndex = (*(*inds_)[currentCharge])[originalIndex] ;	
+		int originalVectorIndex = (*(*inds_)[currentCharge])[originalIndex] ;
 		//Xiuxia, error here. For charge = 2, (*(*inds_))[2]->length() = 30843, but originalIndex = 37755.
 
-		float peptideProphetPValue = 0 ; 
-		bool negativeOnly = false ; 
-		bool currentSpectraAdjusted = false ; 
-		bool adjusted = false ; 
+		float peptideProphetPValue = 0 ;
+		bool negativeOnly = false ;
+		bool currentSpectraAdjusted = false ;
+		bool adjusted = false ;
 
-		if(currentCharge == 0) 
-		{ 
-			if(! negOnly_[0] && priors_[0] == 0.0) 
+		if(currentCharge == 0)
+		{
+			if(! negOnly_[0] && priors_[0] == 0.0)
 			{
 			  // no data
-				peptideProphetPValue = 0 ; 
+				peptideProphetPValue = 0 ;
 			}
 			else
 				peptideProphetPValue = (*(*probs_)[0])[originalIndex];
-			if(negOnly_[0]) 
+			if(negOnly_[0])
 			{
-				negativeOnly = true ; 
+				negativeOnly = true ;
 			}
 		}
-		else 
+		else
 		{
-			if(use_adj_probs_) 
+			if(use_adj_probs_)
 			{
 			  //remember that if paired, the paired information would be in pairedspecs_[originalIndex]
-				peptideProphetPValue = pairedspecs_[originalIndex].prob_; 
-				if(isAdjusted(originalIndex)) 
+				peptideProphetPValue = pairedspecs_[originalIndex].prob_;
+				if(isAdjusted(originalIndex))
 				{
-					adjusted = true ; 
+					adjusted = true ;
 				}
 			}
-			else 
+			else
 			{
-				if(! negOnly_[currentCharge] && priors_[currentCharge] == 0.0) 
+				if(! negOnly_[currentCharge] && priors_[currentCharge] == 0.0)
 				{ // no data
-					peptideProphetPValue = 0 ; 
+					peptideProphetPValue = 0 ;
 				}
 				else
 				{
 					peptideProphetPValue = (*(*probs_)[currentCharge])[originalIndex];
 				}
-				if(negOnly_[currentCharge]) 
+				if(negOnly_[currentCharge])
 				{
-					negativeOnly = true ; 
+					negativeOnly = true ;
 				}
 			}
 		}
-//	  fout<<currentCharge<<","<<sequestResults[originalVectorIndex].mdbl_discriminantScore<<","<<sequestResults[originalVectorIndex].massdiff_<<","<<sequestResults[originalVectorIndex].xcorr_<<","<<sequestResults[originalVectorIndex].delta_<<","<<sequestResults[originalVectorIndex].peptide_<<","<<sequestResults[originalVectorIndex].protein_<<std::endl ; 
+//	  fout<<currentCharge<<","<<sequestResults[originalVectorIndex].mdbl_discriminantScore<<","<<sequestResults[originalVectorIndex].massdiff_<<","<<sequestResults[originalVectorIndex].xcorr_<<","<<sequestResults[originalVectorIndex].delta_<<","<<sequestResults[originalVectorIndex].peptide_<<","<<sequestResults[originalVectorIndex].protein_<<std::endl ;
 	} // charge 2,3
 
 	fout.close();
 }
 
 // write out probabilities to output file (input to mixture_aft.pl)
-//void MixtureModel::writeResults(std::vector<SequestResult> &results, char* filename) 
+//void MixtureModel::writeResults(std::vector<SequestResult> &results, char* filename)
 void MixtureModel::writeResults(char* filename)
 {
   if(
-	  use_adj_probs_ && pairedspecs_ == NULL) 
+	  use_adj_probs_ && pairedspecs_ == NULL)
   {
 	computeAdjDoubleTriplySpectraProbs();
   }
@@ -962,21 +962,21 @@ void MixtureModel::writeResults(char* filename)
     //std::cerr << "could not open filename" << std::endl;
 	  std::stringstream str;
 	  str << "could not open filename" << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     //exit(1);
   }
 
-  
+
   int ind1, ind2 ;
   // header
   //fout << "HitNum" << "\t" << "FScore" << "\t" << "charge" << "\t" << "NTT" << "\t" << "NMC" << "\t" << "Probability" << "\t" << "negOnly" << std::endl ;
   fout << "HitNum" << "\t" << "FScore" << "\t" << "Probability" << "\t" << "negOnly" << std::endl ;
 
-  // first the 1+ 
+  // first the 1+
 	//std::cout << " negOnly_[" << 0 << "] = " << negOnly_[0] << std::endl ;
 
 	for(int k = 0; k < (*spectra_)[0]->length(); k++) {
-		int temp = 0;		
+		int temp = 0;
 
 		if(! negOnly_[0] && priors_[0] == 0.0) { // definite 0
 			fout << "0 \t nodata";
@@ -986,7 +986,7 @@ void MixtureModel::writeResults(char* filename)
 			int temp = 1 ;	//charge
 
 			//fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*scanNumberAll_)[0])[k] << "\t" << temp << "\t" << (*(*xcorrAll_)[0])[k] << "\t" << (*(*deltaCn2All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,0)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",0)))->getNMCValue(k) << "\t" << (*(*probs_)[0])[k] ; //Xiuxia<< (*(*probs_)[0])[k] ; //Xiuxia
-			//fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << temp << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,0)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",0)))->getNMCValue(k) << "\t" << (*(*probs_)[0])[k] ; 
+			//fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << temp << "\t" << ((NTTMixtureDistr*)(getMixtureDistr(ntt_name_,0)))->getNTTValue(k) << "\t" << ((NMCMixtureDistr*)(getMixtureDistr("no. missed cl",0)))->getNMCValue(k) << "\t" << (*(*probs_)[0])[k] ;
 			fout << (*(*dataset_num_All_)[0])[k] << "\t" << (*(*fvalAll_)[0])[k] << "\t" << (*(*probs_)[0])[k] ; //Xiuxia<< (*(*probs_)[0])[k] ; //Xiuxia
 		}
 
@@ -1010,7 +1010,7 @@ void MixtureModel::writeResults(char* filename)
 			ind1 = 0 ;
 			fout << "\t" << ind1 ;
 		}
-		fout << "\n";		
+		fout << "\n";
 	}
 
 	if(use_adj_probs_) {
@@ -1020,7 +1020,7 @@ void MixtureModel::writeResults(char* filename)
 			fout << "\t(";
 			for(int n = 0; n < 3; n++) {
 				fout << computeProbWithNTT(
-				   atoi(pairedspecs_[k].name_+strlen(pairedspecs_[k].name_)-1)-1, 
+				   atoi(pairedspecs_[k].name_+strlen(pairedspecs_[k].name_)-1)-1,
 				   pairedspecs_[k].ntt_,
 				   pairedspecs_[k].prob_, n, pairedspecs_[k].ind_);
 				if(n < 2) {
@@ -1040,7 +1040,7 @@ void MixtureModel::writeResults(char* filename)
 			//std::cout << " negOnly_[" << charge << "] = " << negOnly_[charge] << std::endl ;
 
 			for(int k = 0; k < (*spectra_)[charge]->length(); k++) {
-		
+
 				if(! negOnly_[charge] && priors_[charge] == 0.0) { // definite 0
 					fout << "0 \t nodata";
 				}
@@ -1093,7 +1093,7 @@ void MixtureModel::writeResults(char* filename)
 void MixtureModel::writeResultsOrdered(const char* filename, std::vector<DatasetNumMap> &vecDatasetMap)
 {
 
-	if(use_adj_probs_ && pairedspecs_ == NULL) 
+	if(use_adj_probs_ && pairedspecs_ == NULL)
 	{
 		computeAdjDoubleTriplySpectraProbs();
 	}
@@ -1102,7 +1102,7 @@ void MixtureModel::writeResultsOrdered(const char* filename, std::vector<Dataset
 	std::vector<OutputContent> vecOutputContent ;
 
 	for(int k = 0; k < (*spectra_)[0]->length(); k++) {
-		int temp = 0;		
+		int temp = 0;
 
 		if(! negOnly_[0] && priors_[0] == 0.0) { // definite 0
 			oneOutputUnit.HitNum = (*(*dataset_num_All_)[0])[k] ;
@@ -1126,14 +1126,14 @@ void MixtureModel::writeResultsOrdered(const char* filename, std::vector<Dataset
 			}
 
 			vecOutputContent.push_back (oneOutputUnit) ;
-		}	
+		}
 	}
 
 
 	for(int charge = 1; charge < numCharge; charge++) {
 
 		for(int k = 0; k < (*spectra_)[charge]->length(); k++) {
-	
+
 			if(! negOnly_[charge] && priors_[charge] == 0.0) { // definite 0
 				oneOutputUnit.HitNum = (*(*dataset_num_All_)[charge])[k] ;
 				oneOutputUnit.fscore = 0.0 ;
@@ -1160,7 +1160,7 @@ void MixtureModel::writeResultsOrdered(const char* filename, std::vector<Dataset
 
 	} // next charge
 
-	sort(vecOutputContent.begin(), vecOutputContent.end(), MixtureModel::SortOutputResultsByHitnum) ; 	
+	sort(vecOutputContent.begin(), vecOutputContent.end(), MixtureModel::SortOutputResultsByHitnum) ;
 
 //	std::ofstream fout(filename);
 	FILE *fp = fopen(filename, "w") ;
@@ -1176,32 +1176,32 @@ void MixtureModel::writeResultsOrdered(const char* filename, std::vector<Dataset
 	int indexMap = 0 ;
 	int totaloutrow = 0 ;
 	const int MAXSIZE = 16 ;
-	char tempBuff[MAXSIZE]; 
+	char tempBuff[MAXSIZE];
 
 	for (int index = 0; index < vecOutputContent.size(); index++ )
-	{		
+	{
 		while (vecOutputContent[index].HitNum == vecDatasetMap[indexMap].dataset_num_start)
 		{
 			//fout << vecDatasetMap[indexMap].dataset_num_other << "\t" << vecOutputContent[index].fscore << "\t" << vecOutputContent[index].prob << "\t" << vecOutputContent[index].negonly << "\n" ;
-			int datasetNum = vecDatasetMap[indexMap].dataset_num_other ; 
-			float fScore = vecOutputContent[index].fscore ; 
-			float prob = vecOutputContent[index].prob ; 
-			int negOnly = vecOutputContent[index].negonly ; 
+			int datasetNum = vecDatasetMap[indexMap].dataset_num_other ;
+			float fScore = vecOutputContent[index].fscore ;
+			float prob = vecOutputContent[index].prob ;
+			int negOnly = vecOutputContent[index].negonly ;
 
 			sprintf(tempBuff, "%.4f", prob);
-			
+
 			if (strcmp(tempBuff, "0.0000") == 0 || strcmp(tempBuff, "1.0000") == 0)
-				fprintf(fp, "%d\t%.4f\t%.0f\t%d\n", datasetNum, fScore, prob, negOnly) ; 
+				fprintf(fp, "%d\t%.4f\t%.0f\t%d\n", datasetNum, fScore, prob, negOnly) ;
 			else
-				fprintf(fp, "%d\t%.4f\t%.4f\t%d\n", datasetNum, fScore, prob, negOnly) ; 
+				fprintf(fp, "%d\t%.4f\t%.4f\t%d\n", datasetNum, fScore, prob, negOnly) ;
 
 			indexMap++ ;
 			totaloutrow++ ;
 		}
-		
+
 	}
 
-	fclose(fp) ; 
+	fclose(fp) ;
 //	fout.close();
 	std::cout << "  ... wrote out " << totaloutrow << " lines" << std::endl ;
 }
@@ -1209,7 +1209,7 @@ void MixtureModel::writeResultsOrdered(const char* filename, std::vector<Dataset
 
 
 
-	
+
 
 bool MixtureModel::SortOutputResultsByHitnum(OutputContent &a, OutputContent &b)
 {
@@ -1218,7 +1218,7 @@ bool MixtureModel::SortOutputResultsByHitnum(OutputContent &a, OutputContent &b)
 	if (a.HitNum > b.HitNum)
 		return false ;
 
-	return false ; 
+	return false ;
 }
 
 
@@ -1259,7 +1259,7 @@ void MixtureModel::writeDiscrimValDistr(char* filename) {
     //std::cerr << "could not open " << filename << std::endl;
 	  std::stringstream str;
 	  str  << "could not open " << filename << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     //exit(1);
   }
   fprintf(fout, "\n\nOBSERVED AND MODEL DISTRIBUTIONS\n");
@@ -1281,7 +1281,7 @@ void MixtureModel::writeDiscrimValDistr(char* filename) {
     fprintf(fout, "\n\nMODEL DISTRIBUTIONS BY NTT VALUE\n");
     if(maldi_)
     fprintf(fout, "#Fval\tntt0 1+ pos\tntt1 1+ pos\tntt2 1+ pos\n");
-    else 
+    else
       fprintf(fout, "#Fval\tntt0 1+ pos\tntt0 2+ pos\tntt0 3+ pos\tntt1 1+ pos\tntt1 2+ pos\tntt1 3+ pos\tntt2 1+ pos\tntt2 2+ pos\tntt2 3+ pos\n");
     for(int k = 0; k < numwins; k++) {
       fprintf(fout, "%0.2f", (k+0.5)*window + minval);
@@ -1322,7 +1322,7 @@ void MixtureModel::writeDistr(char* filename) {
     //exit(1);
 	  std::stringstream str;
 	  str << "cannot open " << filename << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
   }
   fprintf(fout, "PeptideProphet v. 1.0  Andrew Keller  ISB\n\n\n");
 
@@ -1333,7 +1333,7 @@ void MixtureModel::writeDistr(char* filename) {
     if(negOnly_[charge]) {
       if(getNegOnlyCharge(charge) < 0)
 	fprintf(fout, "using training data positive distributions to identify candidates ('-%d') above background ('0')\n", charge+1);
-      else 
+      else
 	fprintf(fout, "using %d+ positive distributions to identify candidates ('-%d') above background ('0')\n", getNegOnlyCharge(charge)+1, charge+1);
     }
     else if(pseudonegs_[charge]) {
@@ -1415,7 +1415,7 @@ void MixtureModel::computeEstimatedSensAndError(char* filename) {
       total += (*probs_)[charge]->length();
     }
   }
-  
+
   float* combinedprobs = new float[total];
   total = 0; // index
   for(int k = 0; k < (*probs_)[0]->length(); k++) {
@@ -1437,9 +1437,9 @@ void MixtureModel::computeEstimatedSensAndError(char* filename) {
 	  combinedprobs[total++] = (*(*probs_)[charge])[k];
 	}
       }
-    } // next 
+    } // next
   } // next charge
-  
+
   qsort(combinedprobs, total, sizeof(float), (int(*)(const void*, const void*)) comp_nums);
 
      // now sens and error as walk down list
@@ -1458,7 +1458,7 @@ void MixtureModel::computeEstimatedSensAndError(char* filename) {
     //exit(1);
 	  std::stringstream str;
 	  str << "cannot open " << filename << std::endl;
-	  throw new System::Exception(str.str().c_str());
+	  throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
   }
 
 
@@ -1538,4 +1538,4 @@ float MixtureModel::getAdjDoublyTriplyProb(float prob_2_adj, float prob_of_partn
   }
   return (prob_2_adj * (prob_2_adj + prob_of_partner - prob_2_adj * prob_of_partner) / (prob_2_adj + prob_of_partner));
 }
-  
+

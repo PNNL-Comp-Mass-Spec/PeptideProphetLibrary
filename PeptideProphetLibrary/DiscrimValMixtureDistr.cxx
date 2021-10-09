@@ -312,7 +312,7 @@ Boolean2 DiscrimValMixtureDistr::decayMultimixture() { return qtof_ || (charge_ 
 float DiscrimValMixtureDistr::posSliceWithNTT(float left_val, float right_val, int ntt) {
   if(! decayMultimixture()) {
     //std::cerr << "error in posSliceWithNTT" << std::endl;
-	  throw new System::Exception("error in posSliceWithNTT");
+	  throw gcnew System::Exception("error in posSliceWithNTT");
     //exit(1);
   }
   return ((DecayContinuousMultimixtureDistr*)(posdistr_))->sliceWithNTT(left_val, right_val, ntt);

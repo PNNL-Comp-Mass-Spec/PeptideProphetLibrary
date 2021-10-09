@@ -56,12 +56,12 @@ void MixtureDistr::initializeDistr(int charge, char* name, char* tag) {
   floatvals_ = NULL;
   if(name == NULL) {
     //std::cerr << "null name for MixtureDistr" << std::endl;
-	  throw new System::Exception("null name for MixtureDistr");
+	  throw gcnew System::Exception("null name for MixtureDistr");
     //exit(1);
   }
   if(tag == NULL) {
     //std::cerr << "null tag for MixtureDistr" << std::endl;
-	  throw new System::Exception("null tag for MixtureDistr");
+	  throw gcnew System::Exception("null tag for MixtureDistr");
     //exit(1);
   }
 
@@ -121,7 +121,7 @@ float MixtureDistr::getPosProb(int index) {
       //exit(1);
 		std::stringstream str;
 		str << "violation of index " << index << " for " << intvals_->length() << std::endl;
-		throw new System::Exception(str.str().c_str());
+		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
     }
     return posdistr_->getProb((*intvals_)[index]);
   }

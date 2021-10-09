@@ -2,9 +2,9 @@
 
 /*
 
-Program       : VariableOffsetMassDiffDiscrMixtureDistr for PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : VariableOffsetMassDiffDiscrMixtureDistr for PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 Copyright (C) 2003 Andrew Keller
 
@@ -24,11 +24,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
@@ -130,7 +130,7 @@ float VariableOffsetMassDiffDiscrMixtureDistr::getMode(float window, Array<float
 }
 
 void VariableOffsetMassDiffDiscrMixtureDistr::writeDistr(FILE* fout) {
-  
+
   fprintf(fout, "%s (offset: %0.2f)\n", name_, offset_);
   fprintf(fout, "\tpos: ");
   fprintf(fout, "(");
@@ -149,7 +149,7 @@ void VariableOffsetMassDiffDiscrMixtureDistr::writeDistr(FILE* fout) {
     } // if have value
   }
   fprintf(fout, ")\n");
-  
+
   fprintf(fout, "\tneg: ");
   fprintf(fout, "(");
   counter = 0;
@@ -164,6 +164,6 @@ void VariableOffsetMassDiffDiscrMixtureDistr::writeDistr(FILE* fout) {
 	fprintf(fout, "\n\t\t");
     } // if have value
   }
-  
+
   fprintf(fout, ")\n");
 }

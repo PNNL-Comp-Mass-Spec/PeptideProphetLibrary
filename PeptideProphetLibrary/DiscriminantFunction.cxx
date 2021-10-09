@@ -3,9 +3,9 @@
 
 /*
 
-Program       : DiscriminantFunction for discr_calc of PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : DiscriminantFunction for discr_calc of PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 
 Copyright (C) 2003 Andrew Keller
@@ -26,11 +26,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
@@ -47,7 +47,7 @@ void DiscriminantFunction::error(int charge) {
   //if(charge < 0 || charge > 2) {
 	if(charge < 0 || charge > numCharge-1) {	//Xiuxia
     //std::cerr << "illegal charge: " << charge << std::endl;
-		throw new System::Exception(new System::String("illegal charge: " + charge));
+		throw gcnew System::Exception(gcnew System::String("illegal charge: " + charge));
     exit(1);
   }
 }

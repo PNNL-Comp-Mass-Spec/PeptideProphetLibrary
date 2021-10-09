@@ -82,8 +82,7 @@ namespace PeptideProphetLibrary
 
 		if(strlen(synopsis_file)==0)
 		{
-			System::String *err = new System::String(" Synopsis file path is null");
-			throw new System::Exception(err);
+			throw gcnew System::Exception(" Synopsis file path is null");
 		}
 
 		std::ifstream fhtml(synopsis_file);
@@ -91,8 +90,7 @@ namespace PeptideProphetLibrary
 		if(! fhtml) {
 			//std::cerr << " Could not open synopsis file " << synopsis_file << std::endl;
 			std::cout << " Could not open synopsis file, file not found" << synopsis_file << "\n";
-			System::String *err = new System::String(" Could not open synopsis file, file not found");
-			throw new System::Exception(err);
+			throw gcnew System::Exception(" Could not open synopsis file, file not found");
 			//exit(1);
 		}
 
@@ -253,7 +251,7 @@ namespace PeptideProphetLibrary
 
 
 
-	int PeptideProphet::PValueCalculate(System::String *synopsis_file, System::String *output_file, System::String *output_file_param, System::String *p_enzyme)
+	int PeptideProphet::PValueCalculate(System::String ^synopsis_file, System::String ^output_file, System::String ^output_file_param, System::String ^p_enzyme)
 	{
 		std::cout << "\nPeptideProphet v. 1.0 by A.Keller 11.7.02 ISB \n" ;
 		std::cout << "Modified by Xiuxia Du and Deep Jaitly, June 21, 2006\n" ;
@@ -269,25 +267,24 @@ namespace PeptideProphetLibrary
 		char* c_synopsis_file;
 		try
 		{
-			c_synopsis_file = (char*)(void*)Marshal::StringToHGlobalAnsi(synopsis_file);
+			c_synopsis_file = (char*)Marshal::StringToHGlobalAnsi(synopsis_file).ToPointer();
 
 			std::cout << "\nLoading synopsis file, " << c_synopsis_file << "\n";
 			std::cout.flush();
 
 			LoadSynopsisFile(c_synopsis_file, vectResults, vecDatasetNumMap) ;
 
-			Marshal::FreeHGlobal(c_synopsis_file);
+			Marshal::FreeHGlobal(IntPtr(c_synopsis_file));
 		}
-		catch(System::Exception *ex)
+		catch(System::Exception ^ex)
 		{
-			Marshal::FreeHGlobal(c_synopsis_file);
+			Marshal::FreeHGlobal(IntPtr(c_synopsis_file));
 
 			this->error_msg = ex->Message;
 			this->results = IPeptideProphet::ProcessResults::PP_FAILURE;
 			this->status = IPeptideProphet::ProcessStatus::PP_ERROR;
 
-			std::cout << "Error: " <<  ex->Message << "\n";
-			std::cout.flush();
+			System::Console::WriteLine("Error: {0}\n", ex->Message);
 
 			return 1;
 		}
@@ -315,10 +312,10 @@ namespace PeptideProphetLibrary
 		try
 		{
 			if(abort)
-				throw new AbortException("Aborted");
+				throw gcnew AbortException("Aborted");
 
 			// Calculate SequestDiscrimScore
-			c_enzyme = (char*)(void*)Marshal::StringToHGlobalAnsi(p_enzyme);
+			c_enzyme = (char*)Marshal::StringToHGlobalAnsi(p_enzyme).ToPointer();
 
 			// Note: Matt Monroe and Deep Jaitly tried to consolidate the two calls to SequestDiscrimScoreCalculator by
 			// updating c_enzyme to be "tryptic" if p_enzyme = "", but were not successful, most likely due to a memory
@@ -329,7 +326,7 @@ namespace PeptideProphetLibrary
 				calc = new SequestDiscrimScoreCalculator(vectResults, exclude, windows, massd, modify_deltas, maldi, c_enzyme);
 
 			if(abort)
-				throw new AbortException("Aborted");
+				throw gcnew AbortException("Aborted");
 
 			// See above comment concerning c_enzyme
 			MixtureModel* mixmodel ;
@@ -337,16 +334,16 @@ namespace PeptideProphetLibrary
 				mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, "tryptic");
 			else
 				mixmodel = new MixtureModel(vectResults, MAX_NUM_ITERS, icat, glyc, massd, mascot, qtof, c_enzyme);
-			Marshal::FreeHGlobal(c_enzyme);
+			Marshal::FreeHGlobal(IntPtr(c_enzyme));
 
 			SequestDiscrimFunction* SequestDiscrimFcn = new SequestDiscrimFunction(0) ;
 
 			if(abort)
-				throw new AbortException("Aborted");
+				throw gcnew AbortException("Aborted");
 
 			// Write results
-			c_output_file = (char*)(void*)Marshal::StringToHGlobalAnsi(output_file);
-			c_output_file_param = (char*)(void*)Marshal::StringToHGlobalAnsi(output_file_param);
+			c_output_file = (char*)Marshal::StringToHGlobalAnsi(output_file).ToPointer();
+			c_output_file_param = (char*)Marshal::StringToHGlobalAnsi(output_file_param).ToPointer();
 
 			//mixmodel->writeResults(c_output_file) ;
 
@@ -356,12 +353,12 @@ namespace PeptideProphetLibrary
 
 			SequestDiscrimFcn->writeCoef(c_output_file_param) ;
 
-			Marshal::FreeHGlobal(c_output_file);
+			Marshal::FreeHGlobal(IntPtr(c_output_file));
 		}
-		catch(AbortException *ex)
+		catch(AbortException ^ex)
 		{
-			Marshal::FreeHGlobal(c_enzyme);
-			Marshal::FreeHGlobal(c_output_file);
+			Marshal::FreeHGlobal(IntPtr(c_enzyme));
+			Marshal::FreeHGlobal(IntPtr(c_output_file));
 
 			this->error_msg = ex->Message;
 			this->results = IPeptideProphet::ProcessResults::PP_ABORTED;

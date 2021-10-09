@@ -2,9 +2,9 @@
 
 /*
 
-Program       : MultipleEnzymeDigestion for PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : MultipleEnzymeDigestion for PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 Copyright (C) 2003 Andrew Keller
 
@@ -24,16 +24,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
 
-MultipleEnzymeDigestion::MultipleEnzymeDigestion(): EnzymeDigestion("", "", "", 1, 0) { 
+MultipleEnzymeDigestion::MultipleEnzymeDigestion(): EnzymeDigestion("", "", "", 1, 0) {
   enzs_ = new Array<EnzymeDigestion*>;
 }
 
@@ -47,22 +47,22 @@ int MultipleEnzymeDigestion::numMissedCleavages(std::string pep) {
   int next;
   for(int k = 0; k < enzs_->length(); k++) {
     next = (*enzs_)[k]->numMissedCleavages(pep);
-    if(next < min) 
+    if(next < min)
       min = next;
   }
   return min;
 }
 
-int MultipleEnzymeDigestion::numCompatibleTermini(std::string peptide) 
+int MultipleEnzymeDigestion::numCompatibleTermini(std::string peptide)
 {
-	const char *pep = peptide.c_str() ; 
+	const char *pep = peptide.c_str() ;
 	// max for all enzs
 	int max = 0;
 	int next;
-	for(int k = 0; k < enzs_->length(); k++) 
+	for(int k = 0; k < enzs_->length(); k++)
 	{
 		next = (*enzs_)[k]->numCompatibleTermini(pep);
-		if(next > max) 
+		if(next > max)
 			max = next;
 	}
 	return max;

@@ -3,9 +3,9 @@
 
 /*
 
-Program       : AspNEnzymeDigestion for PeptideProphet                                                       
-Author        : Andrew Keller <akeller@systemsbiology.org>                                                       
-Date          : 11.27.02 
+Program       : AspNEnzymeDigestion for PeptideProphet
+Author        : Andrew Keller <akeller@systemsbiology.org>
+Date          : 11.27.02
 
 Copyright (C) 2003 Andrew Keller
 
@@ -25,27 +25,27 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Andrew Keller
 Insitute for Systems Biology
-1441 North 34th St. 
+1441 North 34th St.
 Seattle, WA  98103  USA
 akeller@systemsbiology.org
 
-Institute for Systems Biology, hereby disclaims all copyright interest 
+Institute for Systems Biology, hereby disclaims all copyright interest
 in PeptideProphet written by Andrew Keller
 
 */
 
 AspNEnzymeDigestion::AspNEnzymeDigestion() : EnzymeDigestion("D", "", "", 1, 0) { }
 
-int AspNEnzymeDigestion::numCompatibleTermini(std::string peptide) 
+int AspNEnzymeDigestion::numCompatibleTermini(std::string peptide)
 {
-	const char *pep = peptide.c_str() ; 
+	const char *pep = peptide.c_str() ;
 
-	if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.') 
+	if(strlen(pep) < 4 || pep[1] != '.' || pep[strlen(pep)-2] != '.')
 	{
 		//std::cerr << "cannot parse peptide " << pep << std::endl;
 		std::stringstream str;
 		str << "cannot parse peptide " << pep << std::endl;
-		throw new System::Exception(str.str().c_str());		
+		throw gcnew System::Exception(gcnew System::String(str.str().c_str()));
 		//exit(1);
 	}
 
@@ -56,9 +56,9 @@ int AspNEnzymeDigestion::numCompatibleTermini(std::string peptide)
 	}
 	else if(strlen(pep) > 2)
 	{
-		for(int s = 0; s < strlen(recognition_sites_); s++) 
+		for(int s = 0; s < strlen(recognition_sites_); s++)
 		{
-			if(pep[2] == recognition_sites_[s]) 
+			if(pep[2] == recognition_sites_[s])
 			{
 				nct++;
 				s = strlen(recognition_sites_); // done
@@ -67,11 +67,11 @@ int AspNEnzymeDigestion::numCompatibleTermini(std::string peptide)
 			{
 				nct++;
 			}
-			else 
+			else
 			{
-				for(int s = 0; s < strlen(recognition_sites_); s++) 
+				for(int s = 0; s < strlen(recognition_sites_); s++)
 				{
-					if(pep[strlen(pep)-1] == recognition_sites_[s]) 
+					if(pep[strlen(pep)-1] == recognition_sites_[s])
 					{
 						nct++;
 						s = strlen(recognition_sites_); // done
