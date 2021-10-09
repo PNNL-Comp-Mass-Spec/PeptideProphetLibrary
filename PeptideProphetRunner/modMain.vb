@@ -132,7 +132,7 @@ Module modMain
                 System.Threading.Thread.Sleep(1000)
             Loop
 
-            Do While (m_PeptideProphet.Status = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_STARTING) OrElse _
+            Do While (m_PeptideProphet.Status = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_STARTING) OrElse
                      (m_PeptideProphet.Status = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_RUNNING)
 
                 System.Threading.Thread.Sleep(3000)
@@ -240,13 +240,12 @@ Module modMain
         ' Initialize peptide prophet
         m_PeptideProphet = New PeptideProphetLibrary.PeptideProphet
 
-        Dim StartParams As PeptideProphetLibrary.InitializationParams
-        StartParams = New PeptideProphetLibrary.InitializationParams
+        Dim startParams = New PeptideProphetLibrary.InitializationParams
 
-        StartParams.InputFileName = mInputFilePath
-        StartParams.OutputFolderPath = mOutputFolderPath
-        StartParams.Enzyme = PEP_PROPHET_ENZYME
-        m_PeptideProphet.Setup(StartParams)
+        startParams.InputFileName = mInputFilePath
+        startParams.OutputFolderPath = mOutputFolderPath
+        startParams.Enzyme = PEP_PROPHET_ENZYME
+        m_PeptideProphet.Setup(startParams)
 
         Try
             'Call peptide prophet
@@ -257,5 +256,5 @@ Module modMain
             m_PepProphetRetVal = PeptideProphetLibrary.IPeptideProphet.ProcessStatus.PP_ERROR
         End Try
     End Sub
-  
+
 End Module
